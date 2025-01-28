@@ -12,3 +12,39 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id          String    @id @default(uuid())
+  firstName   String
+  surname     String
+  email       String    @unique
+  dateOfBirth String
+  salt        String
+  hash        String
+  followedBy  User[]    @relation("UserFollows")
+  following   User[]    @relation("UserFollows")
+  posts       Post[]    @relation("PostAuthor")
+  comments    Comment[]
+  likes       Post[]    @relation("PostLikes")
+}
+
+model Post {
+  id       String    @id @default(uuid())
+  title    String
+  text     String
+  postedAt DateTime  @default(now())
+  author   User      @relation("PostAuthor", fields: [authorId], references: [id])
+  authorId String
+  comments Comment[]
+  likes    User[]    @relation("PostLikes")
+}
+
+model Comment {
+  id       String   @id @default(uuid())
+  text     String
+  postedAt DateTime @default(now())
+  post     Post     @relation(fields: [postId], references: [id])
+  postId   String
+  author   User     @relation(fields: [authorId], references: [id])
+  authorId String
+}
