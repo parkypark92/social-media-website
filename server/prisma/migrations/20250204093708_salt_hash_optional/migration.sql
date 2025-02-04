@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "salt" DROP NOT NULL,
+ALTER COLUMN "hash" DROP NOT NULL;
