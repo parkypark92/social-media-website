@@ -1,21 +1,33 @@
 import DateSelect from "./DateSelect";
+import axios from "axios";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
-export default function SignupForm() {
-  const handleSubmit = (e) => {
+export default function SignupForm({ setErrorMessage }) {
+  const navigate = useNavigate();
+  const sendSignupData = async (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
     const formData = {
       username: data.get("username"),
       email: data.get("email"),
       password: data.get("password"),
-      "password-confirm": data.get("password-confirm"),
+      passwordConfirm: data.get("password-confirm"),
       dob: `${data.get("day")}-${data.get("month")}-${data.get("year")}`,
     };
-    console.log(formData);
+    const response = await axios.post("http://localhost:3000/signup", {
+      formData,
+    });
+    if (response.data.status !== 200) {
+      setErrorMessage(response.data.msgs);
+    } else {
+      console.log(response.data);
+      navigate("/login");
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={sendSignupData}>
       <input
         type="text"
         name="username"
@@ -49,3 +61,7 @@ export default function SignupForm() {
     </form>
   );
 }
+
+SignupForm.propTypes = {
+  setErrorMessage: PropTypes.func,
+};
