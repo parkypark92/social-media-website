@@ -1,7 +1,7 @@
 export default function DateSelect() {
   return (
     <div>
-      <select name="day" id="day" defaultValue="default">
+      <select name="day" id="day" defaultValue="default" required>
         <option value="default" disabled>
           DD
         </option>
@@ -11,7 +11,7 @@ export default function DateSelect() {
           </option>
         ))}
       </select>
-      <select name="month" id="month" defaultValue="default">
+      <select name="month" id="month" defaultValue="default" required>
         <option value="default" disabled>
           MM
         </option>
@@ -21,7 +21,7 @@ export default function DateSelect() {
           </option>
         ))}
       </select>
-      <select name="year" id="year" defaultValue="default">
+      <select name="year" id="year" defaultValue="default" required>
         <option value="default" disabled>
           YYYY
         </option>

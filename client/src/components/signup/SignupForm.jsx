@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function SignupForm({ setErrorMessage }) {
   const navigate = useNavigate();
+
   const sendSignupData = async (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
@@ -13,13 +14,15 @@ export default function SignupForm({ setErrorMessage }) {
       email: data.get("email"),
       password: data.get("password"),
       passwordConfirm: data.get("password-confirm"),
-      dob: `${data.get("day")}-${data.get("month")}-${data.get("year")}`,
+      dob:
+        (data.get("day") || data.get("month") || data.get("year")) == null
+          ? null
+          : `${data.get("day")}-${data.get("month")}-${data.get("year")}`,
     };
-    const response = await axios.post("http://localhost:3000/signup", {
-      formData,
-    });
+
+    const response = await axios.post("http://localhost:3000/signup", formData);
     if (response.data.status !== 200) {
-      setErrorMessage(response.data.msgs);
+      setErrorMessage(response.data.errors);
     } else {
       console.log(response.data);
       navigate("/login");
@@ -34,6 +37,7 @@ export default function SignupForm({ setErrorMessage }) {
         id="username"
         aria-label="Username"
         placeholder="Username"
+        required
       />
       <input
         type="email"
@@ -41,6 +45,7 @@ export default function SignupForm({ setErrorMessage }) {
         id="email"
         aria-label="Email"
         placeholder="Email"
+        required
       />
       <DateSelect></DateSelect>
       <input
@@ -49,6 +54,7 @@ export default function SignupForm({ setErrorMessage }) {
         id="password"
         aria-label="Password"
         placeholder="Password"
+        required
       />
       <input
         type="password"
@@ -56,6 +62,7 @@ export default function SignupForm({ setErrorMessage }) {
         id="password-confirm"
         aria-label="Please confirm your password"
         placeholder="Please confirm you password"
+        required
       />
       <button type="submit">Signup</button>
     </form>

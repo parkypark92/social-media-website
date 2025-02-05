@@ -8,8 +8,8 @@ export default function Signup() {
       <h2>Signup</h2>
       {errorMessage && (
         <ul>
-          {errorMessage.map((message) => (
-            <li key={message}>{message}</li>
+          {errorMessage.map((error) => (
+            <li key={error.msg}>{error.msg}</li>
           ))}
         </ul>
       )}
