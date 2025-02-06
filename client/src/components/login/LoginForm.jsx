@@ -1,12 +1,25 @@
-export default function LoginForm() {
-  const handleSubmit = (e) => {
+import axios from "axios";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
+
+export default function LoginForm({ setLoginErrors }) {
+  const [user, setUser] = useOutletContext();
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
     const formData = {
       username: data.get("username"),
       password: data.get("password"),
     };
-    console.log(formData);
+    const response = await axios.post("http://localhost:3000/login", formData);
+    if (response.data.status !== 200) {
+      setLoginErrors(response.data.errors);
+    } else {
+      setUser(response.data.user);
+      navigate(`/${response.data.user.id}`);
+    }
   };
   return (
     <form onSubmit={handleSubmit}>
@@ -28,3 +41,7 @@ export default function LoginForm() {
     </form>
   );
 }
+
+LoginForm.propTypes = {
+  setLoginErrors: PropTypes.func,
+};
