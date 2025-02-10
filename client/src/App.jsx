@@ -7,6 +7,7 @@ function App() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const handleLogout = () => {
+    localStorage.removeItem("token");
     setUser(null);
     navigate("/login");
   };
@@ -19,7 +20,7 @@ function App() {
           <button onClick={handleLogout}>Logout</button>
         </div>
       )}
-      <Outlet context={[user, setUser]} />
+      <Outlet context={{ user, setUser }} />
     </>
   );
 }

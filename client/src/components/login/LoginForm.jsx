@@ -1,10 +1,8 @@
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { useOutletContext } from "react-router-dom";
 
 export default function LoginForm({ setLoginErrors }) {
-  const [user, setUser] = useOutletContext();
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +15,7 @@ export default function LoginForm({ setLoginErrors }) {
     if (response.data.status !== 200) {
       setLoginErrors(response.data.errors);
     } else {
-      setUser(response.data.user);
+      localStorage.setItem("token", response.data.token);
       navigate(`/${response.data.user.id}`);
     }
   };
