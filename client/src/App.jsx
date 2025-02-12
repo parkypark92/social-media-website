@@ -1,25 +1,14 @@
 import "./App.css";
+import Navbar from "./components/nav/Navbar";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 function App() {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-    navigate("/login");
-  };
 
   return (
     <>
-      {user && (
-        <div>
-          <h1>{user.username}</h1>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      )}
+      <Navbar user={user} setUser={setUser}></Navbar>
       <Outlet context={{ user, setUser }} />
     </>
   );
