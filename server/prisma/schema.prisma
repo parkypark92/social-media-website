@@ -29,7 +29,6 @@ model User {
 
 model Post {
   id       String    @id @default(uuid())
-  title    String
   text     String
   postedAt DateTime  @default(now())
   author   User      @relation("PostAuthor", fields: [authorId], references: [id])

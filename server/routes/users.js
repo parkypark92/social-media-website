@@ -9,6 +9,8 @@ router.get(
     res.json(req.user);
   }
 );
-router.get("/:userId", controller.get_user_info);
+
+router.post("/create-post", controller.create_post);
+router.get("/get-posts", controller.get_all_posts);
 
 module.exports = router;
