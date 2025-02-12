@@ -1,9 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "../App";
-import Home from "../pages/Home";
+import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
+import ProtectedRoute from "./ProtectedRoute";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -13,7 +14,11 @@ const Router = () => {
       children: [
         {
           path: "/:userId",
-          element: <Home />,
+          element: (
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "login",
