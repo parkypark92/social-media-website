@@ -2,11 +2,12 @@ import styles from "./Navbar.module.css";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-export default function Navbar({ user, setUser }) {
+export default function Navbar({ user, setUser, setIsAuthenticated }) {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUser(null);
+    setIsAuthenticated(null);
     navigate("/login");
   };
   return (
@@ -27,4 +28,5 @@ export default function Navbar({ user, setUser }) {
 Navbar.propTypes = {
   user: PropTypes.object,
   setUser: PropTypes.func,
+  setIsAuthenticated: PropTypes.func,
 };
