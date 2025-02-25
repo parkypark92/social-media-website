@@ -14,17 +14,28 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(uuid())
-  username    String    @unique
-  email       String    @unique
-  dateOfBirth String
-  salt        String?
-  hash        String?
-  followedBy  User[]    @relation("UserFollows")
-  following   User[]    @relation("UserFollows")
-  posts       Post[]    @relation("PostAuthor")
-  comments    Comment[]
-  likes       Post[]    @relation("PostLikes")
+  id               String       @id @default(uuid())
+  username         String       @unique
+  email            String       @unique
+  dateOfBirth      String
+  salt             String?
+  hash             String?
+  sentRequests     Friendship[] @relation("SentRequests")
+  receivedRequests Friendship[] @relation("ReceivedRequests")
+  posts            Post[]       @relation("PostAuthor")
+  comments         Comment[]
+  likes            Post[]       @relation("PostLikes")
+}
+
+model Friendship {
+  id         String @id @default(uuid())
+  senderId   String
+  receiverId String
+  status     String @default("pending")
+  sender     User   @relation("SentRequests", fields: [senderId], references: [id])
+  receiver   User   @relation("ReceivedRequests", fields: [receiverId], references: [id])
+
+  @@unique([senderId, receiverId]) // Prevent duplicate friend requests
 }
 
 model Post {
