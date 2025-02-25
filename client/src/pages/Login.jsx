@@ -1,15 +1,18 @@
 import LoginForm from "../components/login/LoginForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const [loginErrors, setLoginErrors] = useState([]);
   const { user } = useOutletContext();
   const navigate = useNavigate();
-  if (user) {
-    navigate(`/${user.id}`);
-  }
 
-  const [loginErrors, setLoginErrors] = useState([]);
+  useEffect(() => {
+    if (user) {
+      navigate(`/${user.id}`);
+    }
+  }, [navigate, user]);
+
   return (
     <div>
       {loginErrors && (
