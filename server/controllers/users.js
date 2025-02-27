@@ -2,6 +2,18 @@ const passport = require("passport");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+module.exports.get_all_users = async (req, res, next) => {
+  const users = await prisma.user.findMany({
+    where: {
+      NOT: {
+        id: req.query.id,
+      },
+    },
+    take: 4,
+  });
+  res.json({ users });
+};
+
 module.exports.authenticate_user = (req, res, next) => {
   let responseObj = {
     statusCode: 0,
