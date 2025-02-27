@@ -2,3 +2,21 @@
   background-color: antiquewhite;
   margin-bottom: 8px;
 }
+
+.postButton {
+  background: none;
+  border: none;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  margin-right: 8px;
+}
+
+.postButton:hover {
+  color: darkblue;
+}
+.postButton:focus {
+  outline: none;
+}

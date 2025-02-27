@@ -5,6 +5,8 @@ export default function Post({ postContent }) {
   return (
     <div className={styles.postContainer}>
       <p>{postContent}</p>
+      <button className={styles.postButton}>Like</button>
+      <button className={styles.postButton}>Comment</button>
     </div>
   );
 }

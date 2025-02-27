@@ -1,6 +1,6 @@
 import LoginForm from "../components/login/LoginForm";
 import { useState, useEffect } from "react";
-import { useOutletContext, useNavigate } from "react-router-dom";
+import { useOutletContext, useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
   const [loginErrors, setLoginErrors] = useState([]);
@@ -24,6 +24,10 @@ export default function Login() {
       )}
       <h2>Login</h2>
       <LoginForm setLoginErrors={setLoginErrors}></LoginForm>
+      <p>
+        Don&apos;t have an account yet? No problem,{" "}
+        <Link to="/signup">sign up here!</Link>
+      </p>
     </div>
   );
 }
