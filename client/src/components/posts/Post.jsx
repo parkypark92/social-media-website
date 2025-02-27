@@ -4,7 +4,7 @@ import styles from "./Post.module.css";
 export default function Post({ postContent }) {
   return (
     <div className={styles.postContainer}>
-      <p>{postContent}</p>
+      <h3>{postContent}</h3>
       <button className={styles.postButton}>Like</button>
       <button className={styles.postButton}>Comment</button>
     </div>

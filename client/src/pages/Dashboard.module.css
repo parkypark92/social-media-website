@@ -1,0 +1,12 @@
+.dashboardDisplay {
+  display: flex;
+  gap: 24px;
+}
+
+.feedDisplay {
+  width: 75%;
+}
+
+.usersDisplay {
+  width: 25%;
+}

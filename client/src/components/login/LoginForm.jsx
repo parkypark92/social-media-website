@@ -16,6 +16,7 @@ export default function LoginForm({ setLoginErrors }) {
       setLoginErrors(response.data.errors);
     } else {
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", response.data.user);
       navigate(`/${response.data.user.id}`);
     }
   };

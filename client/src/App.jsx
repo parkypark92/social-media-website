@@ -6,7 +6,7 @@ import axios from "axios";
 
 function App() {
   const token = localStorage.getItem("token");
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(localStorage.getItem("user"));
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
@@ -29,6 +29,8 @@ function App() {
         setIsAuthenticated(false);
       }
     };
+
+    localStorage.removeItem("user");
 
     if (token) {
       fetchUser();
