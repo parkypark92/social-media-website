@@ -2,15 +2,24 @@ const passport = require("passport");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-module.exports.get_all_users = async (req, res, next) => {
+module.exports.get_users_preview = async (req, res, next) => {
   const users = await prisma.user.findMany({
     where: {
+      id: { not: req.query.id },
       NOT: {
-        id: req.query.id,
+        OR: [
+          { sentRequests: { some: { receiverId: req.query.id } } },
+          { receivedRequests: { some: { senderId: req.query.id } } },
+        ],
       },
     },
     take: 4,
+    include: {
+      sentRequests: true,
+      receivedRequests: true,
+    },
   });
+
   res.json({ users });
 };
 
@@ -74,4 +83,26 @@ module.exports.get_all_posts = async (req, res, next) => {
 
     res.status(500).json({ error: "Internal server error" });
   }
+};
+
+module.exports.send_friend_request = async (req, res, next) => {
+  const existingRequest = await prisma.friendship.findFirst({
+    where: {
+      senderId: req.body.sentBy,
+      receiverId: req.body.receivedBy,
+    },
+  });
+
+  if (existingRequest) {
+    return res.status(400).json({ msg: "Friend request already sent!" });
+  }
+
+  await prisma.friendship.create({
+    data: {
+      senderId: req.body.sentBy,
+      receiverId: req.body.receivedBy,
+    },
+  });
+
+  res.status(200).json({ msg: "Request sent!" });
 };
