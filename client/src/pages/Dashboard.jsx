@@ -1,6 +1,7 @@
 import CreatePost from "../components/createPost/CreatePost";
 import PostsFeed from "../components/posts/PostsFeed";
-import ViewUsersDashboard from "../components/friends/ViewUsersDashboard";
+import RequestFriends from "../components/friends/RequestFriends";
+import FriendsListPreview from "../components/friends/FriendsListPreview";
 import { useState } from "react";
 import styles from "./Dashboard.module.css";
 
@@ -13,8 +14,9 @@ export default function Dashboard() {
         <CreatePost postData={postData} setPostData={setPostData} />
         <PostsFeed postData={postData} setPostData={setPostData} />
       </div>
-      <div className={styles.usersDisplay}>
-        <ViewUsersDashboard />
+      <div className={styles.friendsDisplay}>
+        <FriendsListPreview />
+        <RequestFriends />
       </div>
     </div>
   );
