@@ -2,27 +2,6 @@ const passport = require("passport");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-module.exports.get_users_preview = async (req, res, next) => {
-  const users = await prisma.user.findMany({
-    where: {
-      id: { not: req.query.id },
-      NOT: {
-        OR: [
-          { sentRequests: { some: { receiverId: req.query.id } } },
-          { receivedRequests: { some: { senderId: req.query.id } } },
-        ],
-      },
-    },
-    take: 4,
-    include: {
-      sentRequests: true,
-      receivedRequests: true,
-    },
-  });
-
-  res.json({ users });
-};
-
 module.exports.authenticate_user = (req, res, next) => {
   let responseObj = {
     statusCode: 0,
@@ -85,6 +64,41 @@ module.exports.get_all_posts = async (req, res, next) => {
   }
 };
 
+module.exports.get_requests_preview = async (req, res, next) => {
+  const requests = await prisma.friendship.findMany({
+    where: {
+      receiverId: req.query.id,
+      status: "pending",
+    },
+    include: {
+      sender: true,
+    },
+    take: 4,
+  });
+  res.status(200).json({ requests });
+};
+
+module.exports.get_users_preview = async (req, res, next) => {
+  const users = await prisma.user.findMany({
+    where: {
+      id: { not: req.query.id },
+      NOT: {
+        OR: [
+          { sentRequests: { some: { receiverId: req.query.id } } },
+          { receivedRequests: { some: { senderId: req.query.id } } },
+        ],
+      },
+    },
+    take: 4,
+    include: {
+      sentRequests: true,
+      receivedRequests: true,
+    },
+  });
+
+  res.json({ users });
+};
+
 module.exports.send_friend_request = async (req, res, next) => {
   const existingRequest = await prisma.friendship.findFirst({
     where: {
@@ -105,4 +119,18 @@ module.exports.send_friend_request = async (req, res, next) => {
   });
 
   res.status(200).json({ msg: "Request sent!" });
+};
+
+module.exports.answer_friend_request = async (req, res, next) => {
+  const friendshipStatus = await prisma.friendship.updateManyAndReturn({
+    where: {
+      senderId: req.body.senderId,
+      receiverId: req.body.receiverId,
+      status: "pending",
+    },
+    data: {
+      status: req.body.status,
+    },
+  });
+  res.status(200).json({ msg: "Request Answered!", friendshipStatus });
 };
