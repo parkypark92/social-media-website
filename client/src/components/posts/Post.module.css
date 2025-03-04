@@ -1,6 +1,7 @@
 .postContainer {
   background-color: antiquewhite;
   margin-bottom: 8px;
+  border-radius: 5px;
 }
 
 .postButton {

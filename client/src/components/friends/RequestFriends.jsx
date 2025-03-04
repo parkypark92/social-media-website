@@ -32,8 +32,6 @@ export default function RequestFriends() {
         data
       );
       if (response.status === 200) {
-        alert("Friend request sent successfully!");
-        console.log("Response:", response.data);
         setUsersPreview(
           usersPreview.map((item) => {
             if (item.id === user.id) {
@@ -75,7 +73,6 @@ export default function RequestFriends() {
       {usersPreview.map((item) => {
         return (
           <div key={item.id} className={styles.usersList}>
-            {console.log(item)}
             <li>{item.username}</li>
             {item.sentRequests.includes(user.id) ||
             item.receivedRequests.includes(user.id) ? (
