@@ -24,7 +24,6 @@ export default function FriendRequestsPreview() {
 
   const handleRequest = async (e) => {
     e.preventDefault();
-    console.log(e.target.id);
     const data = {
       receiverId: user.id,
       senderId: e.target.dataset.sender,

@@ -2,6 +2,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import styles from "./CreatePost.module.css";
 
 export default function CreatePost({ postData, setPostData }) {
   const { user } = useOutletContext();
@@ -29,8 +30,9 @@ export default function CreatePost({ postData, setPostData }) {
 
   return (
     <form onSubmit={publishPost}>
-      <div>
+      <div className={styles.createPostContainer}>
         <input
+          className={styles.createPostInput}
           type="text"
           name="newPost"
           id="newPost"

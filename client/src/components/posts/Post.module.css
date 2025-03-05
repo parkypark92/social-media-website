@@ -1,7 +1,15 @@
 .postContainer {
   background-color: antiquewhite;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
   border-radius: 5px;
+  padding: 16px;
+  text-align: left;
+}
+
+.authorAndDate {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .postButton {

@@ -2,6 +2,7 @@ import DateSelect from "./DateSelect";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import styles from "./SignupForm.module.css";
 
 export default function SignupForm({ setErrorMessage }) {
   const navigate = useNavigate();
@@ -30,8 +31,9 @@ export default function SignupForm({ setErrorMessage }) {
   };
 
   return (
-    <form onSubmit={sendSignupData}>
+    <form className={styles.container} onSubmit={sendSignupData}>
       <input
+        className={styles.input}
         type="text"
         name="username"
         id="username"
@@ -40,6 +42,7 @@ export default function SignupForm({ setErrorMessage }) {
         required
       />
       <input
+        className={styles.input}
         type="email"
         name="email"
         id="email"
@@ -49,6 +52,7 @@ export default function SignupForm({ setErrorMessage }) {
       />
       <DateSelect></DateSelect>
       <input
+        className={styles.input}
         type="password"
         name="password"
         id="password"
@@ -57,6 +61,7 @@ export default function SignupForm({ setErrorMessage }) {
         required
       />
       <input
+        className={styles.input}
         type="password"
         name="password-confirm"
         id="password-confirm"
@@ -64,7 +69,9 @@ export default function SignupForm({ setErrorMessage }) {
         placeholder="Please confirm you password"
         required
       />
-      <button type="submit">Signup</button>
+      <button className={styles.btn} type="submit">
+        Signup
+      </button>
     </form>
   );
 }

@@ -10,6 +10,7 @@ export default function Dashboard() {
 
   return (
     <div className={styles.dashboardDisplay}>
+      <div className={styles.menuDisplay}></div>
       <div className={styles.feedDisplay}>
         <CreatePost postData={postData} setPostData={setPostData} />
         <PostsFeed postData={postData} setPostData={setPostData} />

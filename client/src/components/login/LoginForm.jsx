@@ -1,6 +1,7 @@
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import styles from "./LoginForm.module.css";
 
 export default function LoginForm({ setLoginErrors }) {
   const navigate = useNavigate();
@@ -21,8 +22,9 @@ export default function LoginForm({ setLoginErrors }) {
     }
   };
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={styles.container} onSubmit={handleSubmit}>
       <input
+        className={styles.input}
         type="text"
         name="username"
         id="username"
@@ -30,13 +32,16 @@ export default function LoginForm({ setLoginErrors }) {
         placeholder="Username"
       />
       <input
+        className={styles.input}
         type="password"
         name="password"
         id="password"
         aria-label="Password"
         placeholder="Password"
       />
-      <button type="submit">Login</button>
+      <button className={styles.btn} type="submit">
+        Login
+      </button>
     </form>
   );
 }

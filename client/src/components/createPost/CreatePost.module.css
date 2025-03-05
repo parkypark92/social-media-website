@@ -1,0 +1,12 @@
+.createPostContainer {
+  margin-bottom: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.createPostInput {
+  padding: 8px;
+  border-radius: 16px;
+  border: 1px solid black;
+  flex-grow: 1;
+}
