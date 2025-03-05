@@ -34,6 +34,9 @@ module.exports.create_post = async (req, res, next) => {
         text: req.body.text,
         authorId: req.body.userId,
       },
+      include: {
+        author: true,
+      },
     });
 
     res.status(201).json({ message: "Post created successfully", post });
@@ -53,6 +56,9 @@ module.exports.get_all_posts = async (req, res, next) => {
     const posts = await prisma.post.findMany({
       orderBy: {
         postedAt: "desc",
+      },
+      include: {
+        author: true,
       },
     });
 
