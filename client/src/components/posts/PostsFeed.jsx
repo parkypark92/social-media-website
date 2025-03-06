@@ -25,7 +25,14 @@ export default function PostsFeed({ postData, setPostData }) {
       {feedError && <p>{feedError}</p>}
       {postData &&
         postData.map((post) => {
-          return <Post key={post.id} postContent={post} />;
+          return (
+            <Post
+              key={post.id}
+              postContent={post}
+              setPostData={setPostData}
+              postData={postData}
+            />
+          );
         })}
     </div>
   );
