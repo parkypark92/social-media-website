@@ -37,6 +37,36 @@ export default function Post({ postContent, setPostData, postData }) {
     }
   };
 
+  const handleUnlikePost = async (e) => {
+    e.preventDefault;
+    e.preventDefault();
+    const body = {
+      postId: postContent.id,
+      userId: user.id,
+    };
+    const response = await axios.post(
+      "http://localhost:3000/users/unlike-post",
+      body
+    );
+    if (response.status === 200) {
+      console.log(response.data);
+      setPostData(
+        postData.map((prev) => {
+          if (prev.id === postContent.id) {
+            return {
+              ...prev,
+              likes: prev.likes.filter((e) => e.id !== user.id),
+            };
+          } else {
+            return prev;
+          }
+        })
+      );
+    } else {
+      console.log("Error");
+    }
+  };
+
   return (
     <div className={styles.postContainer}>
       <div className={styles.authorAndDate}>
@@ -45,7 +75,9 @@ export default function Post({ postContent, setPostData, postData }) {
       </div>
       <p>{postContent.text}</p>
       {postContent.likes.some((e) => e.id === user.id) ? (
-        <button className={styles.postButton}>Unlike</button>
+        <button className={styles.postButton} onClick={handleUnlikePost}>
+          Unlike
+        </button>
       ) : (
         <button className={styles.postButton} onClick={handleLikePost}>
           Like

@@ -16,5 +16,6 @@ router.get("/get-requests-preview", controller.get_requests_preview);
 router.post("/friend-request", controller.send_friend_request);
 router.post("/answer-request", controller.answer_friend_request);
 router.post("/like-post", controller.like_post);
+router.post("/unlike-post", controller.unlike_post);
 
 module.exports = router;

@@ -157,3 +157,19 @@ module.exports.like_post = async (req, res, next) => {
   });
   res.status(200).json({ msg: "Post liked!" });
 };
+
+module.exports.unlike_post = async (req, res, next) => {
+  await prisma.post.update({
+    where: {
+      id: req.body.postId,
+    },
+    data: {
+      likes: {
+        disconnect: {
+          id: req.body.userId,
+        },
+      },
+    },
+  });
+  res.status(200).json({ msg: "Post unliked!" });
+};
