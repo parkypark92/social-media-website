@@ -59,6 +59,7 @@ module.exports.get_all_posts = async (req, res, next) => {
       },
       include: {
         author: true,
+        likes: true,
       },
     });
 
@@ -139,4 +140,20 @@ module.exports.answer_friend_request = async (req, res, next) => {
     },
   });
   res.status(200).json({ msg: "Request Answered!", friendshipStatus });
+};
+
+module.exports.like_post = async (req, res, next) => {
+  await prisma.post.update({
+    where: {
+      id: req.body.postId,
+    },
+    data: {
+      likes: {
+        connect: {
+          id: req.body.userId,
+        },
+      },
+    },
+  });
+  res.status(200).json({ msg: "Post liked!" });
 };
