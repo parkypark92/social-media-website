@@ -1,3 +1,5 @@
+import CreateComment from "../comments/CreateComment";
+import Comments from "../comments/Comments";
 import PropTypes from "prop-types";
 import styles from "./Post.module.css";
 import axios from "axios";
@@ -6,7 +8,6 @@ import { format, parseISO } from "date-fns";
 
 export default function Post({ postContent, setPostData, postData }) {
   const { user } = useOutletContext();
-  console.log(postContent);
 
   const handleLikePost = async (e) => {
     e.preventDefault();
@@ -83,8 +84,16 @@ export default function Post({ postContent, setPostData, postData }) {
           Like
         </button>
       )}
+      <CreateComment
+        postId={postContent.id}
+        setPostData={setPostData}
+        postData={postData}
+      ></CreateComment>
+      <h2>Comments</h2>
+      <hr />
+      <Comments comments={postContent.comments}></Comments>
 
-      <button className={styles.postButton}>Comment</button>
+      {/* <button className={styles.postButton}>Comment</button> */}
     </div>
   );
 }

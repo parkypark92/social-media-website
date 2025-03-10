@@ -7,6 +7,7 @@ import styles from "./Dashboard.module.css";
 
 export default function Dashboard() {
   const [postData, setPostData] = useState([]);
+  console.log(postData);
 
   return (
     <div className={styles.dashboardDisplay}>
