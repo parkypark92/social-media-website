@@ -60,6 +60,14 @@ module.exports.get_all_posts = async (req, res, next) => {
       include: {
         author: true,
         likes: true,
+        comments: {
+          include: {
+            author: true,
+          },
+          orderBy: {
+            postedAt: "desc",
+          },
+        },
       },
     });
 
@@ -172,4 +180,18 @@ module.exports.unlike_post = async (req, res, next) => {
     },
   });
   res.status(200).json({ msg: "Post unliked!" });
+};
+
+module.exports.create_comment = async (req, res, next) => {
+  const comment = await prisma.comment.create({
+    data: {
+      text: req.body.text,
+      authorId: req.body.authorId,
+      postId: req.body.postId,
+    },
+    include: {
+      author: true,
+    },
+  });
+  res.status(200).json({ msg: "Comment submitted!", comment });
 };
