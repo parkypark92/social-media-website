@@ -1,5 +1,6 @@
 import CreatePost from "../components/createPost/CreatePost";
 import PostsFeed from "../components/posts/PostsFeed";
+import FriendsListPreview from "../components/friends/FriendsListPreview";
 import RequestFriends from "../components/friends/RequestFriends";
 import FriendRequestsPreview from "../components/friends/FriendRequestsPreview";
 import { useState } from "react";
@@ -7,11 +8,12 @@ import styles from "./Dashboard.module.css";
 
 export default function Dashboard() {
   const [postData, setPostData] = useState([]);
-  console.log(postData);
 
   return (
     <div className={styles.dashboardDisplay}>
-      <div className={styles.menuDisplay}></div>
+      <div className={styles.menuDisplay}>
+        <FriendsListPreview></FriendsListPreview>
+      </div>
       <div className={styles.feedDisplay}>
         <CreatePost postData={postData} setPostData={setPostData} />
         <PostsFeed postData={postData} setPostData={setPostData} />

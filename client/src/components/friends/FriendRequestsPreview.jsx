@@ -52,36 +52,40 @@ export default function FriendRequestsPreview() {
   return (
     <div>
       <h2>Friend Requests</h2>
-      {requestsPreview.map((request) => {
-        return (
-          <div className={styles.requestPreviewDisplay} key={request.id}>
-            <li>{request.sender.username}</li>
+      {requestsPreview.length ? (
+        requestsPreview.map((request) => {
+          return (
+            <div className={styles.requestPreviewDisplay} key={request.id}>
+              <li>{request.sender.username}</li>
 
-            {request.status === "accepted" ? (
-              <p>Request Accepted!</p>
-            ) : request.status === "declined" ? (
-              <p>Request Declined!</p>
-            ) : (
-              <div>
-                <button
-                  data-sender={request.sender.id}
-                  id="accepted"
-                  onClick={handleRequest}
-                >
-                  Accept
-                </button>
-                <button
-                  data-sender={request.sender.id}
-                  id="declined"
-                  onClick={handleRequest}
-                >
-                  Decline
-                </button>
-              </div>
-            )}
-          </div>
-        );
-      })}
+              {request.status === "accepted" ? (
+                <p>Request Accepted!</p>
+              ) : request.status === "declined" ? (
+                <p>Request Declined!</p>
+              ) : (
+                <div>
+                  <button
+                    data-sender={request.sender.id}
+                    id="accepted"
+                    onClick={handleRequest}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    data-sender={request.sender.id}
+                    id="declined"
+                    onClick={handleRequest}
+                  >
+                    Decline
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })
+      ) : (
+        <p>No friend requests!</p>
+      )}
     </div>
   );
 }
