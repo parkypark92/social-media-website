@@ -12,6 +12,7 @@ router.get(
 );
 router.post("/create-post", controller.create_post);
 router.get("/get-posts", controller.get_all_posts);
+router.get("/get-friends", controller.get_all_friends);
 router.get("/get-requests-preview", controller.get_requests_preview);
 router.post("/friend-request", controller.send_friend_request);
 router.post("/answer-request", controller.answer_friend_request);

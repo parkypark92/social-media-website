@@ -1,6 +1,7 @@
 const passport = require("passport");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const asyncHandler = require("express-async-handler");
 
 module.exports.authenticate_user = (req, res, next) => {
   let responseObj = {
@@ -24,62 +25,69 @@ module.exports.authenticate_user = (req, res, next) => {
   })(req, res, next);
 };
 
-module.exports.create_post = async (req, res, next) => {
-  try {
-    if (!req.body.text) {
-      return res.status(400).json({ error: "Text field is required." });
-    }
-    const post = await prisma.post.create({
-      data: {
-        text: req.body.text,
-        authorId: req.body.userId,
-      },
-      include: {
-        author: true,
-      },
-    });
-
-    res.status(201).json({ message: "Post created successfully", post });
-  } catch (error) {
-    console.error("Error creating post:", error);
-
-    if (error.code === "P2002") {
-      return res.status(409).json({ error: "Duplicate entry detected." });
-    }
-
-    res.status(500).json({ error: "Internal server error" });
+module.exports.create_post = asyncHandler(async (req, res) => {
+  if (!req.body.text) {
+    return res.status(400).json({ error: "Text field is required." });
   }
-};
 
-module.exports.get_all_posts = async (req, res, next) => {
-  try {
-    const posts = await prisma.post.findMany({
-      orderBy: {
-        postedAt: "desc",
-      },
-      include: {
-        author: true,
-        likes: true,
-        comments: {
-          include: {
-            author: true,
-          },
-          orderBy: {
-            postedAt: "desc",
-          },
+  const post = await prisma.post.create({
+    data: {
+      text: req.body.text,
+      authorId: req.body.userId,
+    },
+    include: {
+      author: true,
+    },
+  });
+
+  res.status(201).json({ message: "Post created successfully", post });
+});
+
+module.exports.get_all_posts = asyncHandler(async (req, res) => {
+  const posts = await prisma.post.findMany({
+    orderBy: {
+      postedAt: "desc",
+    },
+    include: {
+      author: true,
+      likes: true,
+      comments: {
+        include: {
+          author: true,
+        },
+        orderBy: {
+          postedAt: "desc",
         },
       },
-    });
+    },
+  });
 
-    res.status(200).json({ posts });
-  } catch (error) {
-    console.error("Error fetching posts:", error);
+  res.status(200).json({ posts });
+});
 
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+module.exports.get_all_friends = asyncHandler(async (req, res, next) => {
+  const friendsList = await prisma.friendship.findMany({
+    where: {
+      OR: [
+        {
+          senderId: req.query.id,
+          status: "accepted",
+        },
+        {
+          receiverId: req.query.id,
+          status: "accepted",
+        },
+      ],
+    },
+    include: {
+      sender: true,
+      receiver: true,
+    },
+  });
+  res.status(200).json({ friendsList });
+});
 
-module.exports.get_requests_preview = async (req, res, next) => {
+module.exports.get_requests_preview = asyncHandler(async (req, res, next) => {
   const requests = await prisma.friendship.findMany({
     where: {
       receiverId: req.query.id,
@@ -91,9 +99,9 @@ module.exports.get_requests_preview = async (req, res, next) => {
     take: 4,
   });
   res.status(200).json({ requests });
-};
+});
 
-module.exports.get_users_preview = async (req, res, next) => {
+module.exports.get_users_preview = asyncHandler(async (req, res, next) => {
   const users = await prisma.user.findMany({
     where: {
       id: { not: req.query.id },
@@ -112,9 +120,9 @@ module.exports.get_users_preview = async (req, res, next) => {
   });
 
   res.json({ users });
-};
+});
 
-module.exports.send_friend_request = async (req, res, next) => {
+module.exports.send_friend_request = asyncHandler(async (req, res, next) => {
   const existingRequest = await prisma.friendship.findFirst({
     where: {
       senderId: req.body.sentBy,
@@ -134,9 +142,9 @@ module.exports.send_friend_request = async (req, res, next) => {
   });
 
   res.status(200).json({ msg: "Request sent!" });
-};
+});
 
-module.exports.answer_friend_request = async (req, res, next) => {
+module.exports.answer_friend_request = asyncHandler(async (req, res, next) => {
   const friendshipStatus = await prisma.friendship.updateManyAndReturn({
     where: {
       senderId: req.body.senderId,
@@ -148,9 +156,9 @@ module.exports.answer_friend_request = async (req, res, next) => {
     },
   });
   res.status(200).json({ msg: "Request Answered!", friendshipStatus });
-};
+});
 
-module.exports.like_post = async (req, res, next) => {
+module.exports.like_post = asyncHandler(async (req, res, next) => {
   await prisma.post.update({
     where: {
       id: req.body.postId,
@@ -164,9 +172,9 @@ module.exports.like_post = async (req, res, next) => {
     },
   });
   res.status(200).json({ msg: "Post liked!" });
-};
+});
 
-module.exports.unlike_post = async (req, res, next) => {
+module.exports.unlike_post = asyncHandler(async (req, res, next) => {
   await prisma.post.update({
     where: {
       id: req.body.postId,
@@ -180,9 +188,9 @@ module.exports.unlike_post = async (req, res, next) => {
     },
   });
   res.status(200).json({ msg: "Post unliked!" });
-};
+});
 
-module.exports.create_comment = async (req, res, next) => {
+module.exports.create_comment = asyncHandler(async (req, res, next) => {
   const comment = await prisma.comment.create({
     data: {
       text: req.body.text,
@@ -194,4 +202,4 @@ module.exports.create_comment = async (req, res, next) => {
     },
   });
   res.status(200).json({ msg: "Comment submitted!", comment });
-};
+});

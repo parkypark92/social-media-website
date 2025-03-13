@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 const asyncHandler = require("express-async-handler");
 const { issueJWT } = require("../utils/jwtUtils");
 
-module.exports.process_login = asyncHandler(async (req, res, next) => {
+module.exports.process_login = (req, res, next) => {
   const tokenObject = issueJWT(req.user);
   res.json({
     success: true,
@@ -12,4 +12,4 @@ module.exports.process_login = asyncHandler(async (req, res, next) => {
     status: 200,
     user: req.user,
   });
-});
+};
