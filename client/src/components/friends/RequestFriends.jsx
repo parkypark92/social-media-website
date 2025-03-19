@@ -2,8 +2,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useOutletContext, Link } from "react-router-dom";
 import styles from "./RequestFriends.module.css";
+import PropTypes from "prop-types";
 
-export default function RequestFriends() {
+export default function RequestFriends({ limit }) {
   const [usersPreview, setUsersPreview] = useState([]);
   const { user } = useOutletContext();
 
@@ -12,13 +13,13 @@ export default function RequestFriends() {
       const response = await axios.get(
         "http://localhost:3000/users/users-preview",
         {
-          params: { id: user.id },
+          params: { id: user.id, limit },
         }
       );
       setUsersPreview(response.data.users);
     };
     fetchUsers();
-  }, [user]);
+  }, [user, limit]);
 
   const sendRequest = async (e) => {
     e.preventDefault();
@@ -69,23 +70,34 @@ export default function RequestFriends() {
 
   return (
     <div>
-      <h2>Find some new friends!</h2>
-      {usersPreview.map((item) => {
-        return (
-          <div key={item.id} className={styles.usersList}>
-            <li>{item.username}</li>
-            {item.sentRequests.includes(user.id) ||
-            item.receivedRequests.includes(user.id) ? (
-              <p>Request sent!</p>
-            ) : (
-              <button id={item.id} onClick={sendRequest}>
-                Send request
-              </button>
-            )}
-          </div>
-        );
-      })}
-      <Link>View all</Link>
+      {usersPreview.length ? (
+        usersPreview.map((item) => {
+          return (
+            <div key={item.id} className={styles.usersList}>
+              <li>{item.username}</li>
+              {item.sentRequests.includes(user.id) ||
+              item.receivedRequests.includes(user.id) ? (
+                <p>Request sent!</p>
+              ) : (
+                <button id={item.id} onClick={sendRequest}>
+                  Send request
+                </button>
+              )}
+            </div>
+          );
+        })
+      ) : (
+        <p>No suggestions right now!</p>
+      )}
+      {limit && usersPreview.length ? (
+        <Link to={`/${user.id}/find-friends`}>View all</Link>
+      ) : !limit ? (
+        <Link to={`/${user.id}`}>Back</Link>
+      ) : undefined}
     </div>
   );
 }
+
+RequestFriends.propTypes = {
+  limit: PropTypes.number,
+};

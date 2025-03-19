@@ -4,7 +4,7 @@ import styles from "./Comments.module.css";
 export default function Comments({ comments }) {
   return (
     <div>
-      {comments &&
+      {comments.length ? (
         comments.map((comment) => {
           return (
             <div key={comment.id}>
@@ -15,7 +15,10 @@ export default function Comments({ comments }) {
               <hr />
             </div>
           );
-        })}
+        })
+      ) : (
+        <p>No comments yet...</p>
+      )}
     </div>
   );
 }

@@ -55,6 +55,7 @@ function App() {
         setUser={setUser}
         setIsAuthenticated={setIsAuthenticated}
       ></Navbar>
+      <div className="navbarOffset"></div>
       <Outlet context={{ user, setUser }} />
     </>
   );

@@ -9,3 +9,7 @@ form {
   display: flex;
   flex-direction: column;
 }
+
+.navbarOffset {
+  height: 72px;
+}

@@ -92,8 +92,6 @@ export default function Post({ postContent, setPostData, postData }) {
       <h2>Comments</h2>
       <hr />
       <Comments comments={postContent.comments}></Comments>
-
-      {/* <button className={styles.postButton}>Comment</button> */}
     </div>
   );
 }

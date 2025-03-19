@@ -1,7 +1,6 @@
 .dashboardDisplay {
   display: flex;
   gap: 24px;
-  margin-top: 72px;
   padding: 36px 0;
 }
 

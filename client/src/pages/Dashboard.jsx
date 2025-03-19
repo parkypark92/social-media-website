@@ -19,8 +19,10 @@ export default function Dashboard() {
         <PostsFeed postData={postData} setPostData={setPostData} />
       </div>
       <div className={styles.friendsDisplay}>
-        <FriendRequestsPreview />
-        <RequestFriends />
+        <h2>Friend Requests</h2>
+        <FriendRequestsPreview limit={4} />
+        <h2>Find some new friends!</h2>
+        <RequestFriends limit={4} />
       </div>
     </div>
   );

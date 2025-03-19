@@ -4,6 +4,8 @@ import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
+import FindFriends from "../pages/FindFriends";
+import FriendRequestsPreview from "../components/friends/FriendRequestsPreview";
 import ProtectedRoute from "./ProtectedRoute";
 
 const Router = () => {
@@ -31,6 +33,22 @@ const Router = () => {
         {
           path: "profile/:userId",
           element: <Profile />,
+        },
+        {
+          path: "/:userId/find-friends",
+          element: (
+            <ProtectedRoute>
+              <FindFriends></FindFriends>
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/:userId/friend-requests",
+          element: (
+            <ProtectedRoute>
+              <FriendRequestsPreview></FriendRequestsPreview>
+            </ProtectedRoute>
+          ),
         },
       ],
     },
