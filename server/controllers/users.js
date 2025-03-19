@@ -96,7 +96,7 @@ module.exports.get_requests_preview = asyncHandler(async (req, res, next) => {
     include: {
       sender: true,
     },
-    take: 4,
+    ...(req.query.limit ? { take: parseInt(req.query.limit) } : {}),
   });
   res.status(200).json({ requests });
 });
@@ -112,7 +112,7 @@ module.exports.get_users_preview = asyncHandler(async (req, res, next) => {
         ],
       },
     },
-    take: 4,
+    ...(req.query.limit ? { take: parseInt(req.query.limit) } : {}),
     include: {
       sentRequests: true,
       receivedRequests: true,
