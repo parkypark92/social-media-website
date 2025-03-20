@@ -37,6 +37,12 @@ module.exports.create_post = asyncHandler(async (req, res) => {
     },
     include: {
       author: true,
+      likes: true,
+      comments: {
+        include: {
+          author: true,
+        },
+      },
     },
   });
 
