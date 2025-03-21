@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/users");
 
-router.get("/users-preview", controller.get_users_preview);
 router.get(
   "/authenticate",
   controller.authenticate_user,
@@ -11,9 +10,10 @@ router.get(
   }
 );
 router.post("/create-post", controller.create_post);
-router.get("/get-posts", controller.get_all_posts);
+router.get("/get-posts", controller.get_posts);
 router.get("/get-friends", controller.get_all_friends);
 router.get("/get-requests-preview", controller.get_requests_preview);
+router.get("/users-preview", controller.get_users_preview);
 router.post("/friend-request", controller.send_friend_request);
 router.post("/answer-request", controller.answer_friend_request);
 router.post("/like-post", controller.like_post);

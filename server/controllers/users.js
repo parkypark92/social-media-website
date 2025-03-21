@@ -49,8 +49,13 @@ module.exports.create_post = asyncHandler(async (req, res) => {
   res.status(201).json({ message: "Post created successfully", post });
 });
 
-module.exports.get_all_posts = asyncHandler(async (req, res) => {
+module.exports.get_posts = asyncHandler(async (req, res) => {
   const posts = await prisma.post.findMany({
+    where: {
+      authorId: {
+        in: req.query.ids,
+      },
+    },
     orderBy: {
       postedAt: "desc",
     },
