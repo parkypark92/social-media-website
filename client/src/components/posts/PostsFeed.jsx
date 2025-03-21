@@ -1,24 +1,27 @@
 import Post from "./Post";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 
-export default function PostsFeed({ postData, setPostData }) {
+export default function PostsFeed({ postData, setPostData, friendsList }) {
   const [feedError, setFeedError] = useState(null);
 
-  const fetchPostData = useCallback(async () => {
-    const response = await axios.get("http://localhost:3000/users/get-posts");
-    if (response.status === 200) {
-      setFeedError(null);
-      setPostData(response.data.posts);
-    } else {
-      setFeedError(response.data.error);
-    }
-  }, [setPostData]);
-
   useEffect(() => {
-    fetchPostData();
-  }, [fetchPostData]);
+    const fetchPostData = async () => {
+      const friendIds = friendsList.map((friend) => friend.id);
+      const response = await axios.get(
+        "http://localhost:3000/users/get-posts",
+        { params: { ids: friendIds } }
+      );
+      if (response.status === 200) {
+        setFeedError(null);
+        setPostData(response.data.posts);
+      } else {
+        setFeedError(response.data.error);
+      }
+    };
+    friendsList.length && fetchPostData();
+  }, [friendsList, setPostData]);
 
   return (
     <div>
@@ -41,4 +44,5 @@ export default function PostsFeed({ postData, setPostData }) {
 PostsFeed.propTypes = {
   postData: PropTypes.array,
   setPostData: PropTypes.func,
+  friendsList: PropTypes.array,
 };

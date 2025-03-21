@@ -1,10 +1,9 @@
 import axios from "axios";
-import PropTypes from "prop-types";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import styles from "./CreatePost.module.css";
 
-export default function CreatePost({ postData, setPostData }) {
+export default function CreatePost() {
   const { user } = useOutletContext();
   const [text, setText] = useState("");
   const publishPost = async (e) => {
@@ -19,7 +18,7 @@ export default function CreatePost({ postData, setPostData }) {
       formData
     );
     if (response.status === 201) {
-      setPostData([response.data.post, ...postData]);
+      alert("Post success!");
       setText("");
     }
   };
@@ -46,8 +45,3 @@ export default function CreatePost({ postData, setPostData }) {
     </form>
   );
 }
-
-CreatePost.propTypes = {
-  setPostData: PropTypes.func,
-  postData: PropTypes.array,
-};

@@ -1,5 +1,10 @@
 import FriendRequestsPreview from "../components/friends/FriendRequestsPreview";
 
 export default function FriendRequests() {
-  return <FriendRequestsPreview></FriendRequestsPreview>;
+  return (
+    <>
+      <h2>Friend Requests</h2>
+      <FriendRequestsPreview></FriendRequestsPreview>
+    </>
+  );
 }

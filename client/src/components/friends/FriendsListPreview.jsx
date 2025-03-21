@@ -1,37 +1,12 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { useOutletContext } from "react-router-dom";
+import PropTypes from "prop-types";
 
-export default function FriendsListPreview() {
-  const [friendsPreview, setFriendsPreview] = useState([]);
-  const { user } = useOutletContext();
-  useEffect(() => {
-    const fetchFriends = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/users/get-friends",
-        { params: { id: user.id } }
-      );
-      if (response.status === 200) {
-        const friends = response.data.friendsList.map((friendship) => {
-          if (friendship.senderId === user.id) {
-            return friendship.receiver;
-          } else {
-            return friendship.sender;
-          }
-        });
-        setFriendsPreview(friends);
-      } else {
-        console.log("Error");
-      }
-    };
-    fetchFriends();
-  }, [user.id]);
+export default function FriendsListPreview({ friendsList }) {
   return (
     <div>
       <h2>Friends</h2>
-      {friendsPreview.length ? (
+      {friendsList.length ? (
         <ul>
-          {friendsPreview.map((friend) => {
+          {friendsList.map((friend) => {
             return <li key={friend.id}>{friend.username}</li>;
           })}
         </ul>
@@ -41,3 +16,7 @@ export default function FriendsListPreview() {
     </div>
   );
 }
+
+FriendsListPreview.propTypes = {
+  friendsList: PropTypes.array,
+};
