@@ -1,5 +1,10 @@
 .createPostContainer {
+  background-color: #fff;
   margin-bottom: 16px;
+  border-radius: 5px;
+  padding: 16px;
+  text-align: left;
+  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
   display: flex;
   gap: 8px;
 }
@@ -7,6 +12,12 @@
 .createPostInput {
   padding: 8px;
   border-radius: 16px;
-  border: 1px solid black;
+  border: none;
   flex-grow: 1;
+  background-color: #f1f2f6;
+}
+
+.createPostInput:focus {
+  border: 1px solid grey;
+  outline: none;
 }

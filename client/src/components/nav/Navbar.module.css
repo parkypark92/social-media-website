@@ -5,9 +5,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgb(255, 131, 131);
+  background-color: #fff;
   display: flex;
   justify-content: space-between;
+  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
 }
 
 .userNav {

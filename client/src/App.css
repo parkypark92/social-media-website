@@ -13,3 +13,8 @@ form {
 .navbarOffset {
   height: 72px;
 }
+
+button {
+  background-color: #0275d8;
+  color: #fff;
+}

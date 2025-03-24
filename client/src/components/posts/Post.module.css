@@ -1,9 +1,10 @@
 .postContainer {
-  background-color: antiquewhite;
+  background-color: #fff;
   margin-bottom: 16px;
   border-radius: 5px;
   padding: 16px;
   text-align: left;
+  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
 }
 
 .authorAndDate {
@@ -34,6 +35,12 @@
     brightness(89%) contrast(134%);
 }
 
+.fullHeartIcon:hover {
+  filter: invert(69%) sepia(67%) saturate(247%) hue-rotate(302deg)
+    brightness(93%) contrast(94%);
+}
+
 .likes {
   display: flex;
+  margin-bottom: 16px;
 }

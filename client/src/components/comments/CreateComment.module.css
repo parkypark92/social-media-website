@@ -1,0 +1,22 @@
+.commentForm {
+  display: flex;
+  gap: 8px;
+}
+
+.commentInput {
+  padding: 8px;
+  border-radius: 16px;
+  border: none;
+  flex-grow: 1;
+  background-color: #f1f2f6;
+}
+
+.commentInput:focus {
+  border: 1px solid grey;
+  outline: none;
+}
+
+.commentSubmit {
+  width: fit-content;
+  margin-left: auto;
+}

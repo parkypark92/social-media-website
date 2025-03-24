@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import PropTypes from "prop-types";
+import styles from "./CreateComment.module.css";
 
 export default function CreateComment({ postId, postData, setPostData }) {
   const { user } = useOutletContext();
@@ -43,16 +44,19 @@ export default function CreateComment({ postId, postData, setPostData }) {
 
   return (
     <form onSubmit={submitComment}>
-      <input
-        type="text"
-        name="newComment"
-        id="newComment"
-        placeholder="Leave a comment..."
-        aria-label="New Comment"
-        value={text}
-        onChange={handleChange}
-      />
-      <button>Submit</button>
+      <div className={styles.commentForm}>
+        <input
+          type="text"
+          name="newComment"
+          id="newComment"
+          placeholder="Leave a comment..."
+          aria-label="New Comment"
+          value={text}
+          className={styles.commentInput}
+          onChange={handleChange}
+        />
+        <button className={styles.commentSubmit}>Submit</button>
+      </div>
     </form>
   );
 }
