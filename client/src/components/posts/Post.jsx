@@ -75,15 +75,28 @@ export default function Post({ postContent, setPostData, postData }) {
         <small>{format(parseISO(postContent.postedAt), "MMMM dd, yyyy")}</small>
       </div>
       <p>{postContent.text}</p>
-      {postContent.likes.some((e) => e.id === user.id) ? (
-        <button className={styles.postButton} onClick={handleUnlikePost}>
-          Unlike
-        </button>
-      ) : (
-        <button className={styles.postButton} onClick={handleLikePost}>
-          Like
-        </button>
-      )}
+      <div className={styles.likes}>
+        {postContent.likes.some((e) => e.id === user.id) ? (
+          <button className={styles.postButton} onClick={handleUnlikePost}>
+            <img
+              className={styles.fullHeartIcon}
+              src="/heart-full.png"
+              alt=""
+              height={24}
+            />
+          </button>
+        ) : (
+          <button className={styles.postButton} onClick={handleLikePost}>
+            <img
+              className={styles.emptyHeartIcon}
+              src="/heart.png"
+              alt=""
+              height={24}
+            />
+          </button>
+        )}
+        <span>{postContent.likes.length}</span>
+      </div>
       <CreateComment
         postId={postContent.id}
         setPostData={setPostData}

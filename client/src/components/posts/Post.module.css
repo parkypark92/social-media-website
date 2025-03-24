@@ -15,17 +15,25 @@
 .postButton {
   background: none;
   border: none;
-  color: blue;
-  text-decoration: underline;
   cursor: pointer;
-  font-size: inherit;
   padding: 0;
   margin-right: 8px;
 }
 
-.postButton:hover {
-  color: darkblue;
-}
 .postButton:focus {
   outline: none;
+}
+
+.emptyHeartIcon:hover {
+  filter: invert(21%) sepia(50%) saturate(5569%) hue-rotate(352deg)
+    brightness(89%) contrast(134%);
+}
+
+.fullHeartIcon {
+  filter: invert(21%) sepia(50%) saturate(5569%) hue-rotate(352deg)
+    brightness(89%) contrast(134%);
+}
+
+.likes {
+  display: flex;
 }
