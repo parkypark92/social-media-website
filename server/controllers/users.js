@@ -1,6 +1,7 @@
 const passport = require("passport");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const supabase = require("../config/supabase").supabase;
 const asyncHandler = require("express-async-handler");
 
 module.exports.authenticate_user = (req, res, next) => {
