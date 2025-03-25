@@ -1,3 +1,4 @@
+import ProfilePicture from "../profilePicture/ProfilePicture.jsx";
 import axios from "axios";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
@@ -28,20 +29,23 @@ export default function CreatePost() {
   };
 
   return (
-    <form onSubmit={publishPost}>
-      <div className={styles.createPostContainer}>
-        <input
-          className={styles.createPostInput}
-          type="text"
-          name="newPost"
-          id="newPost"
-          value={text}
-          placeholder="What's on your mind..."
-          aria-label="new post"
-          onChange={handleChange}
-        />
-        <button>Publish</button>
-      </div>
-    </form>
+    <div className={styles.createPostContainer}>
+      <ProfilePicture />
+      <form className={styles.createPostForm} onSubmit={publishPost}>
+        <div className={styles.createPost}>
+          <input
+            className={styles.createPostInput}
+            type="text"
+            name="newPost"
+            id="newPost"
+            value={text}
+            placeholder="What's on your mind..."
+            aria-label="new post"
+            onChange={handleChange}
+          />
+          <button>Publish</button>
+        </div>
+      </form>
+    </div>
   );
 }
