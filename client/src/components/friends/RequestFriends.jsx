@@ -1,3 +1,4 @@
+import ProfilePicture from "../profilePicture/ProfilePicture";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useOutletContext, Link } from "react-router-dom";
@@ -74,7 +75,10 @@ export default function RequestFriends({ limit }) {
         usersPreview.map((item) => {
           return (
             <div key={item.id} className={styles.usersList}>
-              <li>{item.username}</li>
+              <div className={styles.avatar}>
+                <ProfilePicture userId={item.id} />
+                <li>{item.username}</li>
+              </div>
               {item.sentRequests.includes(user.id) ||
               item.receivedRequests.includes(user.id) ? (
                 <p>Request sent!</p>

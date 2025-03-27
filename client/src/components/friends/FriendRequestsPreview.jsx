@@ -1,3 +1,4 @@
+import ProfilePicture from "../profilePicture/ProfilePicture";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useOutletContext, Link } from "react-router-dom";
@@ -56,7 +57,10 @@ export default function FriendRequestsPreview({ limit }) {
         requestsPreview.map((request) => {
           return (
             <div className={styles.requestPreviewDisplay} key={request.id}>
-              <li>{request.sender.username}</li>
+              <div className={styles.avatar}>
+                <ProfilePicture userId={request.sender.id} />
+                <li>{request.sender.username}</li>
+              </div>
 
               {request.status === "accepted" ? (
                 <p>Request Accepted!</p>

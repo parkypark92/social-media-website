@@ -1,3 +1,4 @@
+import ProfilePicture from "../profilePicture/ProfilePicture";
 import CreateComment from "../comments/CreateComment";
 import Comments from "../comments/Comments";
 import PropTypes from "prop-types";
@@ -71,6 +72,7 @@ export default function Post({ postContent, setPostData, postData }) {
   return (
     <div className={styles.postContainer}>
       <div className={styles.authorAndDate}>
+        <ProfilePicture userId={postContent.author.id} />
         <h3 style={{ margin: 0 }}>{postContent.author.username}</h3>
         <small>{format(parseISO(postContent.postedAt), "MMMM dd, yyyy")}</small>
       </div>

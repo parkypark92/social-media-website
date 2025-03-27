@@ -32,7 +32,11 @@ const Router = () => {
         },
         {
           path: "profile/:userId",
-          element: <Profile />,
+          element: (
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/:userId/find-friends",

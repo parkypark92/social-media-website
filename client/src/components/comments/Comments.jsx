@@ -1,3 +1,4 @@
+import ProfilePicture from "../profilePicture/ProfilePicture";
 import PropTypes from "prop-types";
 import styles from "./Comments.module.css";
 
@@ -9,7 +10,10 @@ export default function Comments({ comments }) {
           return (
             <div key={comment.id}>
               <div className={styles.commentCtnr}>
-                <h3>{comment.author.username}</h3>
+                <div className={styles.avatar}>
+                  <ProfilePicture userId={comment.author.id} />
+                  <h3>{comment.author.username}</h3>
+                </div>
                 <p>{comment.text}</p>
               </div>
               <hr />

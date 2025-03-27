@@ -1,3 +1,9 @@
 .commentCtnr {
   padding-left: 16px;
 }
+
+.avatar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
