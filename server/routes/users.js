@@ -9,6 +9,7 @@ router.get(
     res.json(req.user);
   }
 );
+router.get("/profile-info", controller.get_profile_info);
 router.post("/create-post", controller.create_post);
 router.get("/get-posts", controller.get_posts);
 router.get("/get-friends", controller.get_all_friends);

@@ -26,6 +26,20 @@ module.exports.authenticate_user = (req, res, next) => {
   })(req, res, next);
 };
 
+module.exports.get_profile_info = asyncHandler(async (req, res, next) => {
+  console.log(req.query.userId);
+  const profileInfo = await prisma.user.findUnique({
+    where: {
+      id: req.query.userId,
+    },
+    include: {
+      posts: true,
+    },
+  });
+  console.log(profileInfo);
+  res.status(200).json({ profileInfo });
+});
+
 module.exports.create_post = asyncHandler(async (req, res) => {
   if (!req.body.text) {
     return res.status(400).json({ error: "Text field is required." });
