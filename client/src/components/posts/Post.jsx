@@ -40,7 +40,6 @@ export default function Post({ postContent, setPostData, postData }) {
   };
 
   const handleUnlikePost = async (e) => {
-    e.preventDefault;
     e.preventDefault();
     const body = {
       postId: postContent.id,
