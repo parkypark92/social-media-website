@@ -20,5 +20,6 @@ router.post("/answer-request", controller.answer_friend_request);
 router.post("/like-post", controller.like_post);
 router.post("/unlike-post", controller.unlike_post);
 router.post("/create-comment", controller.create_comment);
+router.post("/upload-profile-picture", controller.upload_profile_picture);
 
 module.exports = router;

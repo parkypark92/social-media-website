@@ -27,7 +27,6 @@ module.exports.authenticate_user = (req, res, next) => {
 };
 
 module.exports.get_profile_info = asyncHandler(async (req, res, next) => {
-  console.log(req.query.userId);
   const profileInfo = await prisma.user.findUnique({
     where: {
       id: req.query.userId,
@@ -36,7 +35,6 @@ module.exports.get_profile_info = asyncHandler(async (req, res, next) => {
       posts: true,
     },
   });
-  console.log(profileInfo);
   res.status(200).json({ profileInfo });
 });
 
@@ -228,4 +226,41 @@ module.exports.create_comment = asyncHandler(async (req, res, next) => {
     },
   });
   res.status(200).json({ msg: "Comment submitted!", comment });
+});
+
+module.exports.upload_profile_picture = asyncHandler(async (req, res, next) => {
+  const image = req.body.compressedImage;
+  const imageExt = image.name.split(".").pop();
+  const imageName = `profile-${Date.now()}.${imageExt}`;
+  const filePath = `${req.body.user.id}/${imageName}`;
+
+  try {
+    const { error: uploadError } = await supabase.storage
+      .from("user-images")
+      .upload(filePath, image);
+
+    if (uploadError) throw uploadError;
+
+    const { data } = supabase.storage
+      .from("user-images")
+      .getPublicUrl(filePath);
+    const imageUrl = data.publicUrl;
+
+    const result = await prisma.$transaction([
+      prisma.user.update({
+        where: { id: req.body.user.id },
+        data: { profileUrl: imageUrl },
+      }),
+    ]);
+
+    console.log("Profile picture updated:", result);
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("Upload failed:", error.message);
+
+    await supabase.storage.from("user-images").remove([filePath]);
+
+    res.status(400).json({ success: false, error: error.message });
+  }
 });

@@ -25,6 +25,7 @@ model User {
   posts            Post[]       @relation("PostAuthor")
   comments         Comment[]
   likes            Post[]       @relation("PostLikes")
+  profileUrl       String?
 }
 
 model Friendship {
