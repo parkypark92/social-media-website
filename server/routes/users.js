@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/users");
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 router.get(
   "/authenticate",
@@ -20,6 +23,11 @@ router.post("/answer-request", controller.answer_friend_request);
 router.post("/like-post", controller.like_post);
 router.post("/unlike-post", controller.unlike_post);
 router.post("/create-comment", controller.create_comment);
-router.post("/upload-profile-picture", controller.upload_profile_picture);
+router.post(
+  "/upload-profile-picture",
+  upload.single("file"),
+  controller.upload_profile_picture
+);
+router.get("/profile-picture", controller.get_profile_picture);
 
 module.exports = router;

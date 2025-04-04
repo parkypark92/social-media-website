@@ -2,6 +2,7 @@ const passport = require("passport");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const supabase = require("../config/supabase").supabase;
+const { decode } = require("base64-arraybuffer");
 const asyncHandler = require("express-async-handler");
 
 module.exports.authenticate_user = (req, res, next) => {
@@ -229,15 +230,17 @@ module.exports.create_comment = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.upload_profile_picture = asyncHandler(async (req, res, next) => {
-  const image = req.body.compressedImage;
-  const imageExt = image.name.split(".").pop();
+  console.log(req.file);
+  const image = req.file;
+  const imageExt = image.originalname.split(".").pop();
   const imageName = `profile-${Date.now()}.${imageExt}`;
-  const filePath = `${req.body.user.id}/${imageName}`;
+  const filePath = `${req.body.id}/${imageName}`;
+  const fileBase64 = decode(image.buffer.toString("base64"));
 
   try {
     const { error: uploadError } = await supabase.storage
       .from("user-images")
-      .upload(filePath, image);
+      .upload(filePath, fileBase64);
 
     if (uploadError) throw uploadError;
 
@@ -248,7 +251,7 @@ module.exports.upload_profile_picture = asyncHandler(async (req, res, next) => {
 
     const result = await prisma.$transaction([
       prisma.user.update({
-        where: { id: req.body.user.id },
+        where: { id: req.body.id },
         data: { profileUrl: imageUrl },
       }),
     ]);
@@ -263,4 +266,17 @@ module.exports.upload_profile_picture = asyncHandler(async (req, res, next) => {
 
     res.status(400).json({ success: false, error: error.message });
   }
+});
+
+module.exports.get_profile_picture = asyncHandler(async (req, res, next) => {
+  const data = await prisma.user.findUnique({
+    where: {
+      id: req.query.userId,
+    },
+    select: {
+      profileUrl: true,
+    },
+  });
+  const imageUrl = data.profileUrl;
+  res.status(200).json({ imageUrl });
 });
