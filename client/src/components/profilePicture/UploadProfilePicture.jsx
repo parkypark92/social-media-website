@@ -36,7 +36,7 @@ export default function UploadProfilePicture() {
     e.preventDefault();
     setImageUploading(true);
     const file = fileInputRef.current.files[0];
-    console.log(file);
+
     try {
       if (!validImageType(file)) {
         throw new Error("File must be .jpg, .jpeg or .png");
@@ -45,9 +45,12 @@ export default function UploadProfilePicture() {
       if (!compressedImage) {
         throw new Error("Upload error, try again!");
       }
+      const formData = new FormData();
+      formData.append("file", compressedImage);
+      formData.append("id", user.id);
       const response = await axios.post(
         "http://localhost:3000/users/upload-profile-picture",
-        { compressedImage, user }
+        formData
       );
       if (response.status === 200) {
         alert("Profile picture updated!");
@@ -70,10 +73,10 @@ export default function UploadProfilePicture() {
           <button onClick={() => setUploadError(null)}>Retry</button>
         </div>
       ) : (
-        <form>
+        <form method="POST" encType="multipart/form-data">
           <input
             type="file"
-            name="profile-picture"
+            name="file"
             id="profile-picture"
             accept=".jpg, .jpeg, .png"
             ref={fileInputRef}

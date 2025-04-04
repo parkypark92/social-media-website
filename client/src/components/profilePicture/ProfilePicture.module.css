@@ -4,5 +4,9 @@
   min-width: 48px;
   min-height: 48px;
   border-radius: 50%;
-  background-color: #cecece;
+}
+
+.image {
+  object-fit: cover;
+  object-position: center;
 }
