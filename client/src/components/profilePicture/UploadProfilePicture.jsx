@@ -1,5 +1,10 @@
-import { useState, useRef } from "react";
-import imageCompression from "browser-image-compression";
+import { useState, useCallback } from "react";
+import {
+  validImageType,
+  compressImage,
+  getCroppedImg,
+} from "../../utils/imageUtils";
+import Cropper from "react-easy-crop";
 import axios from "axios";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import styles from "./UploadProfilePicture.module.css";
@@ -8,35 +13,15 @@ export default function UploadProfilePicture() {
   const { user } = useOutletContext();
   const [imageUploading, setImageUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
-  const fileInputRef = useRef(null);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [zoom, setZoom] = useState(1);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
   const navigate = useNavigate();
 
-  const validImageType = (fileToVerify) => {
-    const validTypes = ["image/jpg", "image/jpeg", "image/png"];
-    return validTypes.includes(fileToVerify.type);
-  };
-
-  const compressImage = async (image) => {
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 150,
-      useWebWorker: true,
-    };
-    try {
-      const compressedFile = await imageCompression(image, options);
-      return compressedFile;
-      // throw new Error("oops");
-    } catch (error) {
-      console.error(error.message);
-      return null;
-    }
-  };
-
-  const handleImageUpload = async (e) => {
-    e.preventDefault();
-    setImageUploading(true);
-    const file = fileInputRef.current.files[0];
-
+  const onFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
     try {
       if (!validImageType(file)) {
         throw new Error("File must be .jpg, .jpeg or .png");
@@ -45,8 +30,27 @@ export default function UploadProfilePicture() {
       if (!compressedImage) {
         throw new Error("Upload error, try again!");
       }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageSrc(reader.result);
+      };
+      reader.readAsDataURL(compressedImage);
+    } catch (error) {
+      setUploadError(error.message);
+    }
+  };
+
+  const onCropComplete = useCallback((croppedArea, croppedPixels) => {
+    setCroppedAreaPixels(croppedPixels);
+  }, []);
+
+  const handleImageUpload = async (e) => {
+    e.preventDefault();
+    setImageUploading(true);
+    const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
+    try {
       const formData = new FormData();
-      formData.append("file", compressedImage);
+      formData.append("file", croppedImage);
       formData.append("id", user.id);
       const response = await axios.post(
         "http://localhost:3000/users/upload-profile-picture",
@@ -79,10 +83,25 @@ export default function UploadProfilePicture() {
             name="file"
             id="profile-picture"
             accept=".jpg, .jpeg, .png"
-            ref={fileInputRef}
+            onChange={onFileChange}
           />
-          <button onClick={handleImageUpload}>Upload</button>
         </form>
+      )}
+      {imageSrc && (
+        <div>
+          <div style={{ position: "relative", width: "100%", height: 400 }}>
+            <Cropper
+              image={imageSrc}
+              crop={crop}
+              zoom={zoom}
+              aspect={1} // square crop
+              onCropChange={setCrop}
+              onCropComplete={onCropComplete}
+              onZoomChange={setZoom}
+            />
+          </div>
+          <button onClick={handleImageUpload}>Upload</button>
+        </div>
       )}
     </div>
   );
