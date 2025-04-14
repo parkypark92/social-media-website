@@ -17,6 +17,7 @@ export default function UploadProfilePicture() {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [zoom, setZoom] = useState(1);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [isCropping, setIsCropping] = useState(false);
   const navigate = useNavigate();
 
   const onFileChange = async (e) => {
@@ -33,8 +34,9 @@ export default function UploadProfilePicture() {
       const reader = new FileReader();
       reader.onload = () => {
         setImageSrc(reader.result);
+        setIsCropping(true);
       };
-      reader.readAsDataURL(compressedImage);
+      reader.readAsDataURL(file);
     } catch (error) {
       setUploadError(error.message);
     }
@@ -47,6 +49,7 @@ export default function UploadProfilePicture() {
   const handleImageUpload = async (e) => {
     e.preventDefault();
     setImageUploading(true);
+    setIsCropping(false);
     const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
     try {
       const formData = new FormData();
@@ -76,18 +79,7 @@ export default function UploadProfilePicture() {
           <h2>{uploadError}</h2>
           <button onClick={() => setUploadError(null)}>Retry</button>
         </div>
-      ) : (
-        <form method="POST" encType="multipart/form-data">
-          <input
-            type="file"
-            name="file"
-            id="profile-picture"
-            accept=".jpg, .jpeg, .png"
-            onChange={onFileChange}
-          />
-        </form>
-      )}
-      {imageSrc && (
+      ) : isCropping ? (
         <div>
           <div style={{ position: "relative", width: "100%", height: 400 }}>
             <Cropper
@@ -101,7 +93,18 @@ export default function UploadProfilePicture() {
             />
           </div>
           <button onClick={handleImageUpload}>Upload</button>
+          <button onClick={() => setIsCropping(false)}>Cancel</button>
         </div>
+      ) : (
+        <form method="POST" encType="multipart/form-data">
+          <input
+            type="file"
+            name="file"
+            id="profile-picture"
+            accept=".jpg, .jpeg, .png"
+            onChange={onFileChange}
+          />
+        </form>
       )}
     </div>
   );

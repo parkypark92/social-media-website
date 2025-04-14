@@ -8,7 +8,7 @@ export const validImageType = (fileToVerify) => {
 export const compressImage = async (image) => {
   const options = {
     maxSizeMB: 1,
-    maxWidthOrHeight: 400,
+    maxWidthOrHeight: 1000,
     useWebWorker: true,
   };
   try {

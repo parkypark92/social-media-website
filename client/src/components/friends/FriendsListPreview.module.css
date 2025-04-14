@@ -1,0 +1,17 @@
+.container {
+  list-style: none;
+  margin-bottom: 8px;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.avatar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}

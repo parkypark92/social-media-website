@@ -1,5 +1,18 @@
 .profileContainer {
+  padding: 36px 0;
   width: 100%;
-  max-width: 1280px;
-  background-color: #fff;
+  display: flex;
+  gap: 24px;
+}
+
+.infoDisplay {
+  width: 25%;
+}
+
+.postsDisplay {
+  width: 50%;
+}
+
+.friendsDisplay {
+  width: 25%;
 }

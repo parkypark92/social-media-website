@@ -1,3 +1,5 @@
+import ProfilePicture from "../profilePicture/ProfilePicture";
+import styles from "./FriendsListPreview.module.css";
 import PropTypes from "prop-types";
 
 export default function FriendsListPreview({ friendsList }) {
@@ -7,7 +9,14 @@ export default function FriendsListPreview({ friendsList }) {
       {friendsList.length ? (
         <ul>
           {friendsList.map((friend) => {
-            return <li key={friend.id}>{friend.username}</li>;
+            return (
+              <div className={styles.container} key={friend.id}>
+                <div className={styles.avatar}>
+                  <ProfilePicture userId={friend.id} />
+                  <li>{friend.username}</li>
+                </div>
+              </div>
+            );
           })}
         </ul>
       ) : (

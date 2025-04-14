@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import axios from "axios";
 
-export default function ProfilePicture({ userId }) {
+export default function ProfilePicture({ userId, size = 48 }) {
   const [profilePicture, setProfilePicture] = useState(null);
   useEffect(() => {
     const fetchProfilePicture = async () => {
@@ -28,8 +28,21 @@ export default function ProfilePicture({ userId }) {
 
   return (
     <Link to={`/profile/${userId}`}>
-      <div className={styles.imgCircle}>
-        <img className={styles.image} src={profilePicture} alt="" height={48} />
+      <div
+        className={styles.imgCircle}
+        style={{
+          height: `${size}px`,
+          width: `${size}px`,
+          maxHeight: `${size}px`,
+          maxWidth: `${size}px`,
+        }}
+      >
+        <img
+          className={styles.image}
+          src={profilePicture}
+          alt=""
+          height={size}
+        />
       </div>
     </Link>
   );
@@ -37,4 +50,5 @@ export default function ProfilePicture({ userId }) {
 
 ProfilePicture.propTypes = {
   userId: PropTypes.string,
+  size: PropTypes.number,
 };

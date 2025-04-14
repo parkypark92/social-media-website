@@ -1,8 +1,4 @@
 .imgCircle {
-  height: 48px;
-  width: 48px;
-  min-width: 48px;
-  min-height: 48px;
   border-radius: 50%;
   overflow: hidden;
   outline: 2px solid rgb(39, 49, 80);
