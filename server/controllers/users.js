@@ -33,7 +33,23 @@ module.exports.get_profile_info = asyncHandler(async (req, res, next) => {
       id: req.query.userId,
     },
     include: {
-      posts: true,
+      posts: {
+        orderBy: {
+          postedAt: "desc",
+        },
+        include: {
+          author: true,
+          likes: true,
+          comments: {
+            orderBy: {
+              postedAt: "desc",
+            },
+            include: {
+              author: true,
+            },
+          },
+        },
+      },
     },
   });
   res.status(200).json({ profileInfo });

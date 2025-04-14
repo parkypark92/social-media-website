@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/users");
 const multer = require("multer");
-const storage = multer.memoryStorage();
+const storage = multer.memoryStorage(); //memory storage is used so req.file.buffer can be accessed
 const upload = multer({ storage: storage });
 
 router.get(
