@@ -12,12 +12,24 @@ export default function Navbar({ user, setUser, setIsAuthenticated }) {
   };
   return (
     <nav className={styles.navbar}>
-      <h2>FineFellows</h2>
+      <h2 className={styles.logo}>FineFellows</h2>
       {user && (
-        <div className={styles.userNav}>
-          <p>Greetings, {user.username}!</p>
-          <button className={styles.logoutBtn} onClick={handleLogout}>
-            Logout
+        <div className={styles.icons}>
+          <button className={styles.navIcon}>
+            <img
+              src="/home.png"
+              alt=""
+              height={32}
+              onClick={() => navigate(`/${user.id}`)}
+            />
+          </button>
+          <div className={styles.vl}></div>
+          <button className={styles.navIcon}>
+            <img src="/message.png" alt="" height={32} />
+          </button>
+          <div className={styles.vl}></div>
+          <button className={styles.navIcon}>
+            <img src="/logout.png" alt="" height={32} onClick={handleLogout} />
           </button>
         </div>
       )}

@@ -1,22 +1,39 @@
 .navbar {
   width: 100vw;
-  height: 72px;
-  padding: 0 5%;
+  height: 56px;
+  padding: 8px 5%;
   position: fixed;
   top: 0;
   left: 0;
   background-color: #fff;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
 }
 
-.userNav {
+.icons {
   display: flex;
   align-items: center;
-  gap: 16px;
 }
 
-.logoutBtn {
-  height: fit-content;
+.logo {
+  margin: 0;
+}
+
+.navIcon {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+}
+
+.navIcon:hover {
+  filter: invert(27%) sepia(76%) saturate(3664%) hue-rotate(194deg)
+    brightness(97%) contrast(98%);
+  border-color: transparent;
+}
+
+.vl {
+  border-left: 2px solid rgb(180, 180, 180);
+  height: 46px;
 }
