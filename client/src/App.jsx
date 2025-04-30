@@ -7,6 +7,7 @@ import axios from "axios";
 function App() {
   const token = localStorage.getItem("token");
   const [user, setUser] = useState(localStorage.getItem("user"));
+  const [friendsList, setFriendsList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
@@ -39,6 +40,28 @@ function App() {
     }
   }, [token, setUser]);
 
+  useEffect(() => {
+    const fetchFriends = async () => {
+      const response = await axios.get(
+        "http://localhost:3000/users/get-friends",
+        { params: { id: user.id } }
+      );
+      if (response.status === 200) {
+        const friends = response.data.friendsList.map((friendship) => {
+          if (friendship.senderId === user.id) {
+            return friendship.receiver;
+          } else {
+            return friendship.sender;
+          }
+        });
+        setFriendsList(friends);
+      } else {
+        console.log("Error");
+      }
+    };
+    user && fetchFriends();
+  }, [user]);
+
   if (isAuthenticated === null) {
     return <p>Loading...</p>;
   }
@@ -56,7 +79,7 @@ function App() {
         setIsAuthenticated={setIsAuthenticated}
       ></Navbar>
       <div className="navbarOffset"></div>
-      <Outlet context={{ user, setUser }} />
+      <Outlet context={{ user, setUser, friendsList }} />
     </>
   );
 }
