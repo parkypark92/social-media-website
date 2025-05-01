@@ -1,0 +1,23 @@
+.chats {
+  background-color: #fff;
+  height: calc(100vh - 56px);
+  width: 360px;
+  position: fixed;
+  top: 56px;
+  left: 0;
+  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
+}
+
+.chatsHeader {
+  height: 54px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
+}
+
+.scroll {
+  height: calc(100vh - 120px);
+  overflow-y: scroll;
+}

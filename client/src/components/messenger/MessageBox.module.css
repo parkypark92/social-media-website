@@ -1,0 +1,32 @@
+.messenger {
+  background-color: #fff;
+  height: calc(100vh - 88px);
+  flex-grow: 1;
+  margin: 16px -16px 16px 16px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
+}
+
+.messengerHeader {
+  height: 48px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
+}
+
+.messengerContent {
+  height: calc(100% - 112px);
+  overflow-y: scroll;
+}
+
+.formCtnr {
+  height: 64px;
+  padding: 16px 16px;
+  display: flex;
+  gap: 16px;
+}
+
+.messageInput {
+  flex-grow: 1;
+}

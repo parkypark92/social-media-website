@@ -1,0 +1,7 @@
+.pageCtnr {
+  display: flex;
+}
+
+.chatOffset {
+  width: calc(360px - 32px);
+}
