@@ -19,17 +19,22 @@ export default function Navbar({ user, setUser, setIsAuthenticated }) {
             <img
               src="/home.png"
               alt=""
-              height={32}
+              height={24}
               onClick={() => navigate(`/${user.id}`)}
             />
           </button>
           <div className={styles.vl}></div>
           <button className={styles.navIcon}>
-            <img src="/message.png" alt="" height={32} />
+            <img
+              src="/message.png"
+              alt=""
+              height={24}
+              onClick={() => navigate(`${user.id}/messages`)}
+            />
           </button>
           <div className={styles.vl}></div>
           <button className={styles.navIcon}>
-            <img src="/logout.png" alt="" height={32} onClick={handleLogout} />
+            <img src="/logout.png" alt="" height={24} onClick={handleLogout} />
           </button>
         </div>
       )}

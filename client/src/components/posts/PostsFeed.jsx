@@ -1,11 +1,12 @@
 import Post from "./Post";
 import { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 import PropTypes from "prop-types";
 
-export default function PostsFeed({ postData, setPostData, friendsList }) {
+export default function PostsFeed({ postData, setPostData }) {
   const [feedError, setFeedError] = useState(null);
-
+  const { friendsList } = useOutletContext();
   useEffect(() => {
     const fetchPostData = async () => {
       const friendIds = friendsList.map((friend) => friend.id);
@@ -44,5 +45,4 @@ export default function PostsFeed({ postData, setPostData, friendsList }) {
 PostsFeed.propTypes = {
   postData: PropTypes.array,
   setPostData: PropTypes.func,
-  friendsList: PropTypes.array,
 };

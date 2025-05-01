@@ -1,7 +1,7 @@
 .navbar {
   width: 100vw;
   height: 56px;
-  padding: 8px 5%;
+  padding: 8px 32px;
   position: fixed;
   top: 0;
   left: 0;
@@ -10,6 +10,7 @@
   justify-content: space-between;
   align-items: center;
   box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
+  z-index: 1;
 }
 
 .icons {
@@ -33,7 +34,11 @@
   border-color: transparent;
 }
 
+.navIcon:focus {
+  outline: none;
+}
+
 .vl {
   border-left: 2px solid rgb(180, 180, 180);
-  height: 46px;
+  height: 38px;
 }

@@ -14,7 +14,6 @@ export default function Profile() {
   const { userId } = useParams();
   const [profileInfo, setProfileInfo] = useState(null);
   const [profilePosts, setProfilePosts] = useState(null);
-  const [profileFriends, setProfileFriends] = useState(null);
   const isOwnProfile = user.id === userId;
 
   useEffect(() => {
@@ -32,28 +31,7 @@ export default function Profile() {
         console.log("Error");
       }
     };
-
-    const fetchFriends = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/users/get-friends",
-        { params: { id: userId } }
-      );
-      if (response.status === 200) {
-        const friends = response.data.friendsList.map((friendship) => {
-          if (friendship.senderId === userId) {
-            return friendship.receiver;
-          } else {
-            return friendship.sender;
-          }
-        });
-        console.log(friends);
-        setProfileFriends(friends);
-      } else {
-        console.log("Error");
-      }
-    };
     fetchUserData();
-    fetchFriends();
   }, [userId]);
 
   return (
@@ -73,9 +51,7 @@ export default function Profile() {
             )}
           </div>
           <div className={styles.friendsDisplay}>
-            {profileFriends && (
-              <FriendsListPreview friendsList={profileFriends} />
-            )}
+            <FriendsListPreview />
           </div>
         </>
       ) : profileInfo ? (

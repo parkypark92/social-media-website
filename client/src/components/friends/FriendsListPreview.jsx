@@ -1,8 +1,9 @@
 import ProfilePicture from "../profilePicture/ProfilePicture";
+import { useOutletContext } from "react-router-dom";
 import styles from "./FriendsListPreview.module.css";
-import PropTypes from "prop-types";
 
-export default function FriendsListPreview({ friendsList }) {
+export default function FriendsListPreview() {
+  const { friendsList } = useOutletContext();
   return (
     <div>
       <h2>Friends</h2>
@@ -25,7 +26,3 @@ export default function FriendsListPreview({ friendsList }) {
     </div>
   );
 }
-
-FriendsListPreview.propTypes = {
-  friendsList: PropTypes.array,
-};
