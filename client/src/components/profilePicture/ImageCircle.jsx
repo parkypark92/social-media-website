@@ -19,5 +19,5 @@ export default function ImageCircle({ profilePicture, size }) {
 
 ImageCircle.propTypes = {
   profilePicture: PropTypes.string,
-  size: PropTypes.string,
+  size: PropTypes.number,
 };

@@ -30,3 +30,23 @@
 .messageInput {
   flex-grow: 1;
 }
+
+.chatSelectCtnr {
+  height: calc(100% - 48px);
+  overflow-y: scroll;
+}
+
+.chatSelect {
+  padding: 16px;
+}
+
+.chatSelect:hover {
+  background-color: #ebebeb;
+  cursor: pointer;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
