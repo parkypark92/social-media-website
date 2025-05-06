@@ -1,10 +1,10 @@
+import ImageCircle from "./ImageCircle";
 import { useEffect, useState } from "react";
-import styles from "./ProfilePicture.module.css";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import axios from "axios";
 
-export default function ProfilePicture({ userId, size = 48 }) {
+export default function ProfilePicture({ userId, size = 48, link = true }) {
   const [profilePicture, setProfilePicture] = useState(null);
   useEffect(() => {
     const fetchProfilePicture = async () => {
@@ -27,28 +27,20 @@ export default function ProfilePicture({ userId, size = 48 }) {
   }, [userId]);
 
   return (
-    <Link to={`/profile/${userId}`}>
-      <div
-        className={styles.imgCircle}
-        style={{
-          height: `${size}px`,
-          width: `${size}px`,
-          maxHeight: `${size}px`,
-          maxWidth: `${size}px`,
-        }}
-      >
-        <img
-          className={styles.image}
-          src={profilePicture}
-          alt=""
-          height={size}
-        />
-      </div>
-    </Link>
+    <>
+      {link ? (
+        <Link to={`/profile/${userId}`}>
+          <ImageCircle profilePicture={profilePicture} size={size} />
+        </Link>
+      ) : (
+        <ImageCircle profilePicture={profilePicture} size={size} />
+      )}
+    </>
   );
 }
 
 ProfilePicture.propTypes = {
   userId: PropTypes.string,
   size: PropTypes.number,
+  link: PropTypes.bool,
 };
