@@ -6,6 +6,7 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import FindFriends from "../pages/FindFriends";
 import FriendRequests from "../pages/FriendRequests";
+import Messages from "../pages/Messages";
 import ProtectedRoute from "./ProtectedRoute";
 
 const Router = () => {
@@ -51,6 +52,14 @@ const Router = () => {
           element: (
             <ProtectedRoute>
               <FriendRequests />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/:userId/messages",
+          element: (
+            <ProtectedRoute>
+              <Messages />
             </ProtectedRoute>
           ),
         },
