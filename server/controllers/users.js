@@ -296,3 +296,39 @@ module.exports.get_profile_picture = asyncHandler(async (req, res, next) => {
   const imageUrl = data.profileUrl;
   res.status(200).json({ imageUrl });
 });
+
+module.exports.get_conversations = asyncHandler(async (req, res, next) => {
+  const chats = await prisma.conversation.findMany({
+    where: {
+      OR: [{ userAId: req.query.id }, { userBId: req.query.id }],
+    },
+    include: {
+      messages: {
+        orderBy: { createdAt: "asc" },
+        take: 1,
+      },
+      userA: true,
+      userB: true,
+    },
+    orderBy: {
+      lastMessageAt: "desc",
+    },
+  });
+  res.status(200).json({ chats });
+});
+
+module.exports.create_conversation = asyncHandler(async (req, res, next) => {
+  const [userAId, userBId] = [req.body.userId, req.body.friendId];
+  const conversation = await prisma.conversation.create({
+    data: {
+      userAId,
+      userBId,
+    },
+    include: {
+      messages: true,
+      userA: true,
+      userB: true,
+    },
+  });
+  res.status(200).json({ conversation });
+});

@@ -29,5 +29,7 @@ router.post(
   controller.upload_profile_picture
 );
 router.get("/profile-picture", controller.get_profile_picture);
+router.get("/conversations", controller.get_conversations);
+router.post("/create-conversation", controller.create_conversation);
 
 module.exports = router;
