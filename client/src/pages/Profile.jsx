@@ -25,6 +25,7 @@ export default function Profile() {
         }
       );
       if (response.status === 200) {
+        console.log(response.data.profileInfo.posts);
         setProfileInfo(response.data.profileInfo);
         setProfilePosts(response.data.profileInfo.posts);
       } else {
@@ -36,38 +37,44 @@ export default function Profile() {
 
   return (
     <div className={styles.profileContainer}>
-      {isOwnProfile ? (
-        <>
-          <div className={styles.infoDisplay}>
-            {profileInfo && <ProfileHeader profileInfo={profileInfo} />}
-          </div>
-          <div className={styles.postsDisplay}>
-            <CreatePost />
-            {profilePosts && (
-              <ProfilePosts
-                profilePosts={profilePosts}
-                setProfilePosts={setProfilePosts}
-              />
-            )}
-          </div>
-          <div className={styles.friendsDisplay}>
-            <FriendsListPreview />
-          </div>
-        </>
-      ) : profileInfo ? (
-        <>
-          <div className={styles.infoDisplay}>
-            {profileInfo && <ProfileHeader profileInfo={profileInfo} />}
-          </div>
-          <div className={styles.postsDisplay}>
-            {profilePosts && (
-              <ProfilePosts
-                profilePosts={profilePosts}
-                setProfilePosts={setProfilePosts}
-              />
-            )}
-          </div>
-        </>
+      {profileInfo ? (
+        isOwnProfile ? (
+          <>
+            <div className={styles.infoDisplay}>
+              {profileInfo && <ProfileHeader profileInfo={profileInfo} />}
+            </div>
+            <div className={styles.postsDisplay}>
+              <CreatePost />
+              {profilePosts.length > 0 ? (
+                <ProfilePosts
+                  profilePosts={profilePosts}
+                  setProfilePosts={setProfilePosts}
+                />
+              ) : (
+                <h2>You have no posts yet...</h2>
+              )}
+            </div>
+            <div className={styles.friendsDisplay}>
+              <FriendsListPreview />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className={styles.infoDisplay}>
+              {profileInfo && <ProfileHeader profileInfo={profileInfo} />}
+            </div>
+            <div className={styles.postsDisplay}>
+              {profilePosts.length > 0 ? (
+                <ProfilePosts
+                  profilePosts={profilePosts}
+                  setProfilePosts={setProfilePosts}
+                />
+              ) : (
+                <h2>User has no posts yet...</h2>
+              )}
+            </div>
+          </>
+        )
       ) : (
         <h2>...Loading</h2>
       )}
