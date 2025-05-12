@@ -38,11 +38,11 @@
 
 .chatSelect {
   padding: 16px;
+  cursor: pointer;
 }
 
 .chatSelect:hover {
   background-color: #ebebeb;
-  cursor: pointer;
 }
 
 .avatar {

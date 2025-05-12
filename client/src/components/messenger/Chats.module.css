@@ -21,3 +21,14 @@
   height: calc(100vh - 120px);
   overflow-y: scroll;
 }
+
+.selectChat {
+  display: flex;
+  padding: 16px;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.selectChat:hover {
+  background-color: #ebebeb;
+}

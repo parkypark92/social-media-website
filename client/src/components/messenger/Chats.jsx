@@ -1,7 +1,15 @@
 import styles from "./Chats.module.css";
 import PropTypes from "prop-types";
+import { useOutletContext } from "react-router-dom";
+import ProfilePicture from "../profilePicture/ProfilePicture";
 
-export default function Chats({ setNewChat, allChats }) {
+export default function Chats({
+  setNewChat,
+  allChats,
+  currentChat,
+  setCurrentChat,
+}) {
+  const { user } = useOutletContext();
   return (
     <div className={styles.chats}>
       <div className={styles.chatsHeader}>
@@ -12,9 +20,27 @@ export default function Chats({ setNewChat, allChats }) {
         {allChats.length > 0 ? (
           allChats.map((chat) => {
             return (
-              <p
+              <div
                 key={chat.id}
-              >{`${chat.userA.username} + ${chat.userB.username}`}</p>
+                className={styles.selectChat}
+                onClick={() => {
+                  setCurrentChat(chat);
+                  setNewChat(false);
+                }}
+                style={{ backgroundColor: currentChat == chat && "#7777ff" }}
+              >
+                <ProfilePicture
+                  link={false}
+                  userId={
+                    user.id === chat.userA.id ? chat.userB.id : chat.userA.id
+                  }
+                />
+                <p>
+                  {user.id === chat.userA.id
+                    ? chat.userB.username
+                    : chat.userA.username}
+                </p>
+              </div>
             );
           })
         ) : (
@@ -27,6 +53,7 @@ export default function Chats({ setNewChat, allChats }) {
 
 Chats.propTypes = {
   setNewChat: PropTypes.func,
-  // currentChat: PropTypes.object,
+  setCurrentChat: PropTypes.func,
   allChats: PropTypes.array,
+  currentChat: PropTypes.object,
 };

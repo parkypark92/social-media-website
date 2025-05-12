@@ -1,4 +1,5 @@
 import ProfilePicture from "../profilePicture/ProfilePicture.jsx";
+import { useState, useEffect } from "react";
 import styles from "./MessageBox.module.css";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
@@ -7,12 +8,24 @@ import PropTypes from "prop-types";
 export default function MessageBox({
   newChat,
   setNewChat,
-  // currentChat,
+  currentChat,
   setCurrentChat,
   allChats,
   setAllChats,
 }) {
   const { user, friendsList } = useOutletContext();
+
+  const [newConversations, setNewConversations] = useState([]);
+  useEffect(() => {
+    setNewConversations(
+      friendsList.filter(
+        (friend) =>
+          !allChats.some(
+            (chat) => chat.userAId === friend.id || chat.userBId === friend.id
+          )
+      )
+    );
+  }, [friendsList, allChats]);
 
   const createConversation = async (friendId) => {
     const response = await axios.post(
@@ -38,13 +51,19 @@ export default function MessageBox({
               <button onClick={() => setNewChat(false)}>Cancel</button>
             )}
           </>
+        ) : currentChat ? (
+          <h3 style={{ margin: 0, marginRight: "auto" }}>
+            {currentChat.userA.id === user.id
+              ? currentChat.userB.username
+              : currentChat.userA.username}
+          </h3>
         ) : (
           <h3 style={{ margin: 0, marginRight: "auto" }}>Messenger</h3>
         )}
       </div>
       {newChat ? (
         <div className={styles.chatSelectCtnr}>
-          {friendsList.map((friend) => {
+          {newConversations.map((friend) => {
             return (
               <div
                 key={friend.id}
@@ -83,7 +102,7 @@ export default function MessageBox({
 MessageBox.propTypes = {
   newChat: PropTypes.bool,
   setNewChat: PropTypes.func,
-  // currentChat: PropTypes.object,
+  currentChat: PropTypes.object,
   setCurrentChat: PropTypes.func,
   allChats: PropTypes.array,
   setAllChats: PropTypes.func,
