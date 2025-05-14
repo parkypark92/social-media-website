@@ -31,5 +31,6 @@ router.post(
 router.get("/profile-picture", controller.get_profile_picture);
 router.get("/conversations", controller.get_conversations);
 router.post("/create-conversation", controller.create_conversation);
+router.post("/send-message", controller.send_message);
 
 module.exports = router;

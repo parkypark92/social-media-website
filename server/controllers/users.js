@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 const supabase = require("../config/supabase").supabase;
 const { decode } = require("base64-arraybuffer");
 const asyncHandler = require("express-async-handler");
+const { Server } = require("socket.io");
 
 module.exports.authenticate_user = (req, res, next) => {
   let responseObj = {
@@ -304,8 +305,8 @@ module.exports.get_conversations = asyncHandler(async (req, res, next) => {
     },
     include: {
       messages: {
+        include: { sender: true },
         orderBy: { createdAt: "asc" },
-        take: 1,
       },
       userA: true,
       userB: true,
@@ -331,4 +332,33 @@ module.exports.create_conversation = asyncHandler(async (req, res, next) => {
     },
   });
   res.status(200).json({ conversation });
+});
+
+module.exports.send_message = asyncHandler(async (req, res, next) => {
+  try {
+    const message = await prisma.message.create({
+      data: {
+        content: req.body.message,
+        senderId: req.body.senderId,
+        conversationId: req.body.conversationId,
+      },
+      include: {
+        sender: true,
+      },
+    });
+
+    if (message) {
+      const conversation = await prisma.conversation.update({
+        where: {
+          id: req.body.conversationId,
+        },
+        data: {
+          lastMessageAt: message.createdAt,
+        },
+      });
+      res.status(200).json({ msg: "Message sent", message, conversation });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 });
