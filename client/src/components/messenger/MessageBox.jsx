@@ -1,4 +1,5 @@
 import ProfilePicture from "../profilePicture/ProfilePicture.jsx";
+import MessageBubble from "./MessageBubble.jsx";
 import { useState, useEffect } from "react";
 import styles from "./MessageBox.module.css";
 import { useOutletContext } from "react-router-dom";
@@ -124,9 +125,7 @@ export default function MessageBox({
             {currentChat &&
               currentChat.messages.map((message) => {
                 return (
-                  <p
-                    key={message.id}
-                  >{`${message.sender.username}: ${message.content}`}</p>
+                  <MessageBubble key={message.id} msg={message}></MessageBubble>
                 );
               })}
           </div>

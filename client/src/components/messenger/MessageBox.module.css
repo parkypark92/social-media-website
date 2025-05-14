@@ -2,6 +2,7 @@
   background-color: #fff;
   height: calc(100vh - 88px);
   flex-grow: 1;
+  max-width: calc(100vw - 360px - 32px);
   margin: 16px -16px 16px 16px;
   border-radius: 5px;
   box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
@@ -17,7 +18,12 @@
 
 .messengerContent {
   height: calc(100% - 112px);
+  max-width: 100%;
   overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
 }
 
 .formCtnr {

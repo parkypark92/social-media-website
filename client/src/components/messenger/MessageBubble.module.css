@@ -1,0 +1,21 @@
+.bubble {
+  width: fit-content;
+  max-width: 40%;
+  padding: 8px;
+  border-radius: 16px;
+}
+
+.friendsMsg {
+  background-color: #dddddd;
+  align-self: flex-start;
+}
+
+.ownMsg {
+  background-color: #90a4fa;
+  align-self: flex-end;
+}
+
+.content {
+  margin: 0;
+  word-wrap: break-word;
+}
