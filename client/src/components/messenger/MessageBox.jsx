@@ -14,6 +14,7 @@ export default function MessageBox({
   setAllChats,
 }) {
   const { user, friendsList } = useOutletContext();
+  const [messageValue, setMessageValue] = useState("");
 
   const [newConversations, setNewConversations] = useState([]);
   useEffect(() => {
@@ -36,6 +37,45 @@ export default function MessageBox({
       setAllChats([response.data.conversation, ...allChats]);
       setCurrentChat(response.data.conversation);
       setNewChat(false);
+    }
+  };
+
+  const sendMessage = async (e) => {
+    e.preventDefault();
+    const data = new FormData(e.target);
+    const formData = {
+      message: data.get("message"),
+      conversationId: currentChat.id,
+      senderId: user.id,
+    };
+    const response = await axios.post(
+      "http://localhost:3000/users/send-message",
+      formData
+    );
+    if (response.status === 200) {
+      const updatedChats = allChats.map((chat) => {
+        if (chat.id === currentChat.id) {
+          return {
+            ...chat,
+            messages: [...chat.messages, response.data.message],
+            lastMessageAt: response.data.conversation.lastMessageAt,
+          };
+        } else {
+          return chat;
+        }
+      });
+      const sortedChats = updatedChats.sort((a, b) =>
+        a.lastMessageAt > b.lastMessageAt
+          ? -1
+          : b.lastMessageAt > a.lastMessageAt
+          ? 1
+          : 0
+      );
+      setAllChats(sortedChats);
+      setCurrentChat(sortedChats[0]);
+      setMessageValue("");
+    } else {
+      console.log(response.data.error);
     }
   };
 
@@ -80,8 +120,17 @@ export default function MessageBox({
         </div>
       ) : (
         <>
-          <div className={styles.messengerContent}></div>
-          <form>
+          <div className={styles.messengerContent}>
+            {currentChat &&
+              currentChat.messages.map((message) => {
+                return (
+                  <p
+                    key={message.id}
+                  >{`${message.sender.username}: ${message.content}`}</p>
+                );
+              })}
+          </div>
+          <form onSubmit={sendMessage}>
             <div className={styles.formCtnr}>
               <input
                 type="text"
@@ -89,6 +138,8 @@ export default function MessageBox({
                 name="message"
                 placeholder="Send a message..."
                 className={styles.messageInput}
+                onChange={(e) => setMessageValue(e.target.value)}
+                value={messageValue}
               />
               <button>Send</button>
             </div>
