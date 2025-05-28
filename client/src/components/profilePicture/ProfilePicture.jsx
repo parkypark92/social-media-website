@@ -3,28 +3,43 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 export default function ProfilePicture({ userId, size = 48, link = true }) {
   const [profilePicture, setProfilePicture] = useState(null);
+
+  const fetchProfilePicture = async () => {
+    const response = await axios.get(
+      "http://localhost:3000/users/profile-picture",
+      { params: { userId } }
+    );
+    if (response.status === 200) {
+      return response.data.imageUrl
+        ? response.data
+        : { imageUrl: "/profile-alt.png" };
+    } else {
+      throw new Error();
+    }
+  };
+
+  const profilePictureQuery = useQuery({
+    queryKey: ["profile picture", userId],
+    queryFn: fetchProfilePicture,
+    enabled: !!userId,
+  });
+
   useEffect(() => {
-    const fetchProfilePicture = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/users/profile-picture",
-        { params: { userId } }
-      );
-      if (response.status === 200) {
-        if (response.data.imageUrl) {
-          setProfilePicture(response.data.imageUrl);
-        } else {
-          setProfilePicture("/profile-alt.png");
-        }
-      } else {
-        console.log("Error fetching profile picture");
-        setProfilePicture("/profile-alt.png");
-      }
-    };
-    userId && fetchProfilePicture();
-  }, [userId]);
+    if (profilePictureQuery.isSuccess) {
+      setProfilePicture(profilePictureQuery.data.imageUrl);
+    }
+    if (profilePictureQuery.isError) {
+      setProfilePicture("/profile-alt.png");
+    }
+  }, [
+    profilePictureQuery.data?.imageUrl,
+    profilePictureQuery.isError,
+    profilePictureQuery.isSuccess,
+  ]);
 
   return (
     <>
