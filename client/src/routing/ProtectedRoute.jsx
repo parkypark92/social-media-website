@@ -1,44 +1,47 @@
 import axios from "axios";
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Navigate, useOutletContext } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 export default function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
-  const { setUser } = useOutletContext();
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const { setUser, isAuthenticated, setIsAuthenticated } = useOutletContext();
+
+  const fetchUser = async () => {
+    const headers = { Authorization: token };
+    const response = await axios.get(
+      "http://localhost:3000/users/authenticate",
+      { headers }
+    );
+    if (response.data.statusCode === 400) throw new Error("unauthorized");
+    if (response.status === 200) return response.data;
+  };
+
+  const userQuery = useQuery({
+    queryKey: ["user", token],
+    queryFn: fetchUser,
+    retry: false,
+  });
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const headers = { Authorization: token };
-        const response = await axios.get(
-          "http://localhost:3000/users/authenticate",
-          { headers }
-        );
-
-        if (response.data.statusCode === 401) {
-          setIsAuthenticated(false);
-        } else {
-          setUser(response.data);
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
-        console.error("Error fetching user:", error);
-        setIsAuthenticated(false);
-      }
-    };
-
-    if (token) {
-      fetchUser();
-    } else {
+    if (userQuery.isError) {
       setIsAuthenticated(false);
     }
-  }, [token, setUser]);
 
-  if (isAuthenticated === null) {
-    return <p>Loading...</p>;
-  }
+    if (userQuery.isSuccess) {
+      setUser(userQuery.data);
+      setIsAuthenticated(true);
+    }
+  }, [
+    setIsAuthenticated,
+    setUser,
+    userQuery.data,
+    userQuery.isError,
+    userQuery.isSuccess,
+  ]);
+
+  if (userQuery.isLoading) return <h1>Loading...</h1>;
 
   return isAuthenticated ? children : <Navigate to="/login" />;
 }

@@ -1,12 +1,12 @@
 import "./App.css";
 import Navbar from "./components/nav/Navbar";
 import { useState, useEffect } from "react";
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import axios from "axios";
 
 function App() {
   const token = localStorage.getItem("token");
-  const [user, setUser] = useState(localStorage.getItem("user"));
+  const [user, setUser] = useState(null);
   const [friendsList, setFriendsList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
@@ -68,18 +68,22 @@ function App() {
 
   return (
     <>
-      {isAuthenticated ? (
-        <Navigate to={`/${user.id}`} />
-      ) : (
-        <Navigate to="/login" />
-      )}
       <Navbar
         user={user}
         setUser={setUser}
         setIsAuthenticated={setIsAuthenticated}
+        setFriendsList={setFriendsList}
       ></Navbar>
       <div className="navbarOffset"></div>
-      <Outlet context={{ user, setUser, friendsList }} />
+      <Outlet
+        context={{
+          user,
+          setUser,
+          isAuthenticated,
+          setIsAuthenticated,
+          friendsList,
+        }}
+      />
     </>
   );
 }

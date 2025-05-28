@@ -25,7 +25,6 @@ export default function Profile() {
         }
       );
       if (response.status === 200) {
-        console.log(response.data.profileInfo.posts);
         setProfileInfo(response.data.profileInfo);
         setProfilePosts(response.data.profileInfo.posts);
       } else {

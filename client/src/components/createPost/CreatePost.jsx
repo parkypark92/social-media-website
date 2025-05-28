@@ -30,7 +30,7 @@ export default function CreatePost() {
 
   return (
     <div className={styles.createPostContainer}>
-      <ProfilePicture userId={user.id} />
+      <ProfilePicture userId={user?.id} />
       <form className={styles.createPostForm} onSubmit={publishPost}>
         <div className={styles.createPost}>
           <input

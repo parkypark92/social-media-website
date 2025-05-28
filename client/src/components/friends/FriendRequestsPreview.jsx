@@ -13,7 +13,7 @@ export default function FriendRequestsPreview({ limit }) {
     const fetchRequests = async () => {
       const response = await axios.get(
         "http://localhost:3000/users/get-requests-preview",
-        { params: { id: user.id, limit } }
+        { params: { id: user?.id, limit } }
       );
       if (response.status === 200) {
         setRequestsPreview(response.data.requests);
@@ -92,9 +92,9 @@ export default function FriendRequestsPreview({ limit }) {
       )}
 
       {limit && requestsPreview.length ? (
-        <Link to={`/${user.id}/friend-requests`}>View all</Link>
+        <Link to={`/${user?.id}/friend-requests`}>View all</Link>
       ) : !limit ? (
-        <Link to={`/${user.id}`}>Back</Link>
+        <Link to={`/${user?.id}`}>Back</Link>
       ) : undefined}
     </div>
   );

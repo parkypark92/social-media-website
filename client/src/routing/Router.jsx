@@ -1,4 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import App from "../App";
 import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
@@ -8,13 +10,24 @@ import FindFriends from "../pages/FindFriends";
 import FriendRequests from "../pages/FriendRequests";
 import Messages from "../pages/Messages";
 import ProtectedRoute from "./ProtectedRoute";
+import { Navigate } from "react-router-dom";
 
 const Router = () => {
+  const queryClient = new QueryClient();
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <App />,
+      element: (
+        <QueryClientProvider client={queryClient}>
+          <App />
+          <ReactQueryDevtools />
+        </QueryClientProvider>
+      ),
       children: [
+        {
+          index: true,
+          element: <Navigate to="/login" />,
+        },
         {
           path: "/:userId",
           element: (

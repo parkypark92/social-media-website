@@ -23,7 +23,7 @@ export default function ProfilePicture({ userId, size = 48, link = true }) {
         setProfilePicture("/profile-alt.png");
       }
     };
-    fetchProfilePicture();
+    userId && fetchProfilePicture();
   }, [userId]);
 
   return (

@@ -14,7 +14,7 @@ export default function RequestFriends({ limit }) {
       const response = await axios.get(
         "http://localhost:3000/users/users-preview",
         {
-          params: { id: user.id, limit },
+          params: { id: user?.id, limit },
         }
       );
       setUsersPreview(response.data.users);
@@ -79,8 +79,8 @@ export default function RequestFriends({ limit }) {
                 <ProfilePicture userId={item.id} />
                 <li>{item.username}</li>
               </div>
-              {item.sentRequests.includes(user.id) ||
-              item.receivedRequests.includes(user.id) ? (
+              {item.sentRequests.includes(user?.id) ||
+              item.receivedRequests.includes(user?.id) ? (
                 <p>Request sent!</p>
               ) : (
                 <button id={item.id} onClick={sendRequest}>
@@ -94,9 +94,9 @@ export default function RequestFriends({ limit }) {
         <p>No suggestions right now!</p>
       )}
       {limit && usersPreview.length ? (
-        <Link to={`/${user.id}/find-friends`}>View all</Link>
+        <Link to={`/${user?.id}/find-friends`}>View all</Link>
       ) : !limit ? (
-        <Link to={`/${user.id}`}>Back</Link>
+        <Link to={`/${user?.id}`}>Back</Link>
       ) : undefined}
     </div>
   );

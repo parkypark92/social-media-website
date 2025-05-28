@@ -2,12 +2,18 @@ import styles from "./Navbar.module.css";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-export default function Navbar({ user, setUser, setIsAuthenticated }) {
+export default function Navbar({
+  user,
+  setUser,
+  setIsAuthenticated,
+  setFriendsList,
+}) {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUser(null);
-    setIsAuthenticated(null);
+    setIsAuthenticated(false);
+    setFriendsList([]);
     navigate("/login");
   };
   return (
@@ -46,4 +52,5 @@ Navbar.propTypes = {
   user: PropTypes.object,
   setUser: PropTypes.func,
   setIsAuthenticated: PropTypes.func,
+  setFriendsList: PropTypes.func,
 };

@@ -56,7 +56,7 @@ export default function Post({ postContent, setPostData, postData }) {
           if (prev.id === postContent.id) {
             return {
               ...prev,
-              likes: prev.likes.filter((e) => e.id !== user.id),
+              likes: prev.likes.filter((e) => e.id !== user?.id),
             };
           } else {
             return prev;
@@ -77,7 +77,7 @@ export default function Post({ postContent, setPostData, postData }) {
       </div>
       <p>{postContent.text}</p>
       <div className={styles.likes}>
-        {postContent.likes.some((e) => e.id === user.id) ? (
+        {postContent.likes.some((e) => e.id === user?.id) ? (
           <button className={styles.postButton} onClick={handleUnlikePost}>
             <img
               className={styles.fullHeartIcon}
