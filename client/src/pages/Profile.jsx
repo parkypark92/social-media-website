@@ -41,8 +41,8 @@ export default function Profile() {
     }
   }, [profileQuery.data?.profileInfo, profileQuery.isSuccess]);
 
-  if (profileQuery.isLoading) return <h1>Loading...</h1>;
-  if (profileQuery.isError) return <h1>{profileQuery.error.message}</h1>;
+  if (profileQuery.isLoading) return <h2>Loading...</h2>;
+  if (profileQuery.isError) return <h2>{profileQuery.error.message}</h2>;
 
   return (
     <div className={styles.profileContainer}>

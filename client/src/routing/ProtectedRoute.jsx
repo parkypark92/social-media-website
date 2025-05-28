@@ -41,7 +41,7 @@ export default function ProtectedRoute({ children }) {
     userQuery.isSuccess,
   ]);
 
-  if (userQuery.isLoading) return <h1>Loading...</h1>;
+  if (userQuery.isLoading) return <h2>Loading...</h2>;
 
   return isAuthenticated ? children : <Navigate to="/login" />;
 }

@@ -2,31 +2,51 @@ import Post from "./Post";
 import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
 export default function PostsFeed({ postData, setPostData }) {
   const [feedError, setFeedError] = useState(null);
   const { friendsList } = useOutletContext();
+  const friendIds = friendsList.map((friend) => friend.id);
+
+  const fetchPostData = async () => {
+    const response = await axios.get("http://localhost:3000/users/get-posts", {
+      params: { ids: friendIds },
+    });
+    if (response.data.posts) {
+      return response.data;
+    } else {
+      throw new Error("Error loading posts feed");
+    }
+  };
+
+  const postsQuery = useQuery({
+    queryKey: ["posts", friendIds],
+    queryFn: fetchPostData,
+  });
+
   useEffect(() => {
-    const fetchPostData = async () => {
-      const friendIds = friendsList.map((friend) => friend.id);
-      const response = await axios.get(
-        "http://localhost:3000/users/get-posts",
-        { params: { ids: friendIds } }
-      );
-      if (response.status === 200) {
-        setFeedError(null);
-        setPostData(response.data.posts);
-      } else {
-        setFeedError(response.data.error);
-      }
-    };
-    friendsList.length && fetchPostData();
-  }, [friendsList, setPostData]);
+    if (postsQuery.isSuccess) {
+      setFeedError(null);
+      setPostData(postsQuery.data.posts);
+    }
+    if (postsQuery.isError) {
+      setFeedError(postsQuery.error.message);
+    }
+  }, [
+    postsQuery.data?.posts,
+    postsQuery.error?.message,
+    postsQuery.isError,
+    postsQuery.isSuccess,
+    setPostData,
+  ]);
+
+  if (postsQuery.isLoading) return <h2>Loading feed...</h2>;
 
   return (
     <div>
-      {feedError && <p>{feedError}</p>}
+      {feedError && <h2>{feedError}</h2>}
       {postData &&
         postData.map((post) => {
           return (
