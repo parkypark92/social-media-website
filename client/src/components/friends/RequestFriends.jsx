@@ -1,5 +1,6 @@
 import ProfilePicture from "../profilePicture/ProfilePicture";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useOutletContext, Link } from "react-router-dom";
 import styles from "./RequestFriends.module.css";
@@ -9,18 +10,43 @@ export default function RequestFriends({ limit }) {
   const [usersPreview, setUsersPreview] = useState([]);
   const { user } = useOutletContext();
 
+  const fetchUsers = async () => {
+    const response = await axios.get(
+      "http://localhost:3000/users/users-preview",
+      {
+        params: { id: user?.id, limit },
+      }
+    );
+    if (response.data.users) {
+      return response.data;
+    } else {
+      throw new Error("Error retrieving users");
+    }
+  };
+
+  const usersQuery = useQuery({
+    queryKey: ["users", user.id],
+    queryFn: fetchUsers,
+  });
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/users/users-preview",
-        {
-          params: { id: user?.id, limit },
-        }
-      );
-      setUsersPreview(response.data.users);
-    };
-    fetchUsers();
-  }, [user, limit]);
+    if (usersQuery.isSuccess) {
+      setUsersPreview(usersQuery.data.users);
+    }
+  }, [usersQuery.data?.users, usersQuery.isSuccess]);
+
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     const response = await axios.get(
+  //       "http://localhost:3000/users/users-preview",
+  //       {
+  //         params: { id: user?.id, limit },
+  //       }
+  //     );
+  //     setUsersPreview(response.data.users);
+  //   };
+  //   fetchUsers();
+  // }, [user, limit]);
 
   const sendRequest = async (e) => {
     e.preventDefault();
@@ -68,6 +94,9 @@ export default function RequestFriends({ limit }) {
       }
     }
   };
+
+  if (usersQuery.isLoading) return <h2>Loading...</h2>;
+  if (usersQuery.isError) return <h2>{usersQuery.error.message}</h2>;
 
   return (
     <div>
