@@ -3,6 +3,7 @@ import Navbar from "./components/nav/Navbar";
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -31,8 +32,6 @@ function App() {
       }
     };
 
-    localStorage.removeItem("user");
-
     if (token) {
       fetchUser();
     } else {
@@ -40,31 +39,40 @@ function App() {
     }
   }, [token, setUser]);
 
-  useEffect(() => {
-    const fetchFriends = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/users/get-friends",
-        { params: { id: user.id } }
-      );
-      if (response.status === 200) {
-        const friends = response.data.friendsList.map((friendship) => {
-          if (friendship.senderId === user.id) {
-            return friendship.receiver;
-          } else {
-            return friendship.sender;
-          }
-        });
-        setFriendsList(friends);
-      } else {
-        console.log("Error");
-      }
-    };
-    user && fetchFriends();
-  }, [user]);
+  const fetchFriends = async () => {
+    const response = await axios.get(
+      "http://localhost:3000/users/get-friends",
+      { params: { id: user.id } }
+    );
+    if (response.data.friendsList) {
+      const friends = response.data.friendsList.map((friendship) => {
+        if (friendship.senderId === user.id) {
+          return friendship.receiver;
+        } else {
+          return friendship.sender;
+        }
+      });
+      return friends;
+    } else {
+      throw new Error("An error has occurred");
+    }
+  };
 
-  if (isAuthenticated === null) {
-    return <p>Loading...</p>;
-  }
+  const friendsQuery = useQuery({
+    queryKey: ["friends", user?.id],
+    queryFn: fetchFriends,
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (friendsQuery.isSuccess) {
+      setFriendsList(friendsQuery.data);
+    }
+  }, [friendsQuery.data, friendsQuery.isSuccess]);
+
+  if (isAuthenticated === null) return <p>Loading...</p>;
+
+  if (friendsQuery.isError) return <h2>{friendsQuery.error.message}</h2>;
 
   return (
     <>
