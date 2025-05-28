@@ -1,8 +1,7 @@
-import { useState } from "react";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useOutletContext } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, useOutletContext } from "react-router-dom";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 import ProfileHeader from "../components/profileHeader/ProfileHeader";
 import CreatePost from "../components/createPost/CreatePost";
 import ProfilePosts from "../components/posts/ProfilePosts";
@@ -16,23 +15,34 @@ export default function Profile() {
   const [profilePosts, setProfilePosts] = useState(null);
   const isOwnProfile = user.id === userId;
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const response = await axios.get(
-        "http://localhost:3000/users/profile-info",
-        {
-          params: { userId },
-        }
-      );
-      if (response.status === 200) {
-        setProfileInfo(response.data.profileInfo);
-        setProfilePosts(response.data.profileInfo.posts);
-      } else {
-        console.log("Error");
+  const fetchUserData = async () => {
+    const response = await axios.get(
+      "http://localhost:3000/users/profile-info",
+      {
+        params: { userId },
       }
-    };
-    fetchUserData();
-  }, [userId]);
+    );
+    if (response.data.profileInfo) {
+      return response.data;
+    } else {
+      throw new Error("An error occurred");
+    }
+  };
+
+  const profileQuery = useQuery({
+    queryKey: ["profile", userId],
+    queryFn: fetchUserData,
+  });
+
+  useEffect(() => {
+    if (profileQuery.isSuccess) {
+      setProfileInfo(profileQuery.data.profileInfo);
+      setProfilePosts(profileQuery.data.profileInfo.posts);
+    }
+  }, [profileQuery.data?.profileInfo, profileQuery.isSuccess]);
+
+  if (profileQuery.isLoading) return <h1>Loading...</h1>;
+  if (profileQuery.isError) return <h1>{profileQuery.error.message}</h1>;
 
   return (
     <div className={styles.profileContainer}>
