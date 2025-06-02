@@ -4,7 +4,6 @@ import FriendsListPreview from "../components/friends/FriendsListPreview";
 import RequestFriends from "../components/friends/RequestFriends";
 import FriendRequestsPreview from "../components/friends/FriendRequestsPreview";
 import { useState } from "react";
-// import axios from "axios";
 import styles from "./Dashboard.module.css";
 
 export default function Dashboard() {

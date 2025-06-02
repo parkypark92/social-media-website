@@ -47,7 +47,7 @@ export default function PostsFeed({ postData, setPostData }) {
   return (
     <div>
       {feedError && <h2>{feedError}</h2>}
-      {postData &&
+      {postData.length > 0 ? (
         postData.map((post) => {
           return (
             <Post
@@ -57,7 +57,10 @@ export default function PostsFeed({ postData, setPostData }) {
               postData={postData}
             />
           );
-        })}
+        })
+      ) : (
+        <h2>No posts to display...</h2>
+      )}
     </div>
   );
 }

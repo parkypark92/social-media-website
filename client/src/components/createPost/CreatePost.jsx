@@ -1,15 +1,15 @@
 import ProfilePicture from "../profilePicture/ProfilePicture.jsx";
 import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import styles from "./CreatePost.module.css";
 
 export default function CreatePost() {
   const { user } = useOutletContext();
+  const queryClient = useQueryClient();
   const [text, setText] = useState("");
-  const publishPost = async (e) => {
-    e.preventDefault();
-    const data = new FormData(e.target);
+  const publishPost = async (data) => {
     const formData = {
       text: data.get("newPost"),
       userId: user.id,
@@ -19,9 +19,21 @@ export default function CreatePost() {
       formData
     );
     if (response.status === 201) {
-      alert("Post success!");
-      setText("");
+      return response.data.post;
     }
+  };
+
+  const createPostMutation = useMutation({
+    mutationFn: publishPost,
+    onSuccess: () => {
+      setText("");
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+    },
+  });
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    createPostMutation.mutate(new FormData(e.target));
   };
 
   const handleChange = (e) => {
@@ -31,7 +43,7 @@ export default function CreatePost() {
   return (
     <div className={styles.createPostContainer}>
       <ProfilePicture userId={user?.id} />
-      <form className={styles.createPostForm} onSubmit={publishPost}>
+      <form className={styles.createPostForm} onSubmit={submitForm}>
         <div className={styles.createPost}>
           <input
             className={styles.createPostInput}
