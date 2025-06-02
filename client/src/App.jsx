@@ -20,7 +20,7 @@ function App() {
           { headers }
         );
 
-        if (response.data.statusCode === 401) {
+        if (response.data.statusCode === 400) {
           setIsAuthenticated(false);
         } else {
           setUser(response.data);
