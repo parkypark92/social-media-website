@@ -1,14 +1,14 @@
 import ProfilePicture from "../profilePicture/ProfilePicture";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+// import { useState } from "react";
 import { useOutletContext, Link } from "react-router-dom";
 import styles from "./RequestFriends.module.css";
 import PropTypes from "prop-types";
 
 export default function RequestFriends({ limit }) {
-  const [usersPreview, setUsersPreview] = useState([]);
   const { user } = useOutletContext();
+  const queryClient = useQueryClient();
 
   const fetchUsers = async () => {
     const response = await axios.get(
@@ -24,75 +24,52 @@ export default function RequestFriends({ limit }) {
     }
   };
 
+  const sendRequest = async (data) => {
+    const response = await axios.post(
+      "http://localhost:3000/users/friend-request",
+      data
+    );
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      alert("Something went wrong. Please try again.");
+    }
+  };
+
   const usersQuery = useQuery({
-    queryKey: ["users", user.id],
+    queryKey: ["users", user.id, limit],
     queryFn: fetchUsers,
   });
 
-  useEffect(() => {
-    if (usersQuery.isSuccess) {
-      setUsersPreview(usersQuery.data.users);
-    }
-  }, [usersQuery.data?.users, usersQuery.isSuccess]);
-
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     const response = await axios.get(
-  //       "http://localhost:3000/users/users-preview",
-  //       {
-  //         params: { id: user?.id, limit },
-  //       }
-  //     );
-  //     setUsersPreview(response.data.users);
-  //   };
-  //   fetchUsers();
-  // }, [user, limit]);
-
-  const sendRequest = async (e) => {
-    e.preventDefault();
-    const data = {
-      sentBy: user.id,
-      receivedBy: e.target.id,
-    };
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/users/friend-request",
-        data
-      );
-      if (response.status === 200) {
-        setUsersPreview(
-          usersPreview.map((item) => {
-            if (item.id === user.id) {
+  const sendRequestMutation = useMutation({
+    mutationFn: sendRequest,
+    onSuccess: (data) => {
+      queryClient.setQueryData(["users", user.id, limit], (oldData) => {
+        return {
+          users: oldData.users.map((item) => {
+            if (item.id == data.friendRequest.receiverId) {
               return {
                 ...item,
-                sentRequests: [...item.sentRequests, e.target.id],
-              };
-            }
-            if (item.id === e.target.id) {
-              return {
-                ...item,
-                receivedRequests: [...item.receivedRequests, user.id],
+                receivedRequests: [
+                  ...item.receivedRequests,
+                  data.friendRequest,
+                ],
               };
             } else {
               return item;
             }
-          })
-        );
-      } else {
-        alert("Something went wrong. Please try again.");
-      }
-    } catch (error) {
-      if (error.response) {
-        console.error("Server responded with an error:", error.response.data);
-        alert(`Error: ${error.response.data.message}`);
-      } else if (error.request) {
-        console.error("No response received:", error.request);
-        alert("No response from server. Check your connection.");
-      } else {
-        console.error("Error setting up request:", error.message);
-        alert("Unexpected error occurred.");
-      }
-    }
+          }),
+        };
+      });
+    },
+  });
+
+  const callMutation = (e) => {
+    e.preventDefault();
+    sendRequestMutation.mutate({
+      sentBy: user.id,
+      receivedBy: e.target.id,
+    });
   };
 
   if (usersQuery.isLoading) return <h2>Loading...</h2>;
@@ -100,19 +77,20 @@ export default function RequestFriends({ limit }) {
 
   return (
     <div>
-      {usersPreview.length ? (
-        usersPreview.map((item) => {
+      {usersQuery.data.users.length > 0 ? (
+        usersQuery.data.users.map((item) => {
           return (
             <div key={item.id} className={styles.usersList}>
               <div className={styles.avatar}>
                 <ProfilePicture userId={item.id} />
                 <li>{item.username}</li>
               </div>
-              {item.sentRequests.includes(user?.id) ||
-              item.receivedRequests.includes(user?.id) ? (
+              {item.receivedRequests.some(
+                (item) => item.senderId == user.id
+              ) ? (
                 <p>Request sent!</p>
               ) : (
-                <button id={item.id} onClick={sendRequest}>
+                <button id={item.id} onClick={callMutation}>
                   Send request
                 </button>
               )}
@@ -122,7 +100,7 @@ export default function RequestFriends({ limit }) {
       ) : (
         <p>No suggestions right now!</p>
       )}
-      {limit && usersPreview.length ? (
+      {limit && usersQuery.data.users.length > 0 ? (
         <Link to={`/${user?.id}/find-friends`}>View all</Link>
       ) : !limit ? (
         <Link to={`/${user?.id}`}>Back</Link>
