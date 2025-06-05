@@ -4,68 +4,67 @@ import Comments from "../comments/Comments";
 import PropTypes from "prop-types";
 import styles from "./Post.module.css";
 import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useOutletContext } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 
-export default function Post({ postContent, setPostData, postData }) {
+export default function Post({ postContent }) {
   const { user } = useOutletContext();
+  const queryClient = useQueryClient();
 
-  const handleLikePost = async (e) => {
-    e.preventDefault();
-    const body = {
-      postId: postContent.id,
-      userId: user.id,
-    };
+  const handleLikePost = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/like-post",
-      body
+      data
     );
     if (response.status === 200) {
-      console.log(response.data);
-      setPostData(
-        postData.map((prev) => {
-          if (prev.id === postContent.id) {
-            return {
-              ...prev,
-              likes: [...prev.likes, user],
-            };
-          } else {
-            return prev;
-          }
-        })
-      );
+      return response.data;
     } else {
-      console.log("Error");
+      alert("An error occurred! Please try again.");
     }
   };
 
-  const handleUnlikePost = async (e) => {
-    e.preventDefault();
-    const body = {
-      postId: postContent.id,
-      userId: user.id,
-    };
+  const handleUnlikePost = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/unlike-post",
-      body
+      data
     );
     if (response.status === 200) {
-      console.log(response.data);
-      setPostData(
-        postData.map((prev) => {
-          if (prev.id === postContent.id) {
-            return {
-              ...prev,
-              likes: prev.likes.filter((e) => e.id !== user?.id),
-            };
-          } else {
-            return prev;
-          }
-        })
-      );
+      return response.data;
     } else {
-      console.log("Error");
+      alert("An error occurred! Please try again.");
     }
+  };
+
+  const likePostMutation = useMutation({
+    mutationFn: handleLikePost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+    },
+  });
+
+  const unlikePostMutation = useMutation({
+    mutationFn: handleUnlikePost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+    },
+  });
+
+  const callLikeMutation = (e) => {
+    e.preventDefault;
+    likePostMutation.mutate({
+      postId: postContent.id,
+      userId: user.id,
+    });
+  };
+  const callunlikeMutation = (e) => {
+    e.preventDefault;
+    unlikePostMutation.mutate({
+      postId: postContent.id,
+      userId: user.id,
+    });
   };
 
   return (
@@ -78,7 +77,7 @@ export default function Post({ postContent, setPostData, postData }) {
       <p>{postContent.text}</p>
       <div className={styles.likes}>
         {postContent.likes.some((e) => e.id === user?.id) ? (
-          <button className={styles.postButton} onClick={handleUnlikePost}>
+          <button className={styles.postButton} onClick={callunlikeMutation}>
             <img
               className={styles.fullHeartIcon}
               src="/heart-full.png"
@@ -87,7 +86,7 @@ export default function Post({ postContent, setPostData, postData }) {
             />
           </button>
         ) : (
-          <button className={styles.postButton} onClick={handleLikePost}>
+          <button className={styles.postButton} onClick={callLikeMutation}>
             <img
               className={styles.emptyHeartIcon}
               src="/heart.png"
@@ -98,11 +97,7 @@ export default function Post({ postContent, setPostData, postData }) {
         )}
         <span>{postContent.likes.length}</span>
       </div>
-      <CreateComment
-        postId={postContent.id}
-        setPostData={setPostData}
-        postData={postData}
-      ></CreateComment>
+      <CreateComment postId={postContent.id}></CreateComment>
       <h2>Comments</h2>
       <hr />
       <Comments comments={postContent.comments}></Comments>
