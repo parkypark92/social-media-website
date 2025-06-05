@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import PropTypes from "prop-types";
 
 export default function PostsFeed() {
   const [feedError, setFeedError] = useState(null);
@@ -50,8 +49,3 @@ export default function PostsFeed() {
     </div>
   );
 }
-
-PostsFeed.propTypes = {
-  postData: PropTypes.array,
-  setPostData: PropTypes.func,
-};

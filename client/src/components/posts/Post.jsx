@@ -107,6 +107,4 @@ export default function Post({ postContent }) {
 
 Post.propTypes = {
   postContent: PropTypes.object,
-  setPostData: PropTypes.func,
-  postData: PropTypes.array,
 };
