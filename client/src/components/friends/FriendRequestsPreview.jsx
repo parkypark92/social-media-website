@@ -1,14 +1,13 @@
 import ProfilePicture from "../profilePicture/ProfilePicture";
-import { useState, useEffect } from "react";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useOutletContext, Link } from "react-router-dom";
 import styles from "./FriendRequestPreview.module.css";
 import PropTypes from "prop-types";
 
 export default function FriendRequestsPreview({ limit }) {
-  const [requestsPreview, setRequestsPreview] = useState([]);
   const { user } = useOutletContext();
+  const queryClient = useQueryClient();
 
   const fetchRequests = async () => {
     const response = await axios.get(
@@ -22,42 +21,52 @@ export default function FriendRequestsPreview({ limit }) {
     }
   };
 
-  const requestsPreviewQuery = useQuery({
-    queryKey: ["requests preview", user.id],
-    queryFn: fetchRequests,
-  });
-
-  useEffect(() => {
-    if (requestsPreviewQuery.isSuccess) {
-      setRequestsPreview(requestsPreviewQuery.data.requests);
-    }
-  }, [requestsPreviewQuery.data?.requests, requestsPreviewQuery.isSuccess]);
-
-  const handleRequest = async (e) => {
-    e.preventDefault();
-    const data = {
-      receiverId: user.id,
-      senderId: e.target.dataset.sender,
-      status: e.target.id,
-    };
+  const answerRequest = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/answer-request",
       data
     );
     if (response.status === 200) {
-      setRequestsPreview(
-        requestsPreview.map((prev) => {
-          if (prev.id === response.data.friendshipStatus[0].id) {
-            return {
-              ...prev,
-              status: e.target.id,
-            };
-          } else {
-            return prev;
-          }
-        })
-      );
+      return response.data;
+    } else {
+      alert("Something went wrong! Please try again.");
     }
+  };
+
+  const requestsPreviewQuery = useQuery({
+    queryKey: ["requests preview", user.id],
+    queryFn: fetchRequests,
+  });
+
+  const answerRequestMutation = useMutation({
+    mutationFn: answerRequest,
+    onSuccess: (data) => {
+      console.log(queryClient.getQueryData(["requests preview", user.id]));
+      console.log(data);
+      queryClient.setQueryData(["requests preview", user.id], (oldData) => {
+        return {
+          requests: oldData["requests"].map((prev) => {
+            if (prev.id === data.friendshipStatus[0].id) {
+              return {
+                ...prev,
+                status: data.friendshipStatus[0].status,
+              };
+            } else {
+              return prev;
+            }
+          }),
+        };
+      });
+    },
+  });
+
+  const callMutation = (e) => {
+    e.preventDefault();
+    answerRequestMutation.mutate({
+      receiverId: user.id,
+      senderId: e.target.dataset.sender,
+      status: e.target.id,
+    });
   };
 
   if (requestsPreviewQuery.isLoading) return <h2>Loading...</h2>;
@@ -66,8 +75,8 @@ export default function FriendRequestsPreview({ limit }) {
 
   return (
     <div>
-      {requestsPreview.length ? (
-        requestsPreview.map((request) => {
+      {requestsPreviewQuery.data.requests.length > 0 ? (
+        requestsPreviewQuery.data.requests.map((request) => {
           return (
             <div className={styles.requestPreviewDisplay} key={request.id}>
               <div className={styles.avatar}>
@@ -84,14 +93,14 @@ export default function FriendRequestsPreview({ limit }) {
                   <button
                     data-sender={request.sender.id}
                     id="accepted"
-                    onClick={handleRequest}
+                    onClick={callMutation}
                   >
                     Accept
                   </button>
                   <button
                     data-sender={request.sender.id}
                     id="declined"
-                    onClick={handleRequest}
+                    onClick={callMutation}
                   >
                     Decline
                   </button>
@@ -104,7 +113,7 @@ export default function FriendRequestsPreview({ limit }) {
         <p>No friend requests!</p>
       )}
 
-      {limit && requestsPreview.length ? (
+      {limit && requestsPreviewQuery.data.requests.length > 0 ? (
         <Link to={`/${user?.id}/friend-requests`}>View all</Link>
       ) : !limit ? (
         <Link to={`/${user?.id}`}>Back</Link>
