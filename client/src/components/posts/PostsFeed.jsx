@@ -5,7 +5,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 
-export default function PostsFeed({ postData, setPostData }) {
+export default function PostsFeed() {
   const [feedError, setFeedError] = useState(null);
   const { friendsList } = useOutletContext();
   const friendIds = friendsList.map((friend) => friend.id);
@@ -29,34 +29,20 @@ export default function PostsFeed({ postData, setPostData }) {
   useEffect(() => {
     if (postsQuery.isSuccess) {
       setFeedError(null);
-      setPostData(postsQuery.data.posts);
     }
     if (postsQuery.isError) {
       setFeedError(postsQuery.error.message);
     }
-  }, [
-    postsQuery.data?.posts,
-    postsQuery.error?.message,
-    postsQuery.isError,
-    postsQuery.isSuccess,
-    setPostData,
-  ]);
+  }, [postsQuery.error?.message, postsQuery.isError, postsQuery.isSuccess]);
 
   if (postsQuery.isLoading) return <h2>Loading feed...</h2>;
 
   return (
     <div>
       {feedError && <h2>{feedError}</h2>}
-      {postData.length > 0 ? (
-        postData.map((post) => {
-          return (
-            <Post
-              key={post.id}
-              postContent={post}
-              setPostData={setPostData}
-              postData={postData}
-            />
-          );
+      {postsQuery.data.posts.length > 0 ? (
+        postsQuery.data.posts.map((post) => {
+          return <Post key={post.id} postContent={post} />;
         })
       ) : (
         <h2>No posts to display...</h2>
