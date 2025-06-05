@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useParams, useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -11,8 +10,6 @@ import styles from "./Profile.module.css";
 export default function Profile() {
   const { user } = useOutletContext();
   const { userId } = useParams();
-  const [profileInfo, setProfileInfo] = useState(null);
-  const [profilePosts, setProfilePosts] = useState(null);
   const isOwnProfile = user.id === userId;
 
   const fetchUserData = async () => {
@@ -34,30 +31,24 @@ export default function Profile() {
     queryFn: fetchUserData,
   });
 
-  useEffect(() => {
-    if (profileQuery.isSuccess) {
-      setProfileInfo(profileQuery.data.profileInfo);
-      setProfilePosts(profileQuery.data.profileInfo.posts);
-    }
-  }, [profileQuery.data?.profileInfo, profileQuery.isSuccess]);
-
   if (profileQuery.isLoading) return <h2>Loading...</h2>;
   if (profileQuery.isError) return <h2>{profileQuery.error.message}</h2>;
 
   return (
     <div className={styles.profileContainer}>
-      {profileInfo ? (
+      {profileQuery.data.profileInfo ? (
         isOwnProfile ? (
           <>
             <div className={styles.infoDisplay}>
-              {profileInfo && <ProfileHeader profileInfo={profileInfo} />}
+              {profileQuery.data.profileInfo && (
+                <ProfileHeader profileInfo={profileQuery.data.profileInfo} />
+              )}
             </div>
             <div className={styles.postsDisplay}>
               <CreatePost />
-              {profilePosts.length > 0 ? (
+              {profileQuery.data.profileInfo.posts.length > 0 ? (
                 <ProfilePosts
-                  profilePosts={profilePosts}
-                  setProfilePosts={setProfilePosts}
+                  profilePosts={profileQuery.data.profileInfo.posts}
                 />
               ) : (
                 <h2>You have no posts yet...</h2>
@@ -70,13 +61,14 @@ export default function Profile() {
         ) : (
           <>
             <div className={styles.infoDisplay}>
-              {profileInfo && <ProfileHeader profileInfo={profileInfo} />}
+              {profileQuery.data.profileInfo && (
+                <ProfileHeader profileInfo={profileQuery.data.profileInfo} />
+              )}
             </div>
             <div className={styles.postsDisplay}>
-              {profilePosts.length > 0 ? (
+              {profileQuery.data.profileInfo.posts.length > 0 ? (
                 <ProfilePosts
-                  profilePosts={profilePosts}
-                  setProfilePosts={setProfilePosts}
+                  profilePosts={profileQuery.data.profileInfo.posts}
                 />
               ) : (
                 <h2>User has no posts yet...</h2>
