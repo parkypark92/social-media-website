@@ -1,16 +1,40 @@
 import axios from "axios";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import styles from "./CreateComment.module.css";
 
-export default function CreateComment({ postId, postData, setPostData }) {
+export default function CreateComment({ postId }) {
   const { user } = useOutletContext();
   const [text, setText] = useState("");
+  const queryClient = useQueryClient();
+
   const handleChange = (e) => {
     setText(e.target.value);
   };
-  const submitComment = async (e) => {
+  const submitComment = async (data) => {
+    const response = await axios.post(
+      "http://localhost:3000/users/create-comment",
+      data
+    );
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      console.log("Error");
+    }
+  };
+
+  const createCommentMutation = useMutation({
+    mutationFn: submitComment,
+    onSuccess: () => {
+      setText("");
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+    },
+  });
+
+  const callMutation = (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
     const formData = {
@@ -18,32 +42,11 @@ export default function CreateComment({ postId, postData, setPostData }) {
       authorId: user.id,
       postId: postId,
     };
-    const response = await axios.post(
-      "http://localhost:3000/users/create-comment",
-      formData
-    );
-    if (response.status === 200) {
-      console.log(response.data.msg);
-      setText("");
-      setPostData(
-        postData.map((post) => {
-          if (post.id === postId) {
-            return {
-              ...post,
-              comments: [...post.comments, response.data.comment],
-            };
-          } else {
-            return post;
-          }
-        })
-      );
-    } else {
-      console.log("Error");
-    }
+    createCommentMutation.mutate(formData);
   };
 
   return (
-    <form onSubmit={submitComment}>
+    <form onSubmit={callMutation}>
       <div className={styles.commentForm}>
         <input
           type="text"
@@ -63,6 +66,4 @@ export default function CreateComment({ postId, postData, setPostData }) {
 
 CreateComment.propTypes = {
   postId: PropTypes.string,
-  setPostData: PropTypes.func,
-  postData: PropTypes.array,
 };
