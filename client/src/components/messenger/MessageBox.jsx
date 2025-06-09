@@ -17,8 +17,8 @@ export default function MessageBox({
 }) {
   const { user, friendsList } = useOutletContext();
   const [messageValue, setMessageValue] = useState("");
-
   const [newConversations, setNewConversations] = useState([]);
+
   useEffect(() => {
     setNewConversations(
       friendsList.filter(
@@ -36,9 +36,7 @@ export default function MessageBox({
       data
     );
     if (response.status === 200) {
-      setAllChats([response.data.conversation, ...allChats]);
-      setCurrentChat(response.data.conversation);
-      setNewChat(false);
+      return response.data;
     }
   };
 
@@ -76,6 +74,11 @@ export default function MessageBox({
 
   const createConversationMutation = useMutation({
     mutationFn: createConversation,
+    onSuccess: (data) => {
+      setAllChats([data.conversation, ...allChats]);
+      setCurrentChat(data.conversation);
+      setNewChat(false);
+    },
   });
 
   const sendMessageMutation = useMutation({
