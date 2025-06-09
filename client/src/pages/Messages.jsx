@@ -11,7 +11,7 @@ import styles from "./Messages.module.css";
 export default function Messages() {
   const [newChat, setNewChat] = useState(false);
   const [currentChat, setCurrentChat] = useState(null);
-  const [allChats, setAllChats] = useState([]);
+  // const [allChats, setAllChats] = useState([]);
 
   const { user } = useOutletContext();
 
@@ -35,7 +35,7 @@ export default function Messages() {
   useEffect(() => {
     if (conversationsQuery.isSuccess) {
       if (conversationsQuery.data.chats.length > 0) {
-        setAllChats(conversationsQuery.data.chats);
+        // setAllChats(conversationsQuery.data.chats);
         setCurrentChat(conversationsQuery.data.chats[0]);
       } else {
         setNewChat(true);
@@ -53,7 +53,7 @@ export default function Messages() {
         setNewChat={setNewChat}
         currentChat={currentChat}
         setCurrentChat={setCurrentChat}
-        allChats={allChats}
+        allChats={conversationsQuery.data.chats}
       ></Chats>
       <div className={styles.chatOffset}></div>
       <MessageBox
@@ -61,8 +61,8 @@ export default function Messages() {
         setNewChat={setNewChat}
         currentChat={currentChat}
         setCurrentChat={setCurrentChat}
-        allChats={allChats}
-        setAllChats={setAllChats}
+        allChats={conversationsQuery.data.chats}
+        // setAllChats={setAllChats}
       ></MessageBox>
     </div>
   );

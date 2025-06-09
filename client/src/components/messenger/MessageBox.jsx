@@ -1,7 +1,7 @@
 import ProfilePicture from "../profilePicture/ProfilePicture.jsx";
 import MessageBubble from "./MessageBubble.jsx";
 import { useState, useEffect } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styles from "./MessageBox.module.css";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
@@ -13,11 +13,11 @@ export default function MessageBox({
   currentChat,
   setCurrentChat,
   allChats,
-  setAllChats,
 }) {
   const { user, friendsList } = useOutletContext();
   const [messageValue, setMessageValue] = useState("");
   const [newConversations, setNewConversations] = useState([]);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     setNewConversations(
@@ -46,27 +46,28 @@ export default function MessageBox({
       data
     );
     if (response.status === 200) {
-      const updatedChats = allChats.map((chat) => {
-        if (chat.id === currentChat.id) {
-          return {
-            ...chat,
-            messages: [...chat.messages, response.data.message],
-            lastMessageAt: response.data.conversation.lastMessageAt,
-          };
-        } else {
-          return chat;
-        }
-      });
-      const sortedChats = updatedChats.sort((a, b) =>
-        a.lastMessageAt > b.lastMessageAt
-          ? -1
-          : b.lastMessageAt > a.lastMessageAt
-          ? 1
-          : 0
-      );
-      setAllChats(sortedChats);
-      setCurrentChat(sortedChats[0]);
-      setMessageValue("");
+      return response.data;
+      // const updatedChats = allChats.map((chat) => {
+      //   if (chat.id === currentChat.id) {
+      //     return {
+      //       ...chat,
+      //       messages: [...chat.messages, response.data.message],
+      //       lastMessageAt: response.data.conversation.lastMessageAt,
+      //     };
+      //   } else {
+      //     return chat;
+      //   }
+      // });
+      // const sortedChats = updatedChats.sort((a, b) =>
+      //   a.lastMessageAt > b.lastMessageAt
+      //     ? -1
+      //     : b.lastMessageAt > a.lastMessageAt
+      //     ? 1
+      //     : 0
+      // );
+      // setAllChats(sortedChats);
+      // setCurrentChat(sortedChats[0]);
+      // setMessageValue("");
     } else {
       console.log(response.data.error);
     }
@@ -75,7 +76,7 @@ export default function MessageBox({
   const createConversationMutation = useMutation({
     mutationFn: createConversation,
     onSuccess: (data) => {
-      setAllChats([data.conversation, ...allChats]);
+      queryClient.invalidateQueries({ queryKey: ["conversations", user.id] });
       setCurrentChat(data.conversation);
       setNewChat(false);
     },
@@ -83,6 +84,11 @@ export default function MessageBox({
 
   const sendMessageMutation = useMutation({
     mutationFn: sendMessage,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["conversations", user.id] });
+      setCurrentChat(data.message.lastMessageAt);
+      setMessageValue("");
+    },
   });
 
   const callSendMessageMutation = (e) => {
@@ -176,5 +182,4 @@ MessageBox.propTypes = {
   currentChat: PropTypes.object,
   setCurrentChat: PropTypes.func,
   allChats: PropTypes.array,
-  setAllChats: PropTypes.func,
 };
