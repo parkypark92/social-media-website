@@ -42,17 +42,10 @@ export default function MessageBox({
     }
   };
 
-  const sendMessage = async (e) => {
-    e.preventDefault();
-    const data = new FormData(e.target);
-    const formData = {
-      message: data.get("message"),
-      conversationId: currentChat.id,
-      senderId: user.id,
-    };
+  const sendMessage = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/send-message",
-      formData
+      data
     );
     if (response.status === 200) {
       const updatedChats = allChats.map((chat) => {
@@ -84,6 +77,21 @@ export default function MessageBox({
   const createConversationMutation = useMutation({
     mutationFn: createConversation,
   });
+
+  const sendMessageMutation = useMutation({
+    mutationFn: sendMessage,
+  });
+
+  const callSendMessageMutation = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.target);
+    const formData = {
+      message: data.get("message"),
+      conversationId: currentChat.id,
+      senderId: user.id,
+    };
+    sendMessageMutation.mutate(formData);
+  };
 
   return (
     <div className={styles.messenger}>
@@ -139,7 +147,7 @@ export default function MessageBox({
                 );
               })}
           </div>
-          <form onSubmit={sendMessage}>
+          <form onSubmit={callSendMessageMutation}>
             <div className={styles.formCtnr}>
               <input
                 type="text"
