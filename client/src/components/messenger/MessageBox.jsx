@@ -1,6 +1,7 @@
 import ProfilePicture from "../profilePicture/ProfilePicture.jsx";
 import MessageBubble from "./MessageBubble.jsx";
 import { useState, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
 import styles from "./MessageBox.module.css";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
@@ -29,10 +30,10 @@ export default function MessageBox({
     );
   }, [friendsList, allChats]);
 
-  const createConversation = async (friendId) => {
+  const createConversation = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/create-conversation",
-      { userId: user.id, friendId: friendId }
+      data
     );
     if (response.status === 200) {
       setAllChats([response.data.conversation, ...allChats]);
@@ -80,6 +81,10 @@ export default function MessageBox({
     }
   };
 
+  const createConversationMutation = useMutation({
+    mutationFn: createConversation,
+  });
+
   return (
     <div className={styles.messenger}>
       <div className={styles.messengerHeader}>
@@ -109,7 +114,12 @@ export default function MessageBox({
               <div
                 key={friend.id}
                 className={styles.chatSelect}
-                onClick={() => createConversation(friend.id)}
+                onClick={() =>
+                  createConversationMutation.mutate({
+                    userId: user.id,
+                    friendId: friend.id,
+                  })
+                }
               >
                 <div className={styles.avatar}>
                   <ProfilePicture userId={friend.id} link={false} />

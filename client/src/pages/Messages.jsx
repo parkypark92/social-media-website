@@ -43,21 +43,6 @@ export default function Messages() {
     }
   }, [conversationsQuery.data?.chats, conversationsQuery.isSuccess]);
 
-  // useEffect(() => {
-  //   const fetchConversations = async () => {
-  //     const response = await axios.get(
-  //       "http://localhost:3000/users/conversations",
-  //       { params: { id: user.id } }
-  //     );
-  //     if (response.data.chats.length) {
-  //       setAllChats(response.data.chats);
-  //       setCurrentChat(response.data.chats[0]);
-  //     } else {
-  //       setNewChat(true);
-  //     }
-  //   };
-  //   fetchConversations();
-  // }, [user.id]);
   if (conversationsQuery.isLoading) return <h2>Loading...</h2>;
   if (conversationsQuery.isError)
     return <h2>{conversationsQuery.error.message}</h2>;
