@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styles from "./MessageBox.module.css";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
+import socket from "../../config/socket.js";
 import PropTypes from "prop-types";
 
 export default function MessageBox({
@@ -103,6 +104,7 @@ export default function MessageBox({
       queryClient.invalidateQueries({ queryKey: ["conversations", user.id] });
       setCurrentChat(data.message.lastMessageAt);
       setMessageValue("");
+      socket.emit("send-message", data.message.content);
     },
   });
 
