@@ -7,21 +7,13 @@ const asyncHandler = require("express-async-handler");
 const { Server } = require("socket.io");
 
 module.exports.authenticate_user = (req, res, next) => {
-  let responseObj = {
-    statusCode: 0,
-    errorMsg: "",
-    data: {},
-  };
   passport.authenticate("jwt", (err, user, info) => {
     if (err) {
       console.log("auth err");
       return next(err);
     }
     if (!user) {
-      responseObj.data = info.message;
-      responseObj.statusCode = 401;
-      responseObj.errorMsg = "user is not authenticated!!!!";
-      return res.json(responseObj);
+      return res.json({ msg: "user not authenticated", statusCode: 400 });
     }
     req.user = user;
     next();
@@ -77,14 +69,18 @@ module.exports.create_post = asyncHandler(async (req, res) => {
     },
   });
 
-  res.status(201).json({ message: "Post created successfully", post });
+  res.status(201).json({ post });
 });
 
 module.exports.get_posts = asyncHandler(async (req, res) => {
+  const ids = Array.isArray(req.query.ids) ? req.query.ids : [];
+  if (ids.length === 0) {
+    return res.json({ posts: [] });
+  }
   const posts = await prisma.post.findMany({
     where: {
       authorId: {
-        in: req.query.ids,
+        in: ids,
       },
     },
     orderBy: {
@@ -176,14 +172,17 @@ module.exports.send_friend_request = asyncHandler(async (req, res, next) => {
     return res.status(400).json({ msg: "Friend request already sent!" });
   }
 
-  await prisma.friendship.create({
+  const friendRequest = await prisma.friendship.create({
     data: {
       senderId: req.body.sentBy,
       receiverId: req.body.receivedBy,
     },
+    include: {
+      receiver: true,
+    },
   });
 
-  res.status(200).json({ msg: "Request sent!" });
+  res.status(200).json({ friendRequest });
 });
 
 module.exports.answer_friend_request = asyncHandler(async (req, res, next) => {
@@ -201,7 +200,7 @@ module.exports.answer_friend_request = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.like_post = asyncHandler(async (req, res, next) => {
-  await prisma.post.update({
+  const updatedPost = await prisma.post.update({
     where: {
       id: req.body.postId,
     },
@@ -213,11 +212,11 @@ module.exports.like_post = asyncHandler(async (req, res, next) => {
       },
     },
   });
-  res.status(200).json({ msg: "Post liked!" });
+  res.status(200).json({ msg: "Post liked!", updatedPost });
 });
 
 module.exports.unlike_post = asyncHandler(async (req, res, next) => {
-  await prisma.post.update({
+  const updatedPost = await prisma.post.update({
     where: {
       id: req.body.postId,
     },
@@ -229,7 +228,7 @@ module.exports.unlike_post = asyncHandler(async (req, res, next) => {
       },
     },
   });
-  res.status(200).json({ msg: "Post unliked!" });
+  res.status(200).json({ msg: "Post unliked!", updatedPost });
 });
 
 module.exports.create_comment = asyncHandler(async (req, res, next) => {

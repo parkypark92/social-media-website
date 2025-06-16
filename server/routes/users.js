@@ -9,7 +9,7 @@ router.get(
   "/authenticate",
   controller.authenticate_user,
   function (req, res, next) {
-    res.json(req.user);
+    res.status(200).json(req.user);
   }
 );
 router.get("/profile-info", controller.get_profile_info);
