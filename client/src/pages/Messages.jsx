@@ -1,5 +1,3 @@
-// import { useState, useRef } from "react";
-// import socket from "../config/socket";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -11,7 +9,6 @@ import styles from "./Messages.module.css";
 export default function Messages() {
   const [newChat, setNewChat] = useState(false);
   const [currentChat, setCurrentChat] = useState(null);
-  // const [allChats, setAllChats] = useState([]);
 
   const { user } = useOutletContext();
 
@@ -35,7 +32,6 @@ export default function Messages() {
   useEffect(() => {
     if (conversationsQuery.isSuccess) {
       if (conversationsQuery.data.chats.length > 0) {
-        // setAllChats(conversationsQuery.data.chats);
         setCurrentChat(conversationsQuery.data.chats[0]);
       } else {
         setNewChat(true);
@@ -62,7 +58,6 @@ export default function Messages() {
         currentChat={currentChat}
         setCurrentChat={setCurrentChat}
         allChats={conversationsQuery.data.chats}
-        // setAllChats={setAllChats}
       ></MessageBox>
     </div>
   );
