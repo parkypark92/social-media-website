@@ -28,9 +28,11 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  socket.on("send-message", (data) => {
-    console.log(data);
-    socket.broadcast.emit("receive-message", data);
+  const id = socket.handshake.query.id;
+  socket.join(id);
+  socket.on("send-message", (recipientId, message) => {
+    console.log("message recieved");
+    socket.to(recipientId).emit("receive-message", message);
   });
 });
 
