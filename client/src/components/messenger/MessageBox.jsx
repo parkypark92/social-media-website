@@ -1,6 +1,6 @@
 import ProfilePicture from "../profilePicture/ProfilePicture.jsx";
-import MessageBubble from "./MessageBubble.jsx";
-import { useState, useEffect } from "react";
+import { MessageBubble } from "./MessageBubble.jsx";
+import { useState, useEffect, useCallback } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styles from "./MessageBox.module.css";
 import { useOutletContext } from "react-router-dom";
@@ -20,6 +20,11 @@ export default function MessageBox({
   const [newConversations, setNewConversations] = useState([]);
   const queryClient = useQueryClient();
   const socket = useSocket();
+  const setRef = useCallback((node) => {
+    if (node) {
+      node.scrollIntoView();
+    }
+  }, []);
 
   useEffect(() => {
     setNewConversations(
@@ -182,9 +187,14 @@ export default function MessageBox({
         <>
           <div className={styles.messengerContent}>
             {currentChat &&
-              currentChat.messages.map((message) => {
+              currentChat.messages.map((message, index) => {
+                const lastMessage = currentChat.messages.length - 1 === index;
                 return (
-                  <MessageBubble key={message.id} msg={message}></MessageBubble>
+                  <MessageBubble
+                    key={message.id}
+                    msg={message}
+                    ref={lastMessage ? setRef : null}
+                  ></MessageBubble>
                 );
               })}
           </div>
