@@ -5,10 +5,10 @@ import PropTypes from "prop-types";
 import styles from "./Post.module.css";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 
-export default function Post({ postContent }) {
+export default function Post({ postContent, feedPost = false }) {
   const { user } = useOutletContext();
   const queryClient = useQueryClient();
 
@@ -101,10 +101,12 @@ export default function Post({ postContent }) {
       <h2>Comments</h2>
       <hr />
       <Comments comments={postContent.comments}></Comments>
+      {feedPost && <Link to={`/post/${postContent.id}`}>View Post</Link>}
     </div>
   );
 }
 
 Post.propTypes = {
   postContent: PropTypes.object,
+  feedPost: PropTypes.bool,
 };

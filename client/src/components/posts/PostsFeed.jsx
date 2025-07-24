@@ -41,7 +41,7 @@ export default function PostsFeed() {
       {feedError && <h2>{feedError}</h2>}
       {postsQuery.data.posts.length > 0 ? (
         postsQuery.data.posts.map((post) => {
-          return <Post key={post.id} postContent={post} />;
+          return <Post key={post.id} postContent={post} feedPost={true} />;
         })
       ) : (
         <h2>No posts to display...</h2>
