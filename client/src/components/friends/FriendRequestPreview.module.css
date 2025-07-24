@@ -15,3 +15,8 @@
   gap: 8px;
   align-items: center;
 }
+
+.buttons {
+  display: flex;
+  gap: 4px;
+}

@@ -89,7 +89,7 @@ export default function FriendRequestsPreview({ limit }) {
               ) : request.status === "declined" ? (
                 <p>Request Declined!</p>
               ) : (
-                <div>
+                <div className={styles.buttons}>
                   <button
                     data-sender={request.sender.id}
                     id="accepted"
