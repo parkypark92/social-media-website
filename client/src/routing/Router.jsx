@@ -9,6 +9,7 @@ import Signup from "../pages/Signup";
 import FindFriends from "../pages/FindFriends";
 import FriendRequests from "../pages/FriendRequests";
 import Messages from "../pages/Messages";
+import SinglePost from "../pages/SinglePost";
 import ProtectedRoute from "./ProtectedRoute";
 import { Navigate } from "react-router-dom";
 
@@ -73,6 +74,14 @@ const Router = () => {
           element: (
             <ProtectedRoute>
               <Messages />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/post/:postId",
+          element: (
+            <ProtectedRoute>
+              <SinglePost />
             </ProtectedRoute>
           ),
         },
