@@ -96,11 +96,33 @@ module.exports.get_posts = asyncHandler(async (req, res) => {
         orderBy: {
           postedAt: "desc",
         },
+        take: 1,
       },
     },
   });
 
   res.status(200).json({ posts });
+});
+
+module.exports.get_single_post = asyncHandler(async (req, res, next) => {
+  const post = await prisma.post.findUnique({
+    where: {
+      id: req.query.postId,
+    },
+    include: {
+      author: true,
+      likes: true,
+      comments: {
+        include: {
+          author: true,
+        },
+        orderBy: {
+          postedAt: "desc",
+        },
+      },
+    },
+  });
+  res.status(200).json({ post });
 });
 
 module.exports.get_all_friends = asyncHandler(async (req, res, next) => {
