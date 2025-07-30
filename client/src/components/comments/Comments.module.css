@@ -1,9 +1,24 @@
 .commentCtnr {
-  padding-left: 16px;
+  padding: 16px 8px;
 }
 
 .avatar {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
+}
+
+.commentAuthor {
+  margin: 0;
+}
+
+.commentText {
+  margin: 0;
+  padding-left: 44px;
+}
+
+.commentSeperator {
+  height: 1px;
+  border: 0;
+  background-color: rgb(201, 201, 201);
 }

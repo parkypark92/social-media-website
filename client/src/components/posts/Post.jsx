@@ -40,6 +40,7 @@ export default function Post({ postContent, feedPost = false }) {
     mutationFn: handleLikePost,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["post", postContent.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
   });
@@ -48,6 +49,7 @@ export default function Post({ postContent, feedPost = false }) {
     mutationFn: handleUnlikePost,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["post", postContent.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
   });
@@ -69,10 +71,14 @@ export default function Post({ postContent, feedPost = false }) {
 
   return (
     <div className={styles.postContainer}>
-      <div className={styles.authorAndDate}>
+      <div className={styles.postHeader}>
         <ProfilePicture userId={postContent.author.id} />
-        <h3 style={{ margin: 0 }}>{postContent.author.username}</h3>
-        <small>{format(parseISO(postContent.postedAt), "MMMM dd, yyyy")}</small>
+        <div className={styles.authorAndDate}>
+          <h3 style={{ margin: 0 }}>{postContent.author.username}</h3>
+          <small>
+            {format(parseISO(postContent.postedAt), "MMMM dd, yyyy")}
+          </small>
+        </div>
       </div>
       <p>{postContent.text}</p>
       <div className={styles.likes}>
@@ -98,8 +104,6 @@ export default function Post({ postContent, feedPost = false }) {
         <span>{postContent.likes.length}</span>
       </div>
       <CreateComment postId={postContent.id}></CreateComment>
-      <h2>Comments</h2>
-      <hr />
       <Comments comments={postContent.comments}></Comments>
       {feedPost && <Link to={`/post/${postContent.id}`}>View Post</Link>}
     </div>

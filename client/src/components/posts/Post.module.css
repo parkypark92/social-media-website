@@ -7,7 +7,7 @@
   box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
 }
 
-.authorAndDate {
+.postHeader {
   display: flex;
   align-items: center;
   gap: 16px;

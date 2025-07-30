@@ -11,12 +11,14 @@ export default function Comments({ comments }) {
             <div key={comment.id}>
               <div className={styles.commentCtnr}>
                 <div className={styles.avatar}>
-                  <ProfilePicture userId={comment.author.id} />
-                  <h3>{comment.author.username}</h3>
+                  <ProfilePicture userId={comment.author.id} size={32} />
+                  <h4 className={styles.commentAuthor}>
+                    {comment.author.username}
+                  </h4>
                 </div>
-                <p>{comment.text}</p>
+                <p className={styles.commentText}>{comment.text}</p>
               </div>
-              <hr />
+              <hr className={styles.commentSeperator} />
             </div>
           );
         })

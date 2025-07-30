@@ -2,6 +2,7 @@ import Post from "../components/posts/Post";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import styles from "./SinglePost.module.css";
 
 export default function SinglePost() {
   const { postId } = useParams();
@@ -17,7 +18,7 @@ export default function SinglePost() {
       console.log(response.data.post);
       return response.data;
     } else {
-      throw new Error("Error loading posts feed");
+      throw new Error("Error dislpaying post!");
     }
   };
 
@@ -29,10 +30,10 @@ export default function SinglePost() {
   if (postQuery.isLoading) return <h2>Loading post...</h2>;
 
   return (
-    <>
+    <div className={styles.container}>
       {postQuery.data.post && (
         <Post postContent={postQuery.data.post} feedPost={false}></Post>
       )}
-    </>
+    </div>
   );
 }
