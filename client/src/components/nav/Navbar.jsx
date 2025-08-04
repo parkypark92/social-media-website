@@ -32,6 +32,15 @@ export default function Navbar({
           <div className={styles.vl}></div>
           <button className={styles.navIcon}>
             <img
+              src="/bell.png"
+              alt=""
+              height={26}
+              onClick={() => navigate(`/${user.id}`)}
+            />
+          </button>
+          <div className={styles.vl}></div>
+          <button className={styles.navIcon}>
+            <img
               src="/message.png"
               alt=""
               height={24}
