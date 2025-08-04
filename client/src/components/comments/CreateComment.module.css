@@ -13,7 +13,6 @@
 }
 
 .commentInput:focus {
-  border: 1px solid grey;
   outline: none;
 }
 

@@ -30,6 +30,7 @@ export default function CreateComment({ postId }) {
     onSuccess: () => {
       setText("");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["post", postId] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
   });
