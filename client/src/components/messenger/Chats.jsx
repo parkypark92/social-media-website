@@ -19,6 +19,8 @@ export default function Chats({
       <div className={styles.scroll}>
         {allChats.length > 0 ? (
           allChats.map((chat) => {
+            const recipient =
+              user.id === chat.userA.id ? chat.userB : chat.userA;
             return (
               <div
                 key={chat.id}
@@ -27,19 +29,10 @@ export default function Chats({
                   setCurrentChat(chat);
                   setNewChat(false);
                 }}
-                style={{ backgroundColor: currentChat == chat && "#7777ff" }}
+                style={{ backgroundColor: currentChat == chat && "#ebf5ff" }}
               >
-                <ProfilePicture
-                  link={false}
-                  userId={
-                    user.id === chat.userA.id ? chat.userB.id : chat.userA.id
-                  }
-                />
-                <p>
-                  {user.id === chat.userA.id
-                    ? chat.userB.username
-                    : chat.userA.username}
-                </p>
+                <ProfilePicture link={false} userId={recipient.id} />
+                <p>{recipient.username}</p>
               </div>
             );
           })

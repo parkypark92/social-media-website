@@ -16,6 +16,8 @@ export default function MessageBox({
   allChats,
 }) {
   const { user, friendsList } = useOutletContext();
+  const recipient =
+    currentChat?.userA.id === user.id ? currentChat?.userB : currentChat?.userA;
   const [messageValue, setMessageValue] = useState("");
   const [newConversations, setNewConversations] = useState([]);
   const queryClient = useQueryClient();
@@ -152,13 +154,12 @@ export default function MessageBox({
             )}
           </>
         ) : currentChat ? (
-          <h3 style={{ margin: 0, marginRight: "auto" }}>
-            {currentChat.userA.id === user.id
-              ? currentChat.userB.username
-              : currentChat.userA.username}
-          </h3>
+          <>
+            <ProfilePicture userId={recipient.id} size={40} link={false} />
+            <h3>{recipient.username}</h3>
+          </>
         ) : (
-          <h3 style={{ margin: 0, marginRight: "auto" }}>Messenger</h3>
+          <h3>Messenger</h3>
         )}
       </div>
       {newChat ? (
@@ -193,6 +194,7 @@ export default function MessageBox({
                   <MessageBubble
                     key={message.id}
                     msg={message}
+                    recipient={recipient}
                     ref={lastMessage ? setRef : null}
                   ></MessageBubble>
                 );

@@ -9,10 +9,11 @@
 }
 
 .messengerHeader {
-  height: 48px;
-  padding: 16px;
+  height: 64px;
+  padding: 0 16px;
   display: flex;
   align-items: center;
+  gap: 8px;
   box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
 }
 
@@ -34,7 +35,15 @@
 }
 
 .messageInput {
+  padding: 8px;
+  border-radius: 16px;
+  border: none;
   flex-grow: 1;
+  background-color: #f1f2f6;
+}
+
+.messageInput:focus {
+  outline: none;
 }
 
 .chatSelectCtnr {

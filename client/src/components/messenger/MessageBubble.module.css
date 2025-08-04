@@ -1,18 +1,37 @@
-.bubble {
+.msgContainer {
   width: fit-content;
   max-width: 40%;
+}
+
+.bubble {
   padding: 8px;
   border-radius: 16px;
+  text-align: left;
 }
 
 .friendsMsg {
-  background-color: #dddddd;
   align-self: flex-start;
+  display: flex;
+  gap: 8px;
+}
+
+.profilePic {
+  padding-bottom: 5px;
+  align-self: flex-end;
 }
 
 .ownMsg {
-  background-color: #90a4fa;
   align-self: flex-end;
+}
+
+.ownBubble {
+  background-color: #90a4fa;
+}
+
+.friendBubble {
+  width: calc(100% - 32px);
+
+  background-color: #dddddd;
 }
 
 .content {
