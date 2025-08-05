@@ -28,10 +28,9 @@
 }
 
 .formCtnr {
-  height: 64px;
-  padding: 16px 16px;
+  padding: 8px 16px;
   display: flex;
-  gap: 16px;
+  gap: 8px;
 }
 
 .messageInput {
@@ -43,6 +42,23 @@
 }
 
 .messageInput:focus {
+  outline: none;
+}
+
+.sendMessage {
+  background-color: transparent;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  filter: invert(35%) sepia(47%) saturate(6894%) hue-rotate(193deg)
+    brightness(95%) contrast(98%);
+}
+
+.sendMessage:hover {
+  border-color: transparent;
+}
+
+.sendMessage:focus {
   outline: none;
 }
 

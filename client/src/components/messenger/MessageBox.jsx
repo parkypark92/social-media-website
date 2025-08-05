@@ -211,7 +211,9 @@ export default function MessageBox({
                 onChange={(e) => setMessageValue(e.target.value)}
                 value={messageValue}
               />
-              <button>Send</button>
+              <button className={styles.sendMessage}>
+                <img src="/post.png" alt="" height={24} />
+              </button>
             </div>
           </form>
         </>

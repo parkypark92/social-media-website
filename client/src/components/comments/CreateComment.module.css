@@ -17,6 +17,18 @@
 }
 
 .commentSubmit {
-  width: fit-content;
-  margin-left: auto;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  filter: invert(35%) sepia(47%) saturate(6894%) hue-rotate(193deg)
+    brightness(95%) contrast(98%);
+}
+
+.commentSubmit:hover {
+  border-color: transparent;
+}
+
+.commentSubmit:focus {
+  outline: none;
 }

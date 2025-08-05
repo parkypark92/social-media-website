@@ -98,6 +98,7 @@ export default function FriendRequestsPreview({ limit }) {
                     Accept
                   </button>
                   <button
+                    className={styles.decline}
                     data-sender={request.sender.id}
                     id="declined"
                     onClick={callMutation}

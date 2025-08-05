@@ -59,7 +59,9 @@ export default function CreateComment({ postId }) {
           className={styles.commentInput}
           onChange={handleChange}
         />
-        <button className={styles.commentSubmit}>Submit</button>
+        <button className={styles.commentSubmit}>
+          <img src="/post.png" alt="" height={24} />
+        </button>
       </div>
     </form>
   );

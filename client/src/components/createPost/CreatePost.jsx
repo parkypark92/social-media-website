@@ -55,7 +55,7 @@ export default function CreatePost() {
             aria-label="new post"
             onChange={handleChange}
           />
-          <button>Publish</button>
+          <button className={styles.postIcon}>Post</button>
         </div>
       </form>
     </div>

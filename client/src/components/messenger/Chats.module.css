@@ -32,3 +32,20 @@
 .selectChat:hover {
   background-color: #ebebeb;
 }
+
+.newChat {
+  background-color: transparent;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+}
+
+.newChat:hover {
+  border-color: transparent;
+  filter: invert(35%) sepia(47%) saturate(6894%) hue-rotate(193deg)
+    brightness(95%) contrast(98%);
+}
+
+.newChat:focus {
+  outline: none;
+}

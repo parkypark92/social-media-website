@@ -14,7 +14,9 @@ export default function Chats({
     <div className={styles.chats}>
       <div className={styles.chatsHeader}>
         <h3 style={{ margin: 0 }}>Chats</h3>
-        <button onClick={() => setNewChat(true)}>+</button>
+        <button className={styles.newChat} onClick={() => setNewChat(true)}>
+          <img src="/write.png" alt="" height={32} />
+        </button>
       </div>
       <div className={styles.scroll}>
         {allChats.length > 0 ? (

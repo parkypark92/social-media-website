@@ -21,3 +21,8 @@
   display: flex;
   gap: 4px;
 }
+
+.decline {
+  background-color: rgb(216, 216, 216);
+  color: black;
+}
