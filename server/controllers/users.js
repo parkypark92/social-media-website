@@ -268,7 +268,6 @@ module.exports.create_comment = asyncHandler(async (req, res, next) => {
 });
 
 module.exports.upload_profile_picture = asyncHandler(async (req, res, next) => {
-  console.log(req.file);
   const image = req.file;
   const imageExt = image.originalname.split(".").pop();
   const imageName = `profile-${Date.now()}.${imageExt}`;
@@ -279,23 +278,34 @@ module.exports.upload_profile_picture = asyncHandler(async (req, res, next) => {
     const { error: uploadError } = await supabase.storage
       .from("user-images")
       .upload(filePath, fileBase64);
-
     if (uploadError) throw uploadError;
 
-    const { data } = supabase.storage
+    //delete old picture
+    const { data: pictures, error: listError } = await supabase.storage
+      .from("user-images")
+      .list(req.body.id);
+    if (listError) throw listError;
+
+    const toDelete = pictures
+      .filter((pic) => pic.name !== imageName)
+      .map((pic) => req.body.id + "/" + pic.name);
+
+    if (toDelete.length !== 0) {
+      const { error: deleteError } = await supabase.storage
+        .from("user-images")
+        .remove(toDelete);
+      if (deleteError) throw deleteError;
+    }
+
+    const { data } = await supabase.storage
       .from("user-images")
       .getPublicUrl(filePath);
     const imageUrl = data.publicUrl;
 
-    const result = await prisma.$transaction([
-      prisma.user.update({
-        where: { id: req.body.id },
-        data: { profileUrl: imageUrl },
-      }),
-    ]);
-
-    console.log("Profile picture updated:", result);
-
+    await prisma.user.update({
+      where: { id: req.body.id },
+      data: { profileUrl: imageUrl },
+    });
     res.status(200).json({ success: true });
   } catch (error) {
     console.error("Upload failed:", error.message);
