@@ -41,7 +41,10 @@ export default function Profile() {
           <>
             <div className={styles.infoDisplay}>
               {profileQuery.data.profileInfo && (
-                <ProfileHeader profileInfo={profileQuery.data.profileInfo} />
+                <ProfileHeader
+                  profileInfo={profileQuery.data.profileInfo}
+                  ownProfile={true}
+                />
               )}
             </div>
             <div className={styles.postsDisplay}>

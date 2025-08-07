@@ -10,6 +10,7 @@ import FindFriends from "../pages/FindFriends";
 import FriendRequests from "../pages/FriendRequests";
 import Messages from "../pages/Messages";
 import SinglePost from "../pages/SinglePost";
+import UploadPicture from "../pages/UploadPicture";
 import ProtectedRoute from "./ProtectedRoute";
 import { Navigate } from "react-router-dom";
 
@@ -82,6 +83,14 @@ const Router = () => {
           element: (
             <ProtectedRoute>
               <SinglePost />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/profile/:userId/upload-profile-picture",
+          element: (
+            <ProtectedRoute>
+              <UploadPicture />
             </ProtectedRoute>
           ),
         },

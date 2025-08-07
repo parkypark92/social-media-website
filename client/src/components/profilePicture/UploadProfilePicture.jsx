@@ -92,8 +92,10 @@ export default function UploadProfilePicture() {
               onZoomChange={setZoom}
             />
           </div>
-          <button onClick={handleImageUpload}>Upload</button>
-          <button onClick={() => setIsCropping(false)}>Cancel</button>
+          <div className={styles.uploadButtons}>
+            <button onClick={handleImageUpload}>Upload</button>
+            <button onClick={() => setIsCropping(false)}>Cancel</button>
+          </div>
         </div>
       ) : (
         <form method="POST" encType="multipart/form-data">
