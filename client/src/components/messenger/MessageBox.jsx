@@ -6,6 +6,7 @@ import styles from "./MessageBox.module.css";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { useSocket } from "../../contexts/SocketProvider.jsx";
+import { useOnlineUsers } from "../../contexts/OnlineUsers.jsx";
 import PropTypes from "prop-types";
 
 export default function MessageBox({
@@ -22,6 +23,7 @@ export default function MessageBox({
   const [newConversations, setNewConversations] = useState([]);
   const queryClient = useQueryClient();
   const socket = useSocket();
+  const { onlineUsers } = useOnlineUsers();
   const setRef = useCallback((node) => {
     if (node) {
       node.scrollIntoView();
@@ -157,6 +159,9 @@ export default function MessageBox({
           <>
             <ProfilePicture userId={recipient.id} size={40} link={false} />
             <h3>{recipient.username}</h3>
+            {onlineUsers.includes(recipient.id) && (
+              <small className={styles.online}>online</small>
+            )}
           </>
         ) : (
           <h3>Messenger</h3>

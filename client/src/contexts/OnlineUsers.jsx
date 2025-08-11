@@ -9,6 +9,7 @@ export function OnlineUsersProvider({ children }) {
   const socket = useSocket();
 
   useEffect(() => {
+    if (!socket) return;
     socket.on("online-users", (users) => {
       setOnlineUsers(users);
     });

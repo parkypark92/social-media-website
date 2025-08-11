@@ -1,9 +1,12 @@
 import ProfilePicture from "../profilePicture/ProfilePicture";
 import { useOutletContext } from "react-router-dom";
+import { useOnlineUsers } from "../../contexts/OnlineUsers";
 import styles from "./FriendsListPreview.module.css";
 
 export default function FriendsListPreview() {
   const { friendsList } = useOutletContext();
+  const { onlineUsers } = useOnlineUsers();
+  console.log(onlineUsers);
   return (
     <div>
       <h2>Friends</h2>
@@ -15,6 +18,9 @@ export default function FriendsListPreview() {
                 <div className={styles.avatar}>
                   <ProfilePicture userId={friend.id} />
                   <li>{friend.username}</li>
+                  {onlineUsers.includes(friend.id) && (
+                    <small className={styles.online}>online</small>
+                  )}
                 </div>
               </div>
             );

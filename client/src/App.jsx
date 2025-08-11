@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { SocketProvider } from "./contexts/SocketProvider";
+import { OnlineUsersProvider } from "./contexts/OnlineUsers";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -85,15 +86,17 @@ function App() {
           setFriendsList={setFriendsList}
         ></Navbar>
         <div className="navbarOffset"></div>
-        <Outlet
-          context={{
-            user,
-            setUser,
-            isAuthenticated,
-            setIsAuthenticated,
-            friendsList,
-          }}
-        />
+        <OnlineUsersProvider>
+          <Outlet
+            context={{
+              user,
+              setUser,
+              isAuthenticated,
+              setIsAuthenticated,
+              friendsList,
+            }}
+          />
+        </OnlineUsersProvider>
       </SocketProvider>
     </>
   );
