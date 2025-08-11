@@ -27,12 +27,20 @@ const io = new Server(server, {
   },
 });
 
+const onlineUsers = new Map();
+
 io.on("connection", (socket) => {
   const id = socket.handshake.query.id;
+  if (!id) return;
   socket.join(id);
+  onlineUsers.set(id, id);
+  io.emit("online-users", [...onlineUsers.keys()]);
   socket.on("send-message", (recipientId, message) => {
-    console.log("message recieved");
     socket.to(recipientId).emit("receive-message", message);
+  });
+  socket.on("disconnect", () => {
+    onlineUsers.delete(id);
+    io.emit("online-users", [...onlineUsers.keys()]);
   });
 });
 
