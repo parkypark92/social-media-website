@@ -32,3 +32,16 @@
 .commentSubmit:focus {
   outline: none;
 }
+
+.disabled {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  filter: invert(95%) sepia(0%) saturate(4605%) hue-rotate(33deg)
+    brightness(136%) contrast(62%);
+}
+
+.disabled:hover {
+  border-color: transparent;
+}

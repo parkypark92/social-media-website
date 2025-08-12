@@ -7,11 +7,11 @@ import styles from "./CreateComment.module.css";
 
 export default function CreateComment({ postId }) {
   const { user } = useOutletContext();
-  const [text, setText] = useState("");
+  const [inputText, setInputtext] = useState("");
   const queryClient = useQueryClient();
 
   const handleChange = (e) => {
-    setText(e.target.value);
+    setInputtext(e.target.value);
   };
   const submitComment = async (data) => {
     const response = await axios.post(
@@ -28,7 +28,7 @@ export default function CreateComment({ postId }) {
   const createCommentMutation = useMutation({
     mutationFn: submitComment,
     onSuccess: () => {
-      setText("");
+      setInputtext("");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postId] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
@@ -55,11 +55,14 @@ export default function CreateComment({ postId }) {
           id="newComment"
           placeholder="Leave a comment..."
           aria-label="New Comment"
-          value={text}
+          value={inputText}
           className={styles.commentInput}
           onChange={handleChange}
         />
-        <button className={styles.commentSubmit}>
+        <button
+          disabled={inputText === "" ? true : false}
+          className={inputText === "" ? styles.disabled : styles.commentSubmit}
+        >
           <img src="/post.png" alt="" height={24} />
         </button>
       </div>
