@@ -216,7 +216,12 @@ export default function MessageBox({
                 onChange={(e) => setMessageValue(e.target.value)}
                 value={messageValue}
               />
-              <button className={styles.sendMessage}>
+              <button
+                disabled={messageValue === "" ? true : false}
+                className={
+                  messageValue === "" ? styles.disabled : styles.sendMessage
+                }
+              >
                 <img src="/post.png" alt="" height={24} />
               </button>
             </div>
