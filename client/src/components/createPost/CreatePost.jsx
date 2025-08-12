@@ -8,7 +8,7 @@ import styles from "./CreatePost.module.css";
 export default function CreatePost() {
   const { user } = useOutletContext();
   const queryClient = useQueryClient();
-  const [text, setText] = useState("");
+  const [inputText, setInputText] = useState("");
   const publishPost = async (data) => {
     const formData = {
       text: data.get("newPost"),
@@ -26,7 +26,7 @@ export default function CreatePost() {
   const createPostMutation = useMutation({
     mutationFn: publishPost,
     onSuccess: () => {
-      setText("");
+      setInputText("");
       queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
   });
@@ -37,7 +37,7 @@ export default function CreatePost() {
   };
 
   const handleChange = (e) => {
-    setText(e.target.value);
+    setInputText(e.target.value);
   };
 
   return (
@@ -50,12 +50,17 @@ export default function CreatePost() {
             type="text"
             name="newPost"
             id="newPost"
-            value={text}
+            value={inputText}
             placeholder="What's on your mind..."
             aria-label="new post"
             onChange={handleChange}
           />
-          <button className={styles.postIcon}>Post</button>
+          <button
+            disabled={inputText === "" ? true : false}
+            className={inputText === "" ? styles.disabled : undefined}
+          >
+            Post
+          </button>
         </div>
       </form>
     </div>

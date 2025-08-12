@@ -33,3 +33,11 @@
 .createPostInput:focus {
   outline: none;
 }
+
+.disabled {
+  background-color: #cecece;
+}
+
+.disabled:hover {
+  border-color: transparent;
+}
