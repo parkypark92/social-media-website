@@ -6,6 +6,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { SocketProvider } from "./contexts/SocketProvider";
 import { OnlineUsersProvider } from "./contexts/OnlineUsers";
+import { NotificationsProvider } from "./contexts/NotificationsProvider";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -79,24 +80,26 @@ function App() {
   return (
     <>
       <SocketProvider id={user?.id}>
-        <Navbar
-          user={user}
-          setUser={setUser}
-          setIsAuthenticated={setIsAuthenticated}
-          setFriendsList={setFriendsList}
-        ></Navbar>
-        <div className="navbarOffset"></div>
-        <OnlineUsersProvider>
-          <Outlet
-            context={{
-              user,
-              setUser,
-              isAuthenticated,
-              setIsAuthenticated,
-              friendsList,
-            }}
-          />
-        </OnlineUsersProvider>
+        <NotificationsProvider>
+          <Navbar
+            user={user}
+            setUser={setUser}
+            setIsAuthenticated={setIsAuthenticated}
+            setFriendsList={setFriendsList}
+          ></Navbar>
+          <div className="navbarOffset"></div>
+          <OnlineUsersProvider>
+            <Outlet
+              context={{
+                user,
+                setUser,
+                isAuthenticated,
+                setIsAuthenticated,
+                friendsList,
+              }}
+            />
+          </OnlineUsersProvider>
+        </NotificationsProvider>
       </SocketProvider>
     </>
   );
