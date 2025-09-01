@@ -12,10 +12,10 @@ export function NotificationsProvider({ children }) {
     if (!socket) return;
     socket.on("like-notification", (likedBy) => {
       const notification = `${likedBy} liked your post!`;
-      setNotifications([...notifications, notification]);
+      setNotifications((prev) => [notification, ...prev]);
       console.log(notification);
-      alert(notification);
     });
+    return () => socket.off("like-notification");
   }, [socket, notifications]);
 
   return (
