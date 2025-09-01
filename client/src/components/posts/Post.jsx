@@ -4,6 +4,7 @@ import Comments from "../comments/Comments";
 import PropTypes from "prop-types";
 import styles from "./Post.module.css";
 import axios from "axios";
+import { useSocket } from "../../contexts/SocketProvider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useOutletContext, Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
@@ -11,6 +12,7 @@ import { format, parseISO } from "date-fns";
 export default function Post({ postContent, feedPost = false }) {
   const { user } = useOutletContext();
   const queryClient = useQueryClient();
+  const socket = useSocket();
 
   const handleLikePost = async (data) => {
     const response = await axios.post(
@@ -42,6 +44,9 @@ export default function Post({ postContent, feedPost = false }) {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postContent.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      const recipientId = postContent.author.id;
+      const likedBy = user.username;
+      socket.emit("post-liked", likedBy, recipientId);
     },
   });
 
