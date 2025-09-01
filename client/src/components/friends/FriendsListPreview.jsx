@@ -6,7 +6,6 @@ import styles from "./FriendsListPreview.module.css";
 export default function FriendsListPreview() {
   const { friendsList } = useOutletContext();
   const { onlineUsers } = useOnlineUsers();
-  console.log(onlineUsers);
   return (
     <div>
       <h2>Friends</h2>
