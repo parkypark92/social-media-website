@@ -4,11 +4,13 @@ import { useOutletContext } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import styles from "./CreateComment.module.css";
+import { useSocket } from "../../contexts/SocketProvider";
 
-export default function CreateComment({ postId }) {
+export default function CreateComment({ postInfo }) {
   const { user } = useOutletContext();
   const [inputText, setInputtext] = useState("");
   const queryClient = useQueryClient();
+  const socket = useSocket();
 
   const handleChange = (e) => {
     setInputtext(e.target.value);
@@ -30,8 +32,11 @@ export default function CreateComment({ postId }) {
     onSuccess: () => {
       setInputtext("");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
-      queryClient.invalidateQueries({ queryKey: ["post", postId] });
+      queryClient.invalidateQueries({ queryKey: ["post", postInfo.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      const commentBy = user.username;
+      const recipientId = postInfo.author.id;
+      socket.emit("comment", commentBy, recipientId);
     },
   });
 
@@ -41,7 +46,7 @@ export default function CreateComment({ postId }) {
     const formData = {
       text: data.get("newComment"),
       authorId: user.id,
-      postId: postId,
+      postId: postInfo.id,
     };
     createCommentMutation.mutate(formData);
   };
@@ -71,5 +76,5 @@ export default function CreateComment({ postId }) {
 }
 
 CreateComment.propTypes = {
-  postId: PropTypes.string,
+  postInfo: PropTypes.object,
 };

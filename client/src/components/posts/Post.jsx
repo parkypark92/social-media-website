@@ -108,7 +108,7 @@ export default function Post({ postContent, feedPost = false }) {
         )}
         <span>{postContent.likes.length}</span>
       </div>
-      <CreateComment postId={postContent.id}></CreateComment>
+      <CreateComment postInfo={postContent}></CreateComment>
       <Comments comments={postContent.comments}></Comments>
       {feedPost && <Link to={`/post/${postContent.id}`}>View Post</Link>}
     </div>
