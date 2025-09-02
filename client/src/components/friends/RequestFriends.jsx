@@ -1,14 +1,15 @@
 import ProfilePicture from "../profilePicture/ProfilePicture";
 import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-// import { useState } from "react";
 import { useOutletContext, Link } from "react-router-dom";
+import { useSocket } from "../../contexts/SocketProvider";
 import styles from "./RequestFriends.module.css";
 import PropTypes from "prop-types";
 
 export default function RequestFriends({ limit }) {
   const { user } = useOutletContext();
   const queryClient = useQueryClient();
+  const socket = useSocket();
 
   const fetchUsers = async () => {
     const response = await axios.get(
@@ -61,6 +62,9 @@ export default function RequestFriends({ limit }) {
           }),
         };
       });
+      const sentBy = user.username;
+      const recipientId = data.friendRequest.receiverId;
+      socket.emit("friend-request", sentBy, recipientId);
     },
   });
 
