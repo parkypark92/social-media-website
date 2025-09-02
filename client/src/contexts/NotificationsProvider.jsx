@@ -10,13 +10,12 @@ export function NotificationsProvider({ children }) {
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("like-notification", (likedBy) => {
-      const notification = `${likedBy} liked your post!`;
+    socket.on("notification", (notification) => {
       setNotifications((prev) => [notification, ...prev]);
       console.log(notification);
     });
-    return () => socket.off("like-notification");
-  }, [socket, notifications]);
+    return () => socket.off("notification");
+  }, [socket]);
 
   return (
     <NotificationsContext.Provider value={{ notifications }}>
