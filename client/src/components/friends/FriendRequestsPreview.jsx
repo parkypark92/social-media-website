@@ -2,12 +2,14 @@ import ProfilePicture from "../profilePicture/ProfilePicture";
 import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useOutletContext, Link } from "react-router-dom";
+import { useSocket } from "../../contexts/SocketProvider";
 import styles from "./FriendRequestPreview.module.css";
 import PropTypes from "prop-types";
 
 export default function FriendRequestsPreview({ limit }) {
   const { user } = useOutletContext();
   const queryClient = useQueryClient();
+  const socket = useSocket();
 
   const fetchRequests = async () => {
     const response = await axios.get(
@@ -41,15 +43,15 @@ export default function FriendRequestsPreview({ limit }) {
   const answerRequestMutation = useMutation({
     mutationFn: answerRequest,
     onSuccess: (data) => {
-      console.log(queryClient.getQueryData(["requests preview", user.id]));
-      console.log(data);
+      const friendshipData = data.friendshipStatus[0];
+      console.log(friendshipData);
       queryClient.setQueryData(["requests preview", user.id], (oldData) => {
         return {
           requests: oldData["requests"].map((prev) => {
-            if (prev.id === data.friendshipStatus[0].id) {
+            if (prev.id === friendshipData.id) {
               return {
                 ...prev,
-                status: data.friendshipStatus[0].status,
+                status: friendshipData.status,
               };
             } else {
               return prev;
@@ -57,6 +59,11 @@ export default function FriendRequestsPreview({ limit }) {
           }),
         };
       });
+      if (friendshipData.status === "accepted") {
+        const acceptedBy = user.username;
+        const senderId = friendshipData.senderId;
+        socket.emit("request-accepted", acceptedBy, senderId);
+      }
     },
   });
 
