@@ -38,6 +38,22 @@ io.on("connection", (socket) => {
   socket.on("send-message", (recipientId, message) => {
     socket.to(recipientId).emit("receive-message", message);
   });
+  socket.on("post-liked", (likedBy, recipientId) => {
+    const notification = {
+      type: "like",
+      message: `${likedBy} liked your post`,
+      createdAt: new Date(),
+    };
+    socket.to(recipientId).emit("notification", notification);
+  });
+  socket.on("comment", (commentBy, recipientId) => {
+    const notification = {
+      type: "comment",
+      message: `${commentBy} commented on your post`,
+      createdAt: new Date(),
+    };
+    socket.to(recipientId).emit("notification", notification);
+  });
   socket.on("disconnect", () => {
     onlineUsers.delete(id);
     io.emit("online-users", [...onlineUsers.keys()]);
