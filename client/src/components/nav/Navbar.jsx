@@ -1,6 +1,5 @@
 import NotificationsDisplay from "./NotificationsDisplay";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import styles from "./Navbar.module.css";
 import PropTypes from "prop-types";
 
@@ -9,8 +8,9 @@ export default function Navbar({
   setUser,
   setIsAuthenticated,
   setFriendsList,
+  notificationsIsOpen,
+  setNotificationsIsOpen,
 }) {
-  const [notificationsIsOpen, setNotificationsIsOpen] = useState(false);
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -67,4 +67,6 @@ Navbar.propTypes = {
   setUser: PropTypes.func,
   setIsAuthenticated: PropTypes.func,
   setFriendsList: PropTypes.func,
+  notificationsIsOpen: PropTypes.bool,
+  setNotificationsIsOpen: PropTypes.func,
 };

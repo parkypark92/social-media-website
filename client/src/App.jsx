@@ -13,6 +13,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [friendsList, setFriendsList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [notificationsIsOpen, setNotificationsIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -73,12 +74,19 @@ function App() {
     }
   }, [friendsQuery.data, friendsQuery.isSuccess]);
 
+  const handleNotificationsDisplay = () => {
+    if (notificationsIsOpen) {
+      console.log("clicked");
+      setNotificationsIsOpen(false);
+    }
+  };
+
   if (isAuthenticated === null) return <p>Loading...</p>;
 
   if (friendsQuery.isError) return <h2>{friendsQuery.error.message}</h2>;
 
   return (
-    <>
+    <div onClick={handleNotificationsDisplay}>
       <SocketProvider id={user?.id}>
         <NotificationsProvider>
           <Navbar
@@ -86,6 +94,8 @@ function App() {
             setUser={setUser}
             setIsAuthenticated={setIsAuthenticated}
             setFriendsList={setFriendsList}
+            notificationsIsOpen={notificationsIsOpen}
+            setNotificationsIsOpen={setNotificationsIsOpen}
           ></Navbar>
           <div className="navbarOffset"></div>
           <OnlineUsersProvider>
@@ -101,7 +111,7 @@ function App() {
           </OnlineUsersProvider>
         </NotificationsProvider>
       </SocketProvider>
-    </>
+    </div>
   );
 }
 
