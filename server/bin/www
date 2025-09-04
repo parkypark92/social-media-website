@@ -28,6 +28,7 @@ const io = new Server(server, {
 });
 
 const onlineUsers = new Map();
+const { randomUUID } = require("crypto");
 
 io.on("connection", (socket) => {
   const id = socket.handshake.query.id;
@@ -40,6 +41,7 @@ io.on("connection", (socket) => {
   });
   socket.on("post-liked", (likedBy, recipientId) => {
     const notification = {
+      id: randomUUID(),
       type: "like",
       message: `${likedBy} liked your post`,
       createdAt: new Date(),
@@ -48,6 +50,7 @@ io.on("connection", (socket) => {
   });
   socket.on("comment", (commentBy, recipientId) => {
     const notification = {
+      id: randomUUID(),
       type: "comment",
       message: `${commentBy} commented on your post`,
       createdAt: new Date(),
@@ -56,6 +59,7 @@ io.on("connection", (socket) => {
   });
   socket.on("friend-request", (sentBy, recipientId) => {
     const notification = {
+      id: randomUUID(),
       type: "friend-request",
       message: `${sentBy} sent you a friend request`,
       createdAt: new Date(),
@@ -64,6 +68,7 @@ io.on("connection", (socket) => {
   });
   socket.on("request-accepted", (acceptedBy, senderId) => {
     const notification = {
+      id: randomUUID(),
       type: "accepted-request",
       message: `${acceptedBy} accepted your friend request`,
       createdAt: new Date(),
