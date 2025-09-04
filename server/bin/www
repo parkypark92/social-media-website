@@ -39,20 +39,22 @@ io.on("connection", (socket) => {
   socket.on("send-message", (recipientId, message) => {
     socket.to(recipientId).emit("receive-message", message);
   });
-  socket.on("post-liked", (likedBy, recipientId) => {
+  socket.on("post-liked", (likedBy, recipientId, postId) => {
     const notification = {
       id: randomUUID(),
       type: "like",
       message: `${likedBy} liked your post`,
+      postId: postId,
       createdAt: new Date(),
     };
     socket.to(recipientId).emit("notification", notification);
   });
-  socket.on("comment", (commentBy, recipientId) => {
+  socket.on("comment", (commentBy, recipientId, postId) => {
     const notification = {
       id: randomUUID(),
       type: "comment",
       message: `${commentBy} commented on your post`,
+      postId: postId,
       createdAt: new Date(),
     };
     socket.to(recipientId).emit("notification", notification);

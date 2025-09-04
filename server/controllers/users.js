@@ -234,7 +234,7 @@ module.exports.like_post = asyncHandler(async (req, res, next) => {
       },
     },
   });
-  res.status(200).json({ msg: "Post liked!", updatedPost });
+  res.status(200).json({ updatedPost });
 });
 
 module.exports.unlike_post = asyncHandler(async (req, res, next) => {
