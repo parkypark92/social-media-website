@@ -25,31 +25,25 @@ export default function Navbar({
       <h2 className={styles.logo}>FineFellows</h2>
       {user && (
         <div className={styles.icons}>
-          <button className={styles.navIcon}>
-            <img
-              src="/home.png"
-              alt=""
-              height={24}
-              onClick={() => navigate(`/${user.id}`)}
-            />
+          <button
+            className={styles.navIcon}
+            onClick={() => navigate(`/${user.id}`)}
+          >
+            <img src="/home.png" alt="" height={24} />
           </button>
           <div className={styles.vl}></div>
-          <button className={`${styles.navIcon} ${styles.notificationsIcon}`}>
-            <img
-              src="/bell.png"
-              alt=""
-              height={26}
-              onClick={() => setNotificationsIsOpen(!notificationsIsOpen)}
-            />
+          <button
+            className={`${styles.navIcon} ${styles.notificationsIcon}`}
+            onClick={() => setNotificationsIsOpen(!notificationsIsOpen)}
+          >
+            <img src="/bell.png" alt="" height={26} />
           </button>
           <div className={styles.vl}></div>
-          <button className={styles.navIcon}>
-            <img
-              src="/message.png"
-              alt=""
-              height={24}
-              onClick={() => navigate(`${user}/messages`)}
-            />
+          <button
+            className={styles.navIcon}
+            onClick={() => navigate(`${user}/messages`)}
+          >
+            <img src="/message.png" alt="" height={24} />
           </button>
           <div className={styles.vl}></div>
           <button className={styles.navIcon}>
