@@ -42,3 +42,7 @@
   border-left: 2px solid rgb(180, 180, 180);
   height: 38px;
 }
+
+.notificationsIcon {
+  position: relative;
+}

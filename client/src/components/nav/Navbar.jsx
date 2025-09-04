@@ -1,6 +1,8 @@
+import NotificationsDisplay from "./NotificationsDisplay";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import styles from "./Navbar.module.css";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 
 export default function Navbar({
   user,
@@ -8,6 +10,7 @@ export default function Navbar({
   setIsAuthenticated,
   setFriendsList,
 }) {
+  const [notificationsIsOpen, setNotificationsIsOpen] = useState(false);
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -16,6 +19,7 @@ export default function Navbar({
     setFriendsList([]);
     navigate("/login");
   };
+  console.log(notificationsIsOpen);
   return (
     <nav className={styles.navbar}>
       <h2 className={styles.logo}>FineFellows</h2>
@@ -30,12 +34,12 @@ export default function Navbar({
             />
           </button>
           <div className={styles.vl}></div>
-          <button className={styles.navIcon}>
+          <button className={`${styles.navIcon} ${styles.notificationsIcon}`}>
             <img
               src="/bell.png"
               alt=""
               height={26}
-              onClick={() => navigate(`/${user.id}`)}
+              onClick={() => setNotificationsIsOpen(!notificationsIsOpen)}
             />
           </button>
           <div className={styles.vl}></div>
@@ -44,13 +48,14 @@ export default function Navbar({
               src="/message.png"
               alt=""
               height={24}
-              onClick={() => navigate(`${user.id}/messages`)}
+              onClick={() => navigate(`${user}/messages`)}
             />
           </button>
           <div className={styles.vl}></div>
           <button className={styles.navIcon}>
             <img src="/logout.png" alt="" height={24} onClick={handleLogout} />
           </button>
+          {notificationsIsOpen && <NotificationsDisplay></NotificationsDisplay>}
         </div>
       )}
     </nav>

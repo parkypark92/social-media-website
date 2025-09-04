@@ -13,9 +13,10 @@ export function NotificationsProvider({ children }) {
     socket.on("notification", (notification) => {
       setNotifications((prev) => [notification, ...prev]);
       console.log(notification);
+      console.log(notifications);
     });
     return () => socket.off("notification");
-  }, [socket]);
+  }, [socket, notifications]);
 
   return (
     <NotificationsContext.Provider value={{ notifications }}>
