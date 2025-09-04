@@ -36,7 +36,8 @@ export default function CreateComment({ postInfo }) {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
       const commentBy = user.username;
       const recipientId = postInfo.author.id;
-      socket.emit("comment", commentBy, recipientId);
+      const postId = postInfo.id;
+      socket.emit("comment", commentBy, recipientId, postId);
     },
   });
 

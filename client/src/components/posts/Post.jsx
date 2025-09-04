@@ -20,7 +20,7 @@ export default function Post({ postContent, feedPost = false }) {
       data
     );
     if (response.status === 200) {
-      return response.data;
+      return response.data.updatedPost;
     } else {
       alert("An error occurred! Please try again.");
     }
@@ -40,13 +40,14 @@ export default function Post({ postContent, feedPost = false }) {
 
   const likePostMutation = useMutation({
     mutationFn: handleLikePost,
-    onSuccess: () => {
+    onSuccess: (postData) => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
-      queryClient.invalidateQueries({ queryKey: ["post", postContent.id] });
+      queryClient.invalidateQueries({ queryKey: ["post", postData.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-      const recipientId = postContent.author.id;
+      const recipientId = postData.authorId;
       const likedBy = user.username;
-      socket.emit("post-liked", likedBy, recipientId);
+      const postId = postData.id;
+      socket.emit("post-liked", likedBy, recipientId, postId);
     },
   });
 

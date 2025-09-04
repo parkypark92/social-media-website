@@ -19,7 +19,6 @@ export default function Navbar({
     setFriendsList([]);
     navigate("/login");
   };
-  console.log(notificationsIsOpen);
   return (
     <nav className={styles.navbar}>
       <h2 className={styles.logo}>FineFellows</h2>
