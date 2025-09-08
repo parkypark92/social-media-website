@@ -60,7 +60,7 @@ export default function FriendRequestsPreview({ limit }) {
         };
       });
       if (friendshipData.status === "accepted") {
-        const acceptedBy = user.username;
+        const acceptedBy = { id: user.id, username: user.username };
         const senderId = friendshipData.senderId;
         socket.emit("request-accepted", acceptedBy, senderId);
       }
