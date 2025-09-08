@@ -1,8 +1,9 @@
 import { useNotifications } from "../../contexts/NotificationsProvider";
 import { useNavigate } from "react-router-dom";
 import styles from "./NotificationsDisplay.module.css";
+import PropTypes from "prop-types";
 
-export default function NotificationsDisplay() {
+export default function NotificationsDisplay({ userId }) {
   const { notifications } = useNotifications();
   const navigate = useNavigate();
 
@@ -14,6 +15,10 @@ export default function NotificationsDisplay() {
           const route =
             notification.type === "like" || notification.type === "comment"
               ? `/post/${notification.postId}`
+              : notification.type === "friend-request"
+              ? `/${userId}/friend-requests`
+              : notification.type === "accepted-request"
+              ? `/profile/${notification.acceptedById}`
               : "";
           return (
             <div
@@ -31,3 +36,7 @@ export default function NotificationsDisplay() {
     </div>
   );
 }
+
+NotificationsDisplay.propTypes = {
+  userId: PropTypes.string,
+};

@@ -48,7 +48,9 @@ export default function Navbar({
           <button className={styles.navIcon}>
             <img src="/logout.png" alt="" height={24} onClick={handleLogout} />
           </button>
-          {notificationsIsOpen && <NotificationsDisplay></NotificationsDisplay>}
+          {notificationsIsOpen && (
+            <NotificationsDisplay userId={user.id}></NotificationsDisplay>
+          )}
         </div>
       )}
     </nav>
