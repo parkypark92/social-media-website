@@ -69,10 +69,12 @@ io.on("connection", (socket) => {
     socket.to(recipientId).emit("notification", notification);
   });
   socket.on("request-accepted", (acceptedBy, senderId) => {
+    console.log(acceptedBy);
     const notification = {
       id: randomUUID(),
       type: "accepted-request",
-      message: `${acceptedBy} accepted your friend request`,
+      message: `${acceptedBy.username} accepted your friend request`,
+      acceptedById: acceptedBy.id,
       createdAt: new Date(),
     };
     socket.to(senderId).emit("notification", notification);
