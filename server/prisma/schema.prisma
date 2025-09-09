@@ -14,21 +14,23 @@ datasource db {
 }
 
 model User {
-  id               String         @id @default(uuid())
-  username         String         @unique
-  email            String         @unique
-  dateOfBirth      String
-  salt             String?
-  hash             String?
-  sentRequests     Friendship[]   @relation("SentRequests")
-  receivedRequests Friendship[]   @relation("ReceivedRequests")
-  posts            Post[]         @relation("PostAuthor")
-  comments         Comment[]
-  likes            Post[]         @relation("PostLikes")
-  messages         Message[]
-  conversationA    Conversation[] @relation("UserA")
-  conversationB    Conversation[] @relation("UserB")
-  profileUrl       String?
+  id                String         @id @default(uuid())
+  username          String         @unique
+  email             String         @unique
+  dateOfBirth       String
+  salt              String?
+  hash              String?
+  sentRequests      Friendship[]   @relation("SentRequests")
+  receivedRequests  Friendship[]   @relation("ReceivedRequests")
+  posts             Post[]         @relation("PostAuthor")
+  comments          Comment[]
+  likes             Post[]         @relation("PostLikes")
+  messages          Message[]
+  conversationA     Conversation[] @relation("UserA")
+  conversationB     Conversation[] @relation("UserB")
+  profileUrl        String?
+  notifications     Notification[] @relation("userNotifications")
+  sentNotifications Notification[] @relation("sentNotifications")
 }
 
 model Friendship {
@@ -43,13 +45,14 @@ model Friendship {
 }
 
 model Post {
-  id       String    @id @default(uuid())
-  text     String
-  postedAt DateTime  @default(now())
-  author   User      @relation("PostAuthor", fields: [authorId], references: [id])
-  authorId String
-  comments Comment[]
-  likes    User[]    @relation("PostLikes")
+  id                String         @id @default(uuid())
+  text              String
+  postedAt          DateTime       @default(now())
+  author            User           @relation("PostAuthor", fields: [authorId], references: [id])
+  authorId          String
+  comments          Comment[]
+  likes             User[]         @relation("PostLikes")
+  notificationLinks Notification[]
 }
 
 model Comment {
@@ -83,4 +86,18 @@ model Conversation {
   userB         User      @relation("UserB", fields: [userBId], references: [id])
 
   @@unique([userAId, userBId])
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  type        String
+  message     String
+  createdAt   DateTime @default(now())
+  seen        Boolean  @default(false)
+  recipientId String
+  recipient   User     @relation("userNotifications", fields: [recipientId], references: [id])
+  senderId    String
+  sender      User     @relation("sentNotifications", fields: [senderId], references: [id])
+  postId      String?
+  post        Post?    @relation(fields: [postId], references: [id])
 }
