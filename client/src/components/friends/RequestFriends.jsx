@@ -31,9 +31,25 @@ export default function RequestFriends({ limit }) {
       data
     );
     if (response.status === 200) {
-      return response.data;
+      return response.data.friendRequest;
     } else {
       alert("Something went wrong. Please try again.");
+    }
+  };
+
+  const handleRequestNotification = async (friendshipData) => {
+    const data = {
+      type: "friend-request",
+      message: `${user.username} sent you a friend request`,
+      recipientId: friendshipData.receiverId,
+      senderId: user.id,
+    };
+    const response = await axios.post(
+      "http://localhost:3000/users/friend-request-notification",
+      data
+    );
+    if (response.status === 200) {
+      return response.data.notification;
     }
   };
 
@@ -44,17 +60,14 @@ export default function RequestFriends({ limit }) {
 
   const sendRequestMutation = useMutation({
     mutationFn: sendRequest,
-    onSuccess: (data) => {
+    onSuccess: async (friendshipData) => {
       queryClient.setQueryData(["users", user.id, limit], (oldData) => {
         return {
           users: oldData.users.map((item) => {
-            if (item.id == data.friendRequest.receiverId) {
+            if (item.id == friendshipData.receiverId) {
               return {
                 ...item,
-                receivedRequests: [
-                  ...item.receivedRequests,
-                  data.friendRequest,
-                ],
+                receivedRequests: [...item.receivedRequests, friendshipData],
               };
             } else {
               return item;
@@ -62,9 +75,8 @@ export default function RequestFriends({ limit }) {
           }),
         };
       });
-      const sentBy = user.username;
-      const recipientId = data.friendRequest.receiverId;
-      socket.emit("friend-request", sentBy, recipientId);
+      const notification = await handleRequestNotification(friendshipData);
+      socket.emit("friend-request", notification);
     },
   });
 
