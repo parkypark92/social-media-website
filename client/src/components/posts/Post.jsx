@@ -26,6 +26,23 @@ export default function Post({ postContent, feedPost = false }) {
     }
   };
 
+  const handleLikeNotification = async (postData) => {
+    const data = {
+      type: "like",
+      message: `${user.username} liked your post`,
+      recipientId: postData.authorId,
+      senderId: user.id,
+      postId: postData.id,
+    };
+    const response = await axios.post(
+      "http://localhost:3000/users/like-notification",
+      data
+    );
+    if (response.status === 200) {
+      return response.data.notification;
+    }
+  };
+
   const handleUnlikePost = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/unlike-post",
@@ -40,14 +57,12 @@ export default function Post({ postContent, feedPost = false }) {
 
   const likePostMutation = useMutation({
     mutationFn: handleLikePost,
-    onSuccess: (postData) => {
+    onSuccess: async (postData) => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postData.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-      const recipientId = postData.authorId;
-      const likedBy = user.username;
-      const postId = postData.id;
-      socket.emit("post-liked", likedBy, recipientId, postId);
+      const notification = await handleLikeNotification(postData);
+      socket.emit("post-liked", notification);
     },
   });
 
