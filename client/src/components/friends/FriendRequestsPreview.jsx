@@ -35,6 +35,22 @@ export default function FriendRequestsPreview({ limit }) {
     }
   };
 
+  const handleAcceptedRequestNotification = async (friendshipData) => {
+    const data = {
+      type: "accepted-request",
+      message: `${user.username} accepted your friend request`,
+      recipientId: friendshipData.senderId,
+      senderId: user.id,
+    };
+    const response = await axios.post(
+      "http://localhost:3000/users/accepted-request-notification",
+      data
+    );
+    if (response.status === 200) {
+      return response.data.notification;
+    }
+  };
+
   const requestsPreviewQuery = useQuery({
     queryKey: ["requests preview", user.id],
     queryFn: fetchRequests,
@@ -42,7 +58,7 @@ export default function FriendRequestsPreview({ limit }) {
 
   const answerRequestMutation = useMutation({
     mutationFn: answerRequest,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       const friendshipData = data.friendshipStatus[0];
       console.log(friendshipData);
       queryClient.setQueryData(["requests preview", user.id], (oldData) => {
@@ -60,9 +76,10 @@ export default function FriendRequestsPreview({ limit }) {
         };
       });
       if (friendshipData.status === "accepted") {
-        const acceptedBy = { id: user.id, username: user.username };
-        const senderId = friendshipData.senderId;
-        socket.emit("request-accepted", acceptedBy, senderId);
+        const notification = await handleAcceptedRequestNotification(
+          friendshipData
+        );
+        socket.emit("request-accepted", notification);
       }
     },
   });
