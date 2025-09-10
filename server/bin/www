@@ -42,15 +42,8 @@ io.on("connection", (socket) => {
   socket.on("post-liked", (notification) => {
     socket.to(notification.recipientId).emit("notification", notification);
   });
-  socket.on("comment", (commentBy, recipientId, postId) => {
-    const notification = {
-      id: randomUUID(),
-      type: "comment",
-      message: `${commentBy} commented on your post`,
-      postId: postId,
-      createdAt: new Date(),
-    };
-    socket.to(recipientId).emit("notification", notification);
+  socket.on("comment", (notification) => {
+    socket.to(notification.recipientId).emit("notification", notification);
   });
   socket.on("friend-request", (sentBy, recipientId) => {
     const notification = {
