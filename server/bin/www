@@ -45,14 +45,8 @@ io.on("connection", (socket) => {
   socket.on("comment", (notification) => {
     socket.to(notification.recipientId).emit("notification", notification);
   });
-  socket.on("friend-request", (sentBy, recipientId) => {
-    const notification = {
-      id: randomUUID(),
-      type: "friend-request",
-      message: `${sentBy} sent you a friend request`,
-      createdAt: new Date(),
-    };
-    socket.to(recipientId).emit("notification", notification);
+  socket.on("friend-request", (notification) => {
+    socket.to(notification.recipientId).emit("notification", notification);
   });
   socket.on("request-accepted", (notification) => {
     socket.to(notification.recipientId).emit("notification", notification);
