@@ -15,6 +15,7 @@ export default function CreateComment({ postInfo }) {
   const handleChange = (e) => {
     setInputtext(e.target.value);
   };
+
   const submitComment = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/create-comment",
@@ -27,17 +28,32 @@ export default function CreateComment({ postInfo }) {
     }
   };
 
+  const handleCommmentNotification = async (postInfo) => {
+    const data = {
+      type: "comment",
+      message: `${user.username} commented on your post`,
+      recipientId: postInfo.author.id,
+      senderId: user.id,
+      postId: postInfo.id,
+    };
+    const response = await axios.post(
+      "http://localhost:3000/users/comment-notification",
+      data
+    );
+    if (response.status === 200) {
+      return response.data.notification;
+    }
+  };
+
   const createCommentMutation = useMutation({
     mutationFn: submitComment,
-    onSuccess: () => {
+    onSuccess: async () => {
       setInputtext("");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postInfo.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-      const commentBy = user.username;
-      const recipientId = postInfo.author.id;
-      const postId = postInfo.id;
-      socket.emit("comment", commentBy, recipientId, postId);
+      const notification = await handleCommmentNotification(postInfo);
+      socket.emit("comment", notification);
     },
   });
 
