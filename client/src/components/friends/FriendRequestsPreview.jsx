@@ -43,7 +43,7 @@ export default function FriendRequestsPreview({ limit }) {
       senderId: user.id,
     };
     const response = await axios.post(
-      "http://localhost:3000/users/accepted-request-notification",
+      "http://localhost:3000/users/friend-request-notification",
       data
     );
     if (response.status === 200) {
@@ -79,7 +79,7 @@ export default function FriendRequestsPreview({ limit }) {
         const notification = await handleAcceptedRequestNotification(
           friendshipData
         );
-        socket.emit("request-accepted", notification);
+        socket.emit("send-notification", notification);
       }
     },
   });

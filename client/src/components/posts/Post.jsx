@@ -35,7 +35,7 @@ export default function Post({ postContent, feedPost = false }) {
       postId: postData.id,
     };
     const response = await axios.post(
-      "http://localhost:3000/users/like-notification",
+      "http://localhost:3000/users/post-notification",
       data
     );
     if (response.status === 200) {
@@ -62,7 +62,7 @@ export default function Post({ postContent, feedPost = false }) {
       queryClient.invalidateQueries({ queryKey: ["post", postData.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
       const notification = await handleLikeNotification(postData);
-      socket.emit("post-liked", notification);
+      socket.emit("send-notification", notification);
     },
   });
 

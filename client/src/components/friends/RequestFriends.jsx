@@ -76,7 +76,7 @@ export default function RequestFriends({ limit }) {
         };
       });
       const notification = await handleRequestNotification(friendshipData);
-      socket.emit("friend-request", notification);
+      socket.emit("send-notification", notification);
     },
   });
 

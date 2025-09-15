@@ -37,7 +37,7 @@ export default function CreateComment({ postInfo }) {
       postId: postInfo.id,
     };
     const response = await axios.post(
-      "http://localhost:3000/users/comment-notification",
+      "http://localhost:3000/users/post-notification",
       data
     );
     if (response.status === 200) {
@@ -53,7 +53,7 @@ export default function CreateComment({ postInfo }) {
       queryClient.invalidateQueries({ queryKey: ["post", postInfo.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
       const notification = await handleCommmentNotification(postInfo);
-      socket.emit("comment", notification);
+      socket.emit("send-notification", notification);
     },
   });
 

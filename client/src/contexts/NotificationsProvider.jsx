@@ -10,11 +10,11 @@ export function NotificationsProvider({ children }) {
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("notification", (notification) => {
+    socket.on("receive-notification", (notification) => {
       setNotifications((prev) => [notification, ...prev]);
       console.log(notification);
     });
-    return () => socket.off("notification");
+    return () => socket.off("receive-notification");
   }, [socket, notifications]);
 
   return (

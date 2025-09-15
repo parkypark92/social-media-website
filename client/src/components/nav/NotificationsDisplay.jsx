@@ -18,7 +18,7 @@ export default function NotificationsDisplay({ userId }) {
               : notification.type === "friend-request"
               ? `/${userId}/friend-requests`
               : notification.type === "accepted-request"
-              ? `/profile/${notification.acceptedById}`
+              ? `/profile/${notification.senderId}`
               : "";
           return (
             <div
