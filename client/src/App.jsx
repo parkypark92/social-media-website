@@ -88,7 +88,7 @@ function App() {
   return (
     <div onClick={handleNotificationsDisplay}>
       <SocketProvider id={user?.id}>
-        <NotificationsProvider>
+        <NotificationsProvider userId={user?.id}>
           <Navbar
             user={user}
             setUser={setUser}

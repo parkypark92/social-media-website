@@ -10,7 +10,7 @@ export default function NotificationsDisplay({ userId }) {
   return (
     <div className={styles.container}>
       <h3 className={styles.header}>Notifications</h3>
-      {notifications.length > 0 ? (
+      {notifications && notifications.length > 0 ? (
         notifications.map((notification) => {
           const route =
             notification.type === "like" || notification.type === "comment"
