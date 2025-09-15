@@ -394,22 +394,7 @@ module.exports.send_message = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports.create_like_notification = asyncHandler(
-  async (req, res, next) => {
-    const notification = await prisma.notification.create({
-      data: {
-        type: req.body.type,
-        message: req.body.message,
-        recipientId: req.body.recipientId,
-        senderId: req.body.senderId,
-        postId: req.body.postId,
-      },
-    });
-    res.status(200).json({ notification });
-  }
-);
-
-module.exports.create_comment_notification = asyncHandler(
+module.exports.create_post_notification = asyncHandler(
   async (req, res, next) => {
     const notification = await prisma.notification.create({
       data: {
@@ -425,20 +410,6 @@ module.exports.create_comment_notification = asyncHandler(
 );
 
 module.exports.create_friend_request_notification = asyncHandler(
-  async (req, res, next) => {
-    const notification = await prisma.notification.create({
-      data: {
-        type: req.body.type,
-        message: req.body.message,
-        recipientId: req.body.recipientId,
-        senderId: req.body.senderId,
-      },
-    });
-    res.status(200).json({ notification });
-  }
-);
-
-module.exports.create_accepted_request_notification = asyncHandler(
   async (req, res, next) => {
     const notification = await prisma.notification.create({
       data: {

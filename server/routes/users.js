@@ -33,15 +33,10 @@ router.get("/profile-picture", controller.get_profile_picture);
 router.get("/conversations", controller.get_conversations);
 router.post("/create-conversation", controller.create_conversation);
 router.post("/send-message", controller.send_message);
-router.post("/like-notification", controller.create_like_notification);
-router.post("/comment-notification", controller.create_comment_notification);
+router.post("/post-notification", controller.create_post_notification);
 router.post(
   "/friend-request-notification",
   controller.create_friend_request_notification
-);
-router.post(
-  "/accepted-request-notification",
-  controller.create_accepted_request_notification
 );
 
 module.exports = router;

@@ -28,7 +28,6 @@ const io = new Server(server, {
 });
 
 const onlineUsers = new Map();
-const { randomUUID } = require("crypto");
 
 io.on("connection", (socket) => {
   const id = socket.handshake.query.id;
@@ -39,17 +38,10 @@ io.on("connection", (socket) => {
   socket.on("send-message", (recipientId, message) => {
     socket.to(recipientId).emit("receive-message", message);
   });
-  socket.on("post-liked", (notification) => {
-    socket.to(notification.recipientId).emit("notification", notification);
-  });
-  socket.on("comment", (notification) => {
-    socket.to(notification.recipientId).emit("notification", notification);
-  });
-  socket.on("friend-request", (notification) => {
-    socket.to(notification.recipientId).emit("notification", notification);
-  });
-  socket.on("request-accepted", (notification) => {
-    socket.to(notification.recipientId).emit("notification", notification);
+  socket.on("send-notification", (notification) => {
+    socket
+      .to(notification.recipientId)
+      .emit("receive-notification", notification);
   });
   socket.on("disconnect", () => {
     onlineUsers.delete(id);
