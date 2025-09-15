@@ -394,6 +394,16 @@ module.exports.send_message = asyncHandler(async (req, res, next) => {
   }
 });
 
+module.exports.get_user_notifications = asyncHandler(async (req, res, next) => {
+  const notifications = await prisma.notification.findMany({
+    where: {
+      recipientId: req.query.userId,
+    },
+  });
+  console.log(notifications);
+  res.status(200).json({ notifications });
+});
+
 module.exports.create_post_notification = asyncHandler(
   async (req, res, next) => {
     const notification = await prisma.notification.create({
