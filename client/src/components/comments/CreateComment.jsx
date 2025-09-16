@@ -16,6 +16,7 @@ export default function CreateComment({ postInfo }) {
     setInputtext(e.target.value);
   };
 
+  //COMMENT FUNCTIONS
   const submitComment = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/create-comment",
@@ -28,6 +29,29 @@ export default function CreateComment({ postInfo }) {
     }
   };
 
+  const createCommentMutation = useMutation({
+    mutationFn: submitComment,
+    onSuccess: async () => {
+      setInputtext("");
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["post", postInfo.id] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      createNotificationMutation.mutate(postInfo);
+    },
+  });
+
+  const callMutation = (e) => {
+    e.preventDefault();
+    const data = new FormData(e.target);
+    const formData = {
+      text: data.get("newComment"),
+      authorId: user.id,
+      postId: postInfo.id,
+    };
+    createCommentMutation.mutate(formData);
+  };
+
+  //NOTIFICATION FUNCTIONS
   const handleCommmentNotification = async (postInfo) => {
     const data = {
       type: "comment",
@@ -45,28 +69,12 @@ export default function CreateComment({ postInfo }) {
     }
   };
 
-  const createCommentMutation = useMutation({
-    mutationFn: submitComment,
-    onSuccess: async () => {
-      setInputtext("");
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-      queryClient.invalidateQueries({ queryKey: ["post", postInfo.id] });
-      queryClient.invalidateQueries({ queryKey: ["profile"] });
-      const notification = await handleCommmentNotification(postInfo);
-      socket.emit("send-notification", notification);
+  const createNotificationMutation = useMutation({
+    mutationFn: handleCommmentNotification,
+    onSuccess: (notificationData) => {
+      socket.emit("send-notification", notificationData);
     },
   });
-
-  const callMutation = (e) => {
-    e.preventDefault();
-    const data = new FormData(e.target);
-    const formData = {
-      text: data.get("newComment"),
-      authorId: user.id,
-      postId: postInfo.id,
-    };
-    createCommentMutation.mutate(formData);
-  };
 
   return (
     <form onSubmit={callMutation}>
