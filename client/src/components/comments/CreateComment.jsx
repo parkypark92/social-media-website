@@ -31,7 +31,7 @@ export default function CreateComment({ postInfo }) {
 
   const createCommentMutation = useMutation({
     mutationFn: submitComment,
-    onSuccess: async () => {
+    onSuccess: () => {
       setInputtext("");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postInfo.id] });

@@ -57,12 +57,18 @@ export default function Post({ postContent, feedPost = false }) {
 
   const likePostMutation = useMutation({
     mutationFn: handleLikePost,
-    onSuccess: async (postData) => {
+    onSuccess: (postData) => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postData.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-      const notification = await handleLikeNotification(postData);
-      socket.emit("send-notification", notification);
+      likeNotificationMutation.mutate(postData);
+    },
+  });
+
+  const likeNotificationMutation = useMutation({
+    mutationFn: handleLikeNotification,
+    onSuccess: (notificationData) => {
+      socket.emit("send-notification", notificationData);
     },
   });
 
