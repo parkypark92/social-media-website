@@ -25,6 +25,12 @@ export default function RequestFriends({ limit }) {
     }
   };
 
+  const usersQuery = useQuery({
+    queryKey: ["users", user.id, limit],
+    queryFn: fetchUsers,
+  });
+
+  //REQUEST FUNCTIONS
   const sendRequest = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/friend-request",
@@ -36,27 +42,6 @@ export default function RequestFriends({ limit }) {
       alert("Something went wrong. Please try again.");
     }
   };
-
-  const handleRequestNotification = async (friendshipData) => {
-    const data = {
-      type: "friend-request",
-      message: `${user.username} sent you a friend request`,
-      recipientId: friendshipData.receiverId,
-      senderId: user.id,
-    };
-    const response = await axios.post(
-      "http://localhost:3000/users/friend-request-notification",
-      data
-    );
-    if (response.status === 200) {
-      return response.data.notification;
-    }
-  };
-
-  const usersQuery = useQuery({
-    queryKey: ["users", user.id, limit],
-    queryFn: fetchUsers,
-  });
 
   const sendRequestMutation = useMutation({
     mutationFn: sendRequest,
@@ -75,8 +60,7 @@ export default function RequestFriends({ limit }) {
           }),
         };
       });
-      const notification = await handleRequestNotification(friendshipData);
-      socket.emit("send-notification", notification);
+      requestNotificationMutation.mutate(friendshipData);
     },
   });
 
@@ -87,6 +71,30 @@ export default function RequestFriends({ limit }) {
       receivedBy: e.target.id,
     });
   };
+
+  //NOTIFICATIONS FUNCTIONS
+  const handleRequestNotification = async (friendshipData) => {
+    const data = {
+      type: "friend-request",
+      message: `${user.username} sent you a friend request`,
+      recipientId: friendshipData.receiverId,
+      senderId: user.id,
+    };
+    const response = await axios.post(
+      "http://localhost:3000/users/friend-request-notification",
+      data
+    );
+    if (response.status === 200) {
+      return response.data.notification;
+    }
+  };
+
+  const requestNotificationMutation = useMutation({
+    mutationFn: handleRequestNotification,
+    onSuccess: (notificationData) => {
+      socket.emit("send-notification", notificationData);
+    },
+  });
 
   if (usersQuery.isLoading) return <h2>Loading...</h2>;
   if (usersQuery.isError) return <h2>{usersQuery.error.message}</h2>;
