@@ -4,7 +4,7 @@ import styles from "./NotificationsDisplay.module.css";
 import PropTypes from "prop-types";
 
 export default function NotificationsDisplay({ userId }) {
-  const { notifications } = useNotifications();
+  const { data: notifications } = useNotifications();
   const navigate = useNavigate();
 
   return (

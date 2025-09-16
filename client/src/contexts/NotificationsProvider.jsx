@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { createContext, useContext, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSocket } from "./SocketProvider";
 import axios from "axios";
 import PropTypes from "prop-types";
@@ -7,8 +7,8 @@ import PropTypes from "prop-types";
 const NotificationsContext = createContext();
 
 export function NotificationsProvider({ userId, children }) {
-  const [notifications, setNotifications] = useState([]);
   const socket = useSocket();
+  const queryClient = useQueryClient();
 
   const fetchNotifications = async () => {
     const response = await axios.get(
@@ -31,23 +31,18 @@ export function NotificationsProvider({ userId, children }) {
   });
 
   useEffect(() => {
-    if (notificationsQuery.isSuccess) {
-      console.log(notificationsQuery.data);
-      setNotifications(notificationsQuery.data);
-    }
-  }, [notificationsQuery.data, notificationsQuery.isSuccess]);
-
-  useEffect(() => {
     if (!socket) return;
     socket.on("receive-notification", (notification) => {
-      setNotifications((prev) => [notification, ...prev]);
-      console.log(notification);
+      queryClient.invalidateQueries([
+        "notifications",
+        notification.recipientId,
+      ]);
     });
     return () => socket.off("receive-notification");
-  }, [socket, notifications]);
+  }, [queryClient, socket]);
 
   return (
-    <NotificationsContext.Provider value={{ notifications }}>
+    <NotificationsContext.Provider value={notificationsQuery}>
       {children}
     </NotificationsContext.Provider>
   );
