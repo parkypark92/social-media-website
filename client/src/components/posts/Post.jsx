@@ -14,6 +14,7 @@ export default function Post({ postContent, feedPost = false }) {
   const queryClient = useQueryClient();
   const socket = useSocket();
 
+  //LIKE FUNCTIONS
   const handleLikePost = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/like-post",
@@ -26,6 +27,25 @@ export default function Post({ postContent, feedPost = false }) {
     }
   };
 
+  const likePostMutation = useMutation({
+    mutationFn: handleLikePost,
+    onSuccess: (postData) => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["post", postData.id] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      likeNotificationMutation.mutate(postData);
+    },
+  });
+
+  const callLikeMutation = (e) => {
+    e.preventDefault;
+    likePostMutation.mutate({
+      postId: postContent.id,
+      userId: user.id,
+    });
+  };
+
+  //NOTIFICATION FUNCTIONS
   const handleLikeNotification = async (postData) => {
     const data = {
       type: "like",
@@ -43,6 +63,14 @@ export default function Post({ postContent, feedPost = false }) {
     }
   };
 
+  const likeNotificationMutation = useMutation({
+    mutationFn: handleLikeNotification,
+    onSuccess: (notificationData) => {
+      socket.emit("send-notification", notificationData);
+    },
+  });
+
+  //UNLIKE FUNCTIONS
   const handleUnlikePost = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/unlike-post",
@@ -55,23 +83,6 @@ export default function Post({ postContent, feedPost = false }) {
     }
   };
 
-  const likePostMutation = useMutation({
-    mutationFn: handleLikePost,
-    onSuccess: (postData) => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-      queryClient.invalidateQueries({ queryKey: ["post", postData.id] });
-      queryClient.invalidateQueries({ queryKey: ["profile"] });
-      likeNotificationMutation.mutate(postData);
-    },
-  });
-
-  const likeNotificationMutation = useMutation({
-    mutationFn: handleLikeNotification,
-    onSuccess: (notificationData) => {
-      socket.emit("send-notification", notificationData);
-    },
-  });
-
   const unlikePostMutation = useMutation({
     mutationFn: handleUnlikePost,
     onSuccess: () => {
@@ -81,13 +92,6 @@ export default function Post({ postContent, feedPost = false }) {
     },
   });
 
-  const callLikeMutation = (e) => {
-    e.preventDefault;
-    likePostMutation.mutate({
-      postId: postContent.id,
-      userId: user.id,
-    });
-  };
   const callunlikeMutation = (e) => {
     e.preventDefault;
     unlikePostMutation.mutate({

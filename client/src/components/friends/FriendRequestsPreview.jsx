@@ -11,6 +11,7 @@ export default function FriendRequestsPreview({ limit }) {
   const queryClient = useQueryClient();
   const socket = useSocket();
 
+  //REQUESTS FUNCTIONS
   const fetchRequests = async () => {
     const response = await axios.get(
       "http://localhost:3000/users/get-requests-preview",
@@ -23,6 +24,11 @@ export default function FriendRequestsPreview({ limit }) {
     }
   };
 
+  const requestsPreviewQuery = useQuery({
+    queryKey: ["requests preview", user.id],
+    queryFn: fetchRequests,
+  });
+
   const answerRequest = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/answer-request",
@@ -34,27 +40,6 @@ export default function FriendRequestsPreview({ limit }) {
       alert("Something went wrong! Please try again.");
     }
   };
-
-  const handleAcceptedRequestNotification = async (friendshipData) => {
-    const data = {
-      type: "accepted-request",
-      message: `${user.username} accepted your friend request`,
-      recipientId: friendshipData.senderId,
-      senderId: user.id,
-    };
-    const response = await axios.post(
-      "http://localhost:3000/users/friend-request-notification",
-      data
-    );
-    if (response.status === 200) {
-      return response.data.notification;
-    }
-  };
-
-  const requestsPreviewQuery = useQuery({
-    queryKey: ["requests preview", user.id],
-    queryFn: fetchRequests,
-  });
 
   const answerRequestMutation = useMutation({
     mutationFn: answerRequest,
@@ -76,10 +61,8 @@ export default function FriendRequestsPreview({ limit }) {
         };
       });
       if (friendshipData.status === "accepted") {
-        const notification = await handleAcceptedRequestNotification(
-          friendshipData
-        );
-        socket.emit("send-notification", notification);
+        queryClient.invalidateQueries(["friends", user.id]);
+        notificationMutation.mutate(friendshipData);
       }
     },
   });
@@ -92,6 +75,32 @@ export default function FriendRequestsPreview({ limit }) {
       status: e.target.id,
     });
   };
+
+  //NOTIFICATIONS FUNCTIONS
+  const handleAcceptedRequestNotification = async (friendshipData) => {
+    const data = {
+      type: "accepted-request",
+      message: `${user.username} accepted your friend request`,
+      recipientId: friendshipData.senderId,
+      senderId: user.id,
+    };
+    const response = await axios.post(
+      "http://localhost:3000/users/friend-request-notification",
+      data
+    );
+    if (response.status === 200) {
+      return response.data.notification;
+    } else {
+      throw new Error("Error handling notification");
+    }
+  };
+
+  const notificationMutation = useMutation({
+    mutationFn: handleAcceptedRequestNotification,
+    onSuccess: (notificationData) => {
+      socket.emit("send-notification", notificationData);
+    },
+  });
 
   if (requestsPreviewQuery.isLoading) return <h2>Loading...</h2>;
   if (requestsPreviewQuery.isError)
