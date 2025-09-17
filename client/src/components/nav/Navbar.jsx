@@ -1,4 +1,5 @@
 import NotificationsDisplay from "./NotificationsDisplay";
+import { useNotifications } from "../../contexts/NotificationsProvider";
 import { useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import PropTypes from "prop-types";
@@ -11,6 +12,7 @@ export default function Navbar({
   notificationsIsOpen,
   setNotificationsIsOpen,
 }) {
+  const { data: notifications } = useNotifications();
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -24,6 +26,9 @@ export default function Navbar({
       <h2 className={styles.logo}>FineFellows</h2>
       {user && (
         <div className={styles.icons}>
+          {notifications && (
+            <div className={styles.notifications}>{notifications.length}</div>
+          )}
           <button
             className={styles.navIcon}
             onClick={() => navigate(`/${user.id}`)}
@@ -35,7 +40,7 @@ export default function Navbar({
             className={`${styles.navIcon} ${styles.notificationsIcon}`}
             onClick={() => setNotificationsIsOpen(!notificationsIsOpen)}
           >
-            <img src="/bell.png" alt="" height={26} />
+            <img className={styles.image} src="/bell.png" alt="" height={26} />
           </button>
           <div className={styles.vl}></div>
           <button
@@ -48,10 +53,10 @@ export default function Navbar({
           <button className={styles.navIcon}>
             <img src="/logout.png" alt="" height={24} onClick={handleLogout} />
           </button>
-          {notificationsIsOpen && (
-            <NotificationsDisplay userId={user.id}></NotificationsDisplay>
-          )}
         </div>
+      )}
+      {notificationsIsOpen && (
+        <NotificationsDisplay userId={user.id}></NotificationsDisplay>
       )}
     </nav>
   );
