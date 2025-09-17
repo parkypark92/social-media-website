@@ -39,5 +39,6 @@ router.post(
   "/friend-request-notification",
   controller.create_friend_request_notification
 );
+router.post("/seen-notifications", controller.update_seen_notifications);
 
 module.exports = router;

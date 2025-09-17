@@ -399,8 +399,10 @@ module.exports.get_user_notifications = asyncHandler(async (req, res, next) => {
     where: {
       recipientId: req.query.userId,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
-  console.log(notifications);
   res.status(200).json({ notifications });
 });
 
@@ -430,5 +432,22 @@ module.exports.create_friend_request_notification = asyncHandler(
       },
     });
     res.status(200).json({ notification });
+  }
+);
+
+module.exports.update_seen_notifications = asyncHandler(
+  async (req, res, next) => {
+    console.log("here");
+    const updatedNotifications = await prisma.notification.updateMany({
+      where: {
+        id: req.query.userId,
+        seen: false,
+      },
+      data: {
+        seen: true,
+      },
+    });
+    console.log(updatedNotifications);
+    res.status(200).json({ updatedNotifications });
   }
 );
