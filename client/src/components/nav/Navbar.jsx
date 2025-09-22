@@ -76,7 +76,9 @@ export default function Navbar({
           <div className={styles.vl}></div>
           <button
             className={styles.navIcon}
-            onClick={() => navigate(`${user}/messages`)}
+            onClick={() => {
+              navigate(`${user.id}/messages`);
+            }}
           >
             <img src="/message.png" alt="" height={24} />
           </button>

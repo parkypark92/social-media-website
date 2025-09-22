@@ -23,6 +23,7 @@ export default function Chats({
           allChats.map((chat) => {
             const recipient =
               user.id === chat.userA.id ? chat.userB : chat.userA;
+
             return (
               <div
                 key={chat.id}
@@ -35,6 +36,10 @@ export default function Chats({
               >
                 <ProfilePicture link={false} userId={recipient.id} />
                 <p>{recipient.username}</p>
+                {chat.lastMessageSeen === false &&
+                  chat.lastMessageSenderId !== user.id && (
+                    <small>New message!</small>
+                  )}
               </div>
             );
           })
