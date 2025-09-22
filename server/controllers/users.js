@@ -385,6 +385,8 @@ module.exports.send_message = asyncHandler(async (req, res, next) => {
         },
         data: {
           lastMessageAt: message.createdAt,
+          lastMessageSenderId: req.body.senderId,
+          lastMessageSeen: false,
         },
       });
       res.status(200).json({ msg: "Message sent", message, conversation });
@@ -392,6 +394,26 @@ module.exports.send_message = asyncHandler(async (req, res, next) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
+});
+
+module.exports.update_message_seen = asyncHandler(async (req, res, next) => {
+  const updatedChat = await prisma.conversation.update({
+    where: {
+      id: req.body.currentChat.id,
+    },
+    data: {
+      lastMessageSeen: true,
+    },
+    include: {
+      messages: {
+        include: { sender: true },
+        orderBy: { createdAt: "asc" },
+      },
+      userA: true,
+      userB: true,
+    },
+  });
+  res.status(200).json({ updatedChat });
 });
 
 module.exports.get_user_notifications = asyncHandler(async (req, res, next) => {
