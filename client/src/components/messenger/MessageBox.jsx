@@ -105,24 +105,26 @@ export default function MessageBox({
   const sendMessageMutation = useMutation({
     mutationFn: sendMessage,
     onSuccess: (data) => {
-      queryClient.setQueryData(["conversations", user.id], (oldData) => {
-        return {
-          chats: oldData.chats.map((chat) => {
-            if (chat.id === data.conversation.id) {
-              return {
-                ...chat,
-                messages: [...chat.messages, data.message],
-                lastMessageAt: data.conversation.lastMessageAt,
-              };
-            } else {
-              return chat;
-            }
-          }),
-        };
-      });
+      // queryClient.setQueryData(["conversations", user.id], (oldData) => {
+      //   console.log("here");
+      //   return {
+      //     chats: oldData.map((chat) => {
+      //       if (chat.id === data.conversation.id) {
+      //         return {
+      //           ...chat,
+      //           messages: [...chat.messages, data.message],
+      //           lastMessageAt: data.conversation.lastMessageAt,
+      //         };
+      //       } else {
+      //         return chat;
+      //       }
+      //     }),
+      //   };
+      // });
+
       queryClient.invalidateQueries({ queryKey: ["conversations", user.id] });
-      // setCurrentChat(data.message.lastMessageAt);
       setMessageValue("");
+
       const message = data.message;
       const recipientId =
         data.conversation.userAId === user.id

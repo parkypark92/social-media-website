@@ -1,36 +1,20 @@
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import Chats from "../components/messenger/Chats";
 import MessageBox from "../components/messenger/MessageBox";
+import { useMessages } from "../contexts/MessagesProvider";
 import styles from "./Messages.module.css";
 
 export default function Messages() {
+  const { data: chats } = useMessages();
   const [newChat, setNewChat] = useState(false);
   const [currentChat, setCurrentChat] = useState(null);
   const { user } = useOutletContext();
   const queryClient = useQueryClient();
 
-  const fetchConversations = async () => {
-    const response = await axios.get(
-      "http://localhost:3000/users/conversations",
-      { params: { id: user.id } }
-    );
-    if (response.status === 200) {
-      return response.data.chats ? response.data : [];
-    } else {
-      throw new Error("Error retrieving messeges");
-    }
-  };
-
-  const conversationsQuery = useQuery({
-    queryKey: ["conversations", user.id],
-    queryFn: fetchConversations,
-  });
-
   const updateNewMessageSeen = async (currentChat) => {
-    console.log(currentChat);
     const response = await axios.post(
       "http://localhost:3000/users/message-seen",
       { currentChat }
@@ -57,44 +41,40 @@ export default function Messages() {
   }, [currentChat]);
 
   useEffect(() => {
-    if (conversationsQuery.isSuccess) {
-      if (conversationsQuery.data.chats.length === 0) {
+    if (chats) {
+      if (chats.length === 0) {
         setNewChat(true);
       } else if (currentChat === null) {
-        setCurrentChat(conversationsQuery.data.chats[0]);
+        setCurrentChat(chats[0]);
       } else {
-        const [updatedChat] = conversationsQuery.data.chats.filter(
+        const [updatedChat] = chats.filter(
           (chat) => chat.id === currentChat.id
         );
         setCurrentChat(updatedChat);
       }
     }
-  }, [
-    conversationsQuery.data?.chats,
-    conversationsQuery.isSuccess,
-    currentChat,
-  ]);
-
-  if (conversationsQuery.isLoading) return <h2>Loading...</h2>;
-  if (conversationsQuery.isError)
-    return <h2>{conversationsQuery.error.message}</h2>;
+  }, [chats, currentChat]);
 
   return (
     <div className={styles.pageCtnr}>
-      <Chats
-        setNewChat={setNewChat}
-        currentChat={currentChat}
-        setCurrentChat={setCurrentChat}
-        allChats={conversationsQuery.data.chats}
-      ></Chats>
-      <div className={styles.chatOffset}></div>
-      <MessageBox
-        newChat={newChat}
-        setNewChat={setNewChat}
-        currentChat={currentChat}
-        setCurrentChat={setCurrentChat}
-        allChats={conversationsQuery.data.chats}
-      ></MessageBox>
+      {chats && (
+        <>
+          <Chats
+            setNewChat={setNewChat}
+            currentChat={currentChat}
+            setCurrentChat={setCurrentChat}
+            allChats={chats}
+          ></Chats>
+          <div className={styles.chatOffset}></div>
+          <MessageBox
+            newChat={newChat}
+            setNewChat={setNewChat}
+            currentChat={currentChat}
+            setCurrentChat={setCurrentChat}
+            allChats={chats}
+          ></MessageBox>
+        </>
+      )}
     </div>
   );
 }

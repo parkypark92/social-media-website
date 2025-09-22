@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { SocketProvider } from "./contexts/SocketProvider";
 import { OnlineUsersProvider } from "./contexts/OnlineUsers";
 import { NotificationsProvider } from "./contexts/NotificationsProvider";
+import { MessagesProvider } from "./contexts/MessagesProvider";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -88,28 +89,30 @@ function App() {
   return (
     <div onClick={handleNotificationsDisplay}>
       <SocketProvider id={user?.id}>
-        <NotificationsProvider userId={user?.id}>
-          <Navbar
-            user={user}
-            setUser={setUser}
-            setIsAuthenticated={setIsAuthenticated}
-            setFriendsList={setFriendsList}
-            notificationsIsOpen={notificationsIsOpen}
-            setNotificationsIsOpen={setNotificationsIsOpen}
-          ></Navbar>
-          <div className="navbarOffset"></div>
-          <OnlineUsersProvider>
-            <Outlet
-              context={{
-                user,
-                setUser,
-                isAuthenticated,
-                setIsAuthenticated,
-                friendsList,
-              }}
-            />
-          </OnlineUsersProvider>
-        </NotificationsProvider>
+        <MessagesProvider userId={user?.id}>
+          <NotificationsProvider userId={user?.id}>
+            <Navbar
+              user={user}
+              setUser={setUser}
+              setIsAuthenticated={setIsAuthenticated}
+              setFriendsList={setFriendsList}
+              notificationsIsOpen={notificationsIsOpen}
+              setNotificationsIsOpen={setNotificationsIsOpen}
+            ></Navbar>
+            <div className="navbarOffset"></div>
+            <OnlineUsersProvider>
+              <Outlet
+                context={{
+                  user,
+                  setUser,
+                  isAuthenticated,
+                  setIsAuthenticated,
+                  friendsList,
+                }}
+              />
+            </OnlineUsersProvider>
+          </NotificationsProvider>
+        </MessagesProvider>
       </SocketProvider>
     </div>
   );
