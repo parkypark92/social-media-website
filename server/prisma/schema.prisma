@@ -76,16 +76,17 @@ model Message {
 }
 
 model Conversation {
-  id                  String    @id @default(uuid())
-  userAId             String
-  userBId             String
-  messages            Message[]
-  createdAt           DateTime  @default(now())
-  lastMessageAt       DateTime  @default(now())
-  lastMessageSenderId String?
-  lastMessageSeen     Boolean   @default(false)
-  userA               User      @relation("UserA", fields: [userAId], references: [id])
-  userB               User      @relation("UserB", fields: [userBId], references: [id])
+  id                         String    @id @default(uuid())
+  userAId                    String
+  userBId                    String
+  messages                   Message[]
+  createdAt                  DateTime  @default(now())
+  lastMessageAt              DateTime  @default(now())
+  lastMessageSenderId        String?
+  lastMessageSeen            Boolean   @default(false)
+  newMessageNotificationSeen Boolean   @default(false)
+  userA                      User      @relation("UserA", fields: [userAId], references: [id])
+  userB                      User      @relation("UserB", fields: [userBId], references: [id])
 
   @@unique([userAId, userBId])
 }
