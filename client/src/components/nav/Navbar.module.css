@@ -48,7 +48,8 @@
   height: 38px;
 }
 
-.notificationsCount {
+.notificationsCount,
+.newMessagesCount {
   position: absolute;
   display: flex;
   justify-content: center;
@@ -59,7 +60,15 @@
   color: #fff;
   font-size: 0.7em;
   border-radius: 50%;
+  z-index: 1;
+}
+
+.notificationsCount {
   top: 0;
   left: 90px;
-  z-index: 1;
+}
+
+.newMessagesCount {
+  top: 0;
+  left: 155px;
 }

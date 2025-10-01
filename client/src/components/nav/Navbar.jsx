@@ -1,7 +1,9 @@
 import NotificationsDisplay from "./NotificationsDisplay";
 import { useNotifications } from "../../contexts/NotificationsProvider";
+import { useMessages } from "../../contexts/MessagesProvider";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import styles from "./Navbar.module.css";
 import PropTypes from "prop-types";
@@ -14,9 +16,12 @@ export default function Navbar({
   notificationsIsOpen,
   setNotificationsIsOpen,
 }) {
+  const { data: chats } = useMessages();
   const { data: notifications } = useNotifications();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const path = pathname.split("/").pop();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -49,6 +54,29 @@ export default function Navbar({
       seenNotificationsMutation.mutate(user.id);
   };
 
+  const handleMessageNotificationSeen = async (userId) => {
+    const response = await axios.post(
+      "http://localhost:3000/users/message-notifications-seen",
+      { params: userId }
+    );
+    if (response.status === 200) {
+      return response.data.updatedConversations;
+    }
+  };
+
+  const messageNotificationSeenMutation = useMutation({
+    mutationFn: handleMessageNotificationSeen,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["conversations", user.id]);
+    },
+  });
+
+  const handleMessageIconClick = () => {
+    if (chats.some((c) => c.newMessageNotificationSeen === false))
+      messageNotificationSeenMutation.mutate(user.id);
+    navigate(`${user.id}/messages`);
+  };
+
   return (
     <nav className={styles.navbar}>
       <h2 className={styles.logo}>FineFellows</h2>
@@ -58,6 +86,23 @@ export default function Navbar({
           notifications.filter((n) => n.seen === false).length > 0 ? (
             <div className={styles.notificationsCount}>
               {notifications.filter((n) => n.seen === false).length}
+            </div>
+          ) : null}
+          {path !== "messages" &&
+          chats &&
+          chats.filter(
+            (c) =>
+              c.newMessageNotificationSeen === false &&
+              c.lastMessageSenderId !== user.id
+          ).length > 0 ? (
+            <div className={styles.newMessagesCount}>
+              {
+                chats.filter(
+                  (c) =>
+                    c.newMessageNotificationSeen === false &&
+                    c.lastMessageSenderId !== user.id
+                ).length
+              }
             </div>
           ) : null}
           <button
@@ -74,12 +119,7 @@ export default function Navbar({
             <img className={styles.image} src="/bell.png" alt="" height={26} />
           </button>
           <div className={styles.vl}></div>
-          <button
-            className={styles.navIcon}
-            onClick={() => {
-              navigate(`${user.id}/messages`);
-            }}
-          >
+          <button className={styles.navIcon} onClick={handleMessageIconClick}>
             <img src="/message.png" alt="" height={24} />
           </button>
           <div className={styles.vl}></div>

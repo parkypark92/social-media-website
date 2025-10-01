@@ -41,15 +41,6 @@ export default function MessageBox({
     );
   }, [friendsList, allChats]);
 
-  useEffect(() => {
-    if (!socket) return;
-    socket.on("receive-message", (message) => {
-      console.log(`Message: ${message.content}, From: ${message.senderId}`);
-      queryClient.invalidateQueries({ queryKey: ["conversations", user.id] });
-    });
-    return () => socket.off("receive-message");
-  }, [queryClient, socket, user.id]);
-
   const createConversation = async (data) => {
     const response = await axios.post(
       "http://localhost:3000/users/create-conversation",
@@ -67,27 +58,6 @@ export default function MessageBox({
     );
     if (response.status === 200) {
       return response.data;
-      // const updatedChats = allChats.map((chat) => {
-      //   if (chat.id === currentChat.id) {
-      //     return {
-      //       ...chat,
-      //       messages: [...chat.messages, response.data.message],
-      //       lastMessageAt: response.data.conversation.lastMessageAt,
-      //     };
-      //   } else {
-      //     return chat;
-      //   }
-      // });
-      // const sortedChats = updatedChats.sort((a, b) =>
-      //   a.lastMessageAt > b.lastMessageAt
-      //     ? -1
-      //     : b.lastMessageAt > a.lastMessageAt
-      //     ? 1
-      //     : 0
-      // );
-      // setAllChats(sortedChats);
-      // setCurrentChat(sortedChats[0]);
-      // setMessageValue("");
     } else {
       console.log(response.data.error);
     }
@@ -105,23 +75,6 @@ export default function MessageBox({
   const sendMessageMutation = useMutation({
     mutationFn: sendMessage,
     onSuccess: (data) => {
-      // queryClient.setQueryData(["conversations", user.id], (oldData) => {
-      //   console.log("here");
-      //   return {
-      //     chats: oldData.map((chat) => {
-      //       if (chat.id === data.conversation.id) {
-      //         return {
-      //           ...chat,
-      //           messages: [...chat.messages, data.message],
-      //           lastMessageAt: data.conversation.lastMessageAt,
-      //         };
-      //       } else {
-      //         return chat;
-      //       }
-      //     }),
-      //   };
-      // });
-
       queryClient.invalidateQueries({ queryKey: ["conversations", user.id] });
       setMessageValue("");
 
