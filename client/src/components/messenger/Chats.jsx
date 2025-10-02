@@ -37,9 +37,8 @@ export default function Chats({
                 <ProfilePicture link={false} userId={recipient.id} />
                 <p>{recipient.username}</p>
                 {chat.lastMessageSeen === false &&
-                  chat.lastMessageSenderId !== user.id && (
-                    <small>New message!</small>
-                  )}
+                  chat.lastMessageSenderId !== user.id &&
+                  chat.id !== currentChat?.id && <small>New message!</small>}
               </div>
             );
           })

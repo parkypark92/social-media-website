@@ -37,8 +37,9 @@ export default function Messages() {
       currentChat?.lastMessageSenderId !== user.id
     ) {
       messageSeenMutation.mutate(currentChat);
+      setNewChat(false);
     }
-  }, [currentChat]);
+  }, [currentChat, user.id]);
 
   useEffect(() => {
     if (chats) {
@@ -46,9 +47,9 @@ export default function Messages() {
         setNewChat(true);
       } else if (currentChat === null) {
         setCurrentChat(chats[0]);
-      } else {
+      } else if (chats.some((chat) => chat.id === currentChat.id)) {
         const [updatedChat] = chats.filter(
-          (chat) => chat.id === currentChat.id
+          (chat) => chat.id === currentChat?.id
         );
         setCurrentChat(updatedChat);
       }
