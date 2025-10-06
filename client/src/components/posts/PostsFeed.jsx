@@ -2,50 +2,127 @@ import Post from "./Post";
 import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 export default function PostsFeed() {
   const [feedError, setFeedError] = useState(null);
   const { friendsList } = useOutletContext();
   const friendIds = friendsList.map((friend) => friend.id);
 
-  const fetchPostData = async () => {
+  const fetchPostData = async ({ pageParam = 1 }) => {
+    const limit = 5;
     const response = await axios.get("http://localhost:3000/users/get-posts", {
-      params: { ids: friendIds },
+      params: { ids: friendIds, page: pageParam, limit },
     });
     if (response.data.posts) {
-      return response.data;
+      return {
+        posts: response.data.posts,
+        nextPage:
+          response.data.posts.length === limit ? pageParam + 1 : undefined,
+      };
     } else {
       throw new Error("Error loading posts feed");
     }
   };
 
-  const postsQuery = useQuery({
+  const {
+    data,
+    isLoading,
+    isError,
+    isSuccess,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+  } = useInfiniteQuery({
     queryKey: ["posts", friendIds],
     queryFn: fetchPostData,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    enabled: friendIds.length > 0,
   });
 
   useEffect(() => {
-    if (postsQuery.isSuccess) {
+    if (isSuccess) {
       setFeedError(null);
     }
-    if (postsQuery.isError) {
-      setFeedError(postsQuery.error.message);
+    if (isError) {
+      setFeedError(error.message);
     }
-  }, [postsQuery.error?.message, postsQuery.isError, postsQuery.isSuccess]);
+  }, [error?.message, isError, isSuccess]);
 
-  if (postsQuery.isLoading) return <h2>Loading feed...</h2>;
+  if (isLoading) return <h2>Loading feed...</h2>;
+
+  const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
 
   return (
     <div>
       {feedError && <h2>{feedError}</h2>}
-      {postsQuery.data.posts.length > 0 ? (
-        postsQuery.data.posts.map((post) => {
-          return <Post key={post.id} postContent={post} feedPost={true} />;
-        })
+      {allPosts.length > 0 ? (
+        <>
+          {allPosts.map((post) => {
+            return <Post key={post.id} postContent={post} feedPost={true} />;
+          })}
+          {hasNextPage && (
+            <button onClick={fetchNextPage} disabled={isFetching}>
+              Load More
+            </button>
+          )}
+        </>
       ) : (
         <h2>No posts to display...</h2>
       )}
     </div>
   );
 }
+
+// import Post from "./Post";
+// import { useState, useEffect } from "react";
+// import { useOutletContext } from "react-router-dom";
+// import axios from "axios";
+// import { useQuery } from "@tanstack/react-query";
+
+// export default function PostsFeed() {
+//   const [feedError, setFeedError] = useState(null);
+//   const { friendsList } = useOutletContext();
+//   const friendIds = friendsList.map((friend) => friend.id);
+
+//   const fetchPostData = async () => {
+//     const response = await axios.get("http://localhost:3000/users/get-posts", {
+//       params: { ids: friendIds },
+//     });
+//     if (response.data.posts) {
+//       return response.data;
+//     } else {
+//       throw new Error("Error loading posts feed");
+//     }
+//   };
+
+//   const postsQuery = useQuery({
+//     queryKey: ["posts", friendIds],
+//     queryFn: fetchPostData,
+//   });
+
+//   useEffect(() => {
+//     if (postsQuery.isSuccess) {
+//       setFeedError(null);
+//     }
+//     if (postsQuery.isError) {
+//       setFeedError(postsQuery.error.message);
+//     }
+//   }, [postsQuery.error?.message, postsQuery.isError, postsQuery.isSuccess]);
+
+//   if (postsQuery.isLoading) return <h2>Loading feed...</h2>;
+
+//   return (
+//     <div>
+//       {feedError && <h2>{feedError}</h2>}
+//       {postsQuery.data.posts.length > 0 ? (
+//         postsQuery.data.posts.map((post) => {
+//           return <Post key={post.id} postContent={post} feedPost={true} />;
+//         })
+//       ) : (
+//         <h2>No posts to display...</h2>
+//       )}
+//     </div>
+//   );
+// }
