@@ -78,6 +78,8 @@ module.exports.get_posts = asyncHandler(async (req, res) => {
   if (ids.length === 0) {
     return res.json({ posts: [] });
   }
+  const { page, limit } = req.query;
+  const skip = (page - 1) * limit;
   const posts = await prisma.post.findMany({
     where: {
       authorId: {
@@ -87,6 +89,8 @@ module.exports.get_posts = asyncHandler(async (req, res) => {
     orderBy: {
       postedAt: "desc",
     },
+    skip: Number(skip),
+    take: Number(limit),
     include: {
       author: true,
       likes: true,
