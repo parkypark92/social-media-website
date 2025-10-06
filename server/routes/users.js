@@ -34,6 +34,10 @@ router.get("/conversations", controller.get_conversations);
 router.post("/create-conversation", controller.create_conversation);
 router.post("/send-message", controller.send_message);
 router.post("/message-seen", controller.update_message_seen);
+router.post(
+  "/message-notifications-seen",
+  controller.update_message_notifications_seen
+);
 router.get("/get-notifications", controller.get_user_notifications);
 router.post("/post-notification", controller.create_post_notification);
 router.post(

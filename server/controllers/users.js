@@ -40,6 +40,7 @@ module.exports.get_profile_info = asyncHandler(async (req, res, next) => {
             include: {
               author: true,
             },
+            take: 1,
           },
         },
       },
@@ -387,6 +388,7 @@ module.exports.send_message = asyncHandler(async (req, res, next) => {
           lastMessageAt: message.createdAt,
           lastMessageSenderId: req.body.senderId,
           lastMessageSeen: false,
+          newMessageNotificationSeen: false,
         },
       });
       res.status(200).json({ msg: "Message sent", message, conversation });
@@ -415,6 +417,29 @@ module.exports.update_message_seen = asyncHandler(async (req, res, next) => {
   });
   res.status(200).json({ updatedChat });
 });
+
+module.exports.update_message_notifications_seen = asyncHandler(
+  async (req, res, next) => {
+    const updatedConversations = await prisma.conversation.updateMany({
+      where: {
+        AND: [
+          {
+            OR: [{ userAId: req.query.userId }, { userBId: req.query.userId }],
+          },
+          {
+            lastMessageSenderId: {
+              not: req.query.userId,
+            },
+          },
+        ],
+      },
+      data: {
+        newMessageNotificationSeen: true,
+      },
+    });
+    res.status(200).json({ updatedConversations });
+  }
+);
 
 module.exports.get_user_notifications = asyncHandler(async (req, res, next) => {
   const notifications = await prisma.notification.findMany({
