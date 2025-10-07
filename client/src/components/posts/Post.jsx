@@ -1,6 +1,7 @@
 import ProfilePicture from "../profilePicture/ProfilePicture";
 import CreateComment from "../comments/CreateComment";
 import Comments from "../comments/Comments";
+import LatestComment from "../comments/LatestComment";
 import PropTypes from "prop-types";
 import styles from "./Post.module.css";
 import axios from "axios";
@@ -13,6 +14,7 @@ export default function Post({ postContent, feedPost = false }) {
   const { user } = useOutletContext();
   const queryClient = useQueryClient();
   const socket = useSocket();
+  const [latestComment] = postContent.comments;
 
   //LIKE FUNCTIONS
   const handleLikePost = async (data) => {
@@ -135,8 +137,14 @@ export default function Post({ postContent, feedPost = false }) {
         <span>{postContent.likes.length}</span>
       </div>
       <CreateComment postInfo={postContent}></CreateComment>
-      <Comments comments={postContent.comments}></Comments>
-      {feedPost && <Link to={`/post/${postContent.id}`}>View Post</Link>}
+      {feedPost ? (
+        <>
+          <LatestComment comment={latestComment}></LatestComment>
+          <Link to={`/post/${postContent.id}`}>View Post</Link>
+        </>
+      ) : (
+        <Comments comments={postContent.comments}></Comments>
+      )}
     </div>
   );
 }
