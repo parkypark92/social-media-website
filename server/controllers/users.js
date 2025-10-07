@@ -130,6 +130,25 @@ module.exports.get_single_post = asyncHandler(async (req, res, next) => {
   res.status(200).json({ post });
 });
 
+module.exports.get_post_comments = asyncHandler(async (req, res, next) => {
+  const { page, limit } = req.query;
+  const skip = (page - 1) * limit;
+  const comments = await prisma.comment.findMany({
+    where: {
+      postId: req.query.postId,
+    },
+    include: {
+      author: true,
+    },
+    orderBy: {
+      postedAt: "desc",
+    },
+    skip: Number(skip),
+    take: Number(limit),
+  });
+  res.status(200).json({ comments });
+});
+
 module.exports.get_all_friends = asyncHandler(async (req, res, next) => {
   const friendsList = await prisma.friendship.findMany({
     where: {

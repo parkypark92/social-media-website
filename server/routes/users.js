@@ -16,6 +16,7 @@ router.get("/profile-info", controller.get_profile_info);
 router.post("/create-post", controller.create_post);
 router.get("/get-posts", controller.get_posts);
 router.get("/get-single-post", controller.get_single_post);
+router.get("/get-post-comments", controller.get_post_comments);
 router.get("/get-friends", controller.get_all_friends);
 router.get("/get-requests-preview", controller.get_requests_preview);
 router.get("/users-preview", controller.get_users_preview);
