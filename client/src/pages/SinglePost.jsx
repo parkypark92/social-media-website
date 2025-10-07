@@ -31,9 +31,7 @@ export default function SinglePost() {
 
   return (
     <div className={styles.container}>
-      {postQuery.data.post && (
-        <Post postContent={postQuery.data.post} feedPost={false}></Post>
-      )}
+      {postQuery.data.post && <Post postContent={postQuery.data.post}></Post>}
     </div>
   );
 }

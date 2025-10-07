@@ -14,7 +14,6 @@ export default function Post({ postContent, feedPost = false }) {
   const { user } = useOutletContext();
   const queryClient = useQueryClient();
   const socket = useSocket();
-  const [latestComment] = postContent.comments;
 
   //LIKE FUNCTIONS
   const handleLikePost = async (data) => {
@@ -139,11 +138,11 @@ export default function Post({ postContent, feedPost = false }) {
       <CreateComment postInfo={postContent}></CreateComment>
       {feedPost ? (
         <>
-          <LatestComment comment={latestComment}></LatestComment>
+          <LatestComment latestComment={postContent.comments}></LatestComment>
           <Link to={`/post/${postContent.id}`}>View Post</Link>
         </>
       ) : (
-        <Comments comments={postContent.comments}></Comments>
+        <Comments postId={postContent.id}></Comments>
       )}
     </div>
   );

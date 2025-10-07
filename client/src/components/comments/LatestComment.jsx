@@ -2,7 +2,8 @@ import ProfilePicture from "../profilePicture/ProfilePicture";
 import PropTypes from "prop-types";
 import styles from "./Comments.module.css";
 
-export default function LatestComment({ comment }) {
+export default function LatestComment({ latestComment }) {
+  const [comment] = latestComment;
   return (
     <div>
       {comment ? (
@@ -26,5 +27,5 @@ export default function LatestComment({ comment }) {
 }
 
 LatestComment.propTypes = {
-  comment: PropTypes.object,
+  latestComment: PropTypes.array,
 };
