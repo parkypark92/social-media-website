@@ -1,6 +1,5 @@
 const passport = require("passport");
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../config/prisma");
 const supabase = require("../config/supabase").supabase;
 const { decode } = require("base64-arraybuffer");
 const asyncHandler = require("express-async-handler");

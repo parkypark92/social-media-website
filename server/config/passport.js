@@ -2,8 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../config/prisma");
 
 const pathToKey = path.join(__dirname, "..", "id_rsa_pub.pem");
 const PUB_KEY = fs.readFileSync(pathToKey, "utf8");
