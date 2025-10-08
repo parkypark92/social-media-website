@@ -1,6 +1,3 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
-const asyncHandler = require("express-async-handler");
 const { issueJWT } = require("../utils/jwtUtils");
 
 module.exports.process_login = (req, res, next) => {
