@@ -22,8 +22,9 @@ app.set("port", port);
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://192.168.0.17:5173"],
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
@@ -53,7 +54,7 @@ io.on("connection", (socket) => {
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(port, "0.0.0.0");
 server.on("error", onError);
 server.on("listening", onListening);
 
