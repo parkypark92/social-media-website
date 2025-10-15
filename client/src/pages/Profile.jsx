@@ -13,12 +13,11 @@ export default function Profile() {
   const isOwnProfile = user.id === userId;
 
   const fetchUserData = async () => {
-    const response = await axios.get(
-      "http://localhost:3000/users/profile-info",
-      {
-        params: { userId },
-      }
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.get(`${BASE_URL}/users/profile-info`, {
+      params: { userId },
+    });
     if (response.data.profileInfo) {
       return response.data;
     } else {

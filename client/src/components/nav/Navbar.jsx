@@ -32,10 +32,11 @@ export default function Navbar({
   };
 
   const handleSeenNotifications = async (userId) => {
-    const response = await axios.post(
-      "http://localhost:3000/users/seen-notifications",
-      { params: userId }
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.post(`${BASE_URL}/users/seen-notifications`, {
+      params: userId,
+    });
     if (response.status === 200) {
       return response.data.updatedNotifications;
     }
@@ -55,8 +56,10 @@ export default function Navbar({
   };
 
   const handleMessageNotificationSeen = async (userId) => {
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
     const response = await axios.post(
-      "http://localhost:3000/users/message-notifications-seen",
+      `${BASE_URL}/users/message-notifications-seen`,
       { params: userId }
     );
     if (response.status === 200) {

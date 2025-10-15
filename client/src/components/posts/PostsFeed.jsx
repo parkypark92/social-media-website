@@ -11,7 +11,9 @@ export default function PostsFeed() {
 
   const fetchPostData = async ({ pageParam = 1 }) => {
     const limit = 10;
-    const response = await axios.get("http://localhost:3000/users/get-posts", {
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.get(`${BASE_URL}/users/get-posts`, {
       params: { ids: friendIds, page: pageParam, limit },
     });
     if (response.data.posts) {

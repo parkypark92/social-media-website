@@ -15,10 +15,11 @@ export default function Messages() {
   const queryClient = useQueryClient();
 
   const updateNewMessageSeen = async (currentChat) => {
-    const response = await axios.post(
-      "http://localhost:3000/users/message-seen",
-      { currentChat }
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.post(`${BASE_URL}/users/message-seen`, {
+      currentChat,
+    });
     if (response.status === 200) {
       return response.data.updatedChat;
     }

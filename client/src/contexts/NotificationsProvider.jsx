@@ -11,12 +11,11 @@ export function NotificationsProvider({ userId, children }) {
   const queryClient = useQueryClient();
 
   const fetchNotifications = async () => {
-    const response = await axios.get(
-      "http://localhost:3000/users/get-notifications",
-      {
-        params: { userId },
-      }
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.get(`${BASE_URL}/users/get-notifications`, {
+      params: { userId },
+    });
     if (response.status === 200) {
       return response.data.notifications;
     } else {

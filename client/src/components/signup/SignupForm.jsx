@@ -20,8 +20,9 @@ export default function SignupForm({ setErrorMessage }) {
           ? null
           : `${data.get("day")}-${data.get("month")}-${data.get("year")}`,
     };
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-    const response = await axios.post("http://localhost:3000/signup", formData);
+    const response = await axios.post(`${BASE_URL}/signup`, formData);
     if (response.data.status !== 200) {
       setErrorMessage(response.data.errors);
     } else {

@@ -17,10 +17,9 @@ export default function Post({ postContent, feedPost = false }) {
 
   //LIKE FUNCTIONS
   const handleLikePost = async (data) => {
-    const response = await axios.post(
-      "http://localhost:3000/users/like-post",
-      data
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.post(`${BASE_URL}/users/like-post`, data);
     if (response.status === 200) {
       return response.data.updatedPost;
     } else {
@@ -55,8 +54,10 @@ export default function Post({ postContent, feedPost = false }) {
       senderId: user.id,
       postId: postData.id,
     };
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
     const response = await axios.post(
-      "http://localhost:3000/users/post-notification",
+      `${BASE_URL}/users/post-notification`,
       data
     );
     if (response.status === 200) {
@@ -73,10 +74,9 @@ export default function Post({ postContent, feedPost = false }) {
 
   //UNLIKE FUNCTIONS
   const handleUnlikePost = async (data) => {
-    const response = await axios.post(
-      "http://localhost:3000/users/unlike-post",
-      data
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.post(`${BASE_URL}/users/unlike-post`, data);
     if (response.status === 200) {
       return response.data;
     } else {

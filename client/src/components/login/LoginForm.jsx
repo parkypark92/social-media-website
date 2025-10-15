@@ -12,7 +12,8 @@ export default function LoginForm({ setLoginErrors }) {
       username: data.get("username"),
       password: data.get("password"),
     };
-    const response = await axios.post("http://localhost:3000/login", formData);
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    const response = await axios.post(`${BASE_URL}/login`, formData);
     if (response.data.status !== 200) {
       setLoginErrors(response.data.errors);
     } else {

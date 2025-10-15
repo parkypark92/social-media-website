@@ -7,10 +7,10 @@ import styles from "./Comments.module.css";
 export default function Comments({ postId }) {
   const fetchComments = async ({ pageParam = 1 }) => {
     const limit = 2;
-    const response = await axios.get(
-      "http://localhost:3000/users/get-post-comments",
-      { params: { postId, limit, page: pageParam } }
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    const response = await axios.get(`${BASE_URL}/users/get-post-comments`, {
+      params: { postId, limit, page: pageParam },
+    });
     if (response.data.comments) {
       return {
         comments: response.data.comments,

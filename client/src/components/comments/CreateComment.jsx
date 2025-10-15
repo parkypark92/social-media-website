@@ -18,10 +18,9 @@ export default function CreateComment({ postInfo }) {
 
   //COMMENT FUNCTIONS
   const submitComment = async (data) => {
-    const response = await axios.post(
-      "http://localhost:3000/users/create-comment",
-      data
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.post(`${BASE_URL}/users/create-comment`, data);
     if (response.status === 200) {
       return response.data;
     } else {

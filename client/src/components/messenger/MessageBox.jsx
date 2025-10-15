@@ -42,8 +42,10 @@ export default function MessageBox({
   }, [friendsList, allChats]);
 
   const createConversation = async (data) => {
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
     const response = await axios.post(
-      "http://localhost:3000/users/create-conversation",
+      `${BASE_URL}/users/create-conversation`,
       data
     );
     if (response.status === 200) {
@@ -52,10 +54,9 @@ export default function MessageBox({
   };
 
   const sendMessage = async (data) => {
-    const response = await axios.post(
-      "http://localhost:3000/users/send-message",
-      data
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.post(`${BASE_URL}/users/send-message`, data);
     if (response.status === 200) {
       return response.data;
     } else {

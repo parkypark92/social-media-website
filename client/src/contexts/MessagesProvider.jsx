@@ -14,10 +14,11 @@ export function MessagesProvider({ userId, children }) {
   const lastPartOfUrlPath = pathname.split("/").pop();
 
   const fetchConversations = async () => {
-    const response = await axios.get(
-      "http://localhost:3000/users/conversations",
-      { params: { id: userId } }
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.get(`${BASE_URL}/users/conversations`, {
+      params: { id: userId },
+    });
     if (response.status === 200) {
       return response.data.chats ? response.data.chats : [];
     } else {
@@ -32,8 +33,10 @@ export function MessagesProvider({ userId, children }) {
   });
 
   const handleMessageNotificationSeen = async (userId) => {
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
     const response = await axios.post(
-      "http://localhost:3000/users/message-notifications-seen",
+      `${BASE_URL}/users/message-notifications-seen`,
       { params: userId }
     );
     if (response.status === 200) {

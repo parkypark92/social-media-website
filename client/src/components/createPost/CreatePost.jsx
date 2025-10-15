@@ -14,8 +14,10 @@ export default function CreatePost() {
       text: data.get("newPost"),
       userId: user.id,
     };
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
     const response = await axios.post(
-      "http://localhost:3000/users/create-post",
+      `${BASE_URL}/users/create-post`,
       formData
     );
     if (response.status === 201) {

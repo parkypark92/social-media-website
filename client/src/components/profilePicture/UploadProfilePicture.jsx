@@ -55,8 +55,10 @@ export default function UploadProfilePicture() {
       const formData = new FormData();
       formData.append("file", croppedImage);
       formData.append("id", user.id);
+      const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
       const response = await axios.post(
-        "http://localhost:3000/users/upload-profile-picture",
+        `${BASE_URL}/users/upload-profile-picture`,
         formData
       );
       if (response.status === 200) {

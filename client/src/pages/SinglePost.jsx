@@ -8,12 +8,11 @@ export default function SinglePost() {
   const { postId } = useParams();
 
   const fetchSinglePost = async () => {
-    const response = await axios.get(
-      "http://localhost:3000/users/get-single-post",
-      {
-        params: { postId },
-      }
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.get(`${BASE_URL}/users/get-single-post`, {
+      params: { postId },
+    });
     if (response.data.post) {
       console.log(response.data.post);
       return response.data;

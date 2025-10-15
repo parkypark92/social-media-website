@@ -20,10 +20,12 @@ function App() {
     const fetchUser = async () => {
       try {
         const headers = { Authorization: token };
-        const response = await axios.get(
-          "http://localhost:3000/users/authenticate",
-          { headers }
-        );
+        const BASE_URL =
+          import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+        const response = await axios.get(`${BASE_URL}/users/authenticate`, {
+          headers,
+        });
 
         if (response.data.statusCode === 400) {
           setIsAuthenticated(false);
@@ -45,10 +47,11 @@ function App() {
   }, [token, setUser]);
 
   const fetchFriends = async () => {
-    const response = await axios.get(
-      "http://localhost:3000/users/get-friends",
-      { params: { id: user.id } }
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.get(`${BASE_URL}/users/get-friends`, {
+      params: { id: user.id },
+    });
     if (response.data.friendsList) {
       const friends = response.data.friendsList.map((friendship) => {
         if (friendship.senderId === user.id) {

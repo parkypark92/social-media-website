@@ -9,10 +9,11 @@ export default function ProfilePicture({ userId, size = 48, link = true }) {
   const [profilePicture, setProfilePicture] = useState(null);
 
   const fetchProfilePicture = async () => {
-    const response = await axios.get(
-      "http://localhost:3000/users/profile-picture",
-      { params: { userId } }
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.get(`${BASE_URL}/users/profile-picture`, {
+      params: { userId },
+    });
     if (response.status === 200) {
       return response.data.imageUrl
         ? response.data

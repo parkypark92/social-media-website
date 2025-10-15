@@ -12,12 +12,11 @@ export default function RequestFriends({ limit }) {
   const socket = useSocket();
 
   const fetchUsers = async () => {
-    const response = await axios.get(
-      "http://localhost:3000/users/users-preview",
-      {
-        params: { id: user?.id, limit },
-      }
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.get(`${BASE_URL}/users/users-preview`, {
+      params: { id: user?.id, limit },
+    });
     if (response.data.users) {
       return response.data;
     } else {
@@ -32,10 +31,9 @@ export default function RequestFriends({ limit }) {
 
   //REQUEST FUNCTIONS
   const sendRequest = async (data) => {
-    const response = await axios.post(
-      "http://localhost:3000/users/friend-request",
-      data
-    );
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+    const response = await axios.post(`${BASE_URL}/users/friend-request`, data);
     if (response.status === 200) {
       return response.data.friendRequest;
     } else {
@@ -80,8 +78,10 @@ export default function RequestFriends({ limit }) {
       recipientId: friendshipData.receiverId,
       senderId: user.id,
     };
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
     const response = await axios.post(
-      "http://localhost:3000/users/friend-request-notification",
+      `${BASE_URL}/users/friend-request-notification`,
       data
     );
     if (response.status === 200) {
