@@ -1,4 +1,6 @@
 .usersList {
+  max-width: 1440px;
+  margin: auto;
   list-style: none;
   height: 64px;
   margin-bottom: 8px;
@@ -13,7 +15,18 @@
 }
 
 .avatar {
+  min-width: 0;
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.avatar li {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.usersList button {
+  min-width: fit-content;
 }

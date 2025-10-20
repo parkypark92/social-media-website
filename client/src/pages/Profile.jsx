@@ -76,6 +76,7 @@ export default function Profile() {
                 <h2>User has no posts yet...</h2>
               )}
             </div>
+            <div className={styles.emptySpace}></div>
           </>
         )
       ) : (

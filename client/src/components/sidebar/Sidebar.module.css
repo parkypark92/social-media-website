@@ -1,0 +1,11 @@
+.list {
+  width: 100%;
+}
+
+.listItem {
+  list-style: none;
+  text-align: left;
+  padding: 8px 8px;
+  font-size: 1.2em;
+  font-weight: bold;
+}

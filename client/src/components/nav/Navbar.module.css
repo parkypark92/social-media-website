@@ -6,11 +6,17 @@
   top: 0;
   left: 0;
   background-color: #fff;
+  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
+  z-index: 1;
+}
+
+.navbarContent {
+  max-width: 1440px;
+  margin: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
-  z-index: 1;
+  position: relative;
 }
 
 .icons {

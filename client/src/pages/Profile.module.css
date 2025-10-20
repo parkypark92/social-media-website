@@ -1,18 +1,24 @@
 .profileContainer {
   padding: 36px 0;
   width: 100%;
+  max-width: 1440px;
+  margin: auto;
   display: flex;
   gap: 24px;
 }
 
 .infoDisplay {
-  width: 25%;
+  flex: 0 0 320px;
 }
 
 .postsDisplay {
-  width: 50%;
+  flex-grow: 1;
 }
 
 .friendsDisplay {
-  width: 25%;
+  flex: 0 0 320px;
+}
+
+.emptySpace {
+  flex: 0 0 320px;
 }
