@@ -1,5 +1,5 @@
 .navbar {
-  width: 100vw;
+  width: 100%;
   height: 56px;
   padding: 8px 32px;
   position: fixed;
@@ -77,4 +77,14 @@
 .newMessagesCount {
   top: 0;
   left: 155px;
+}
+
+@media (max-width: 640px) {
+  .icons {
+    display: none;
+  }
+
+  .navbar {
+    padding: 8px;
+  }
 }

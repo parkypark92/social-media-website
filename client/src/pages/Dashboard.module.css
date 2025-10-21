@@ -1,7 +1,7 @@
 .dashboardDisplay {
   display: flex;
   gap: 24px;
-  padding: 36px 0;
+  padding: 16px 0;
   max-width: 1440px;
   margin: auto;
 }
@@ -11,9 +11,25 @@
 }
 
 .feedDisplay {
-  flex-grow: 1;
+  width: 100%;
 }
 
 .friendsDisplay {
   min-width: 320px;
+}
+
+@media (max-width: 1530px) {
+  .menuDisplay {
+    flex: 0 0 160px;
+  }
+}
+
+@media (max-width: 992px) {
+  .menuDisplay {
+    display: none;
+  }
+
+  .friendsDisplay {
+    display: none;
+  }
 }
