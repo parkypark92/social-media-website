@@ -104,12 +104,17 @@ export default function Post({ postContent, feedPost = false }) {
   return (
     <div className={styles.postContainer}>
       <div className={styles.postHeader}>
-        <ProfilePicture userId={postContent.author.id} />
-        <div className={styles.authorAndDate}>
-          <h3 style={{ margin: 0 }}>{postContent.author.username}</h3>
-          <small>
-            {format(parseISO(postContent.postedAt), "MMMM dd, yyyy")}
-          </small>
+        <div className={styles.headerLeft}>
+          <ProfilePicture userId={postContent.author.id} />
+          <div className={styles.authorAndDate}>
+            <h3 style={{ margin: 0 }}>{postContent.author.username}</h3>
+            <small>
+              {format(parseISO(postContent.postedAt), "MMMM dd, yyyy")}
+            </small>
+          </div>
+        </div>
+        <div className={styles.headerRight}>
+          <img src="/save.png" alt="" height={24} />
         </div>
       </div>
       <p>{postContent.text}</p>
