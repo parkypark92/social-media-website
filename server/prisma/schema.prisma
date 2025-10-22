@@ -25,6 +25,7 @@ model User {
   posts             Post[]         @relation("PostAuthor")
   comments          Comment[]
   likes             Post[]         @relation("PostLikes")
+  savedPosts        Post[]         @relation("SavedPosts")
   messages          Message[]
   conversationA     Conversation[] @relation("UserA")
   conversationB     Conversation[] @relation("UserB")
@@ -53,6 +54,7 @@ model Post {
   comments          Comment[]
   likes             User[]         @relation("PostLikes")
   notificationLinks Notification[]
+  saves             User[]         @relation("SavedPosts")
 }
 
 model Comment {
