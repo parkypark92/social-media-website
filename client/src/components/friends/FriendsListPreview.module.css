@@ -1,4 +1,6 @@
 .container {
+  max-width: 1440px;
+  margin: auto;
   list-style: none;
   margin-bottom: 8px;
   background-color: rgb(255, 255, 255);
