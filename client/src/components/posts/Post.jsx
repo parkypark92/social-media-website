@@ -101,6 +101,62 @@ export default function Post({ postContent, feedPost = false }) {
     });
   };
 
+  //SAVE POST FUNCTIONS
+  const handleSavePost = async (data) => {
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    const response = await axios.post(`${BASE_URL}/users/save-post`, data);
+    if (response.status === 200) {
+      return response.data.savedPost;
+    } else {
+      alert("An error occured, please try again");
+    }
+  };
+
+  const savePostMutation = useMutation({
+    mutationFn: handleSavePost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["post", postContent.id] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+    },
+  });
+
+  const callSavePostMutation = (e) => {
+    e.preventDefault();
+    savePostMutation.mutate({
+      postId: postContent.id,
+      userId: user.id,
+    });
+  };
+
+  //UNSAVE POST FUNCTIONS
+  const handleUnsavePost = async (data) => {
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    const response = await axios.post(`${BASE_URL}/users/unsave-post`, data);
+    if (response.status === 200) {
+      return response.data.unsavedPost;
+    } else {
+      alert("An error occured, please try again");
+    }
+  };
+
+  const unsavePostMutation = useMutation({
+    mutationFn: handleUnsavePost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["post", postContent.id] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+    },
+  });
+
+  const callUnsavePostMutation = (e) => {
+    e.preventDefault();
+    unsavePostMutation.mutate({
+      postId: postContent.id,
+      userId: user.id,
+    });
+  };
+
   return (
     <div className={styles.postContainer}>
       <div className={styles.postHeader}>
@@ -114,7 +170,21 @@ export default function Post({ postContent, feedPost = false }) {
           </div>
         </div>
         <div className={styles.headerRight}>
-          <img src="/save.png" alt="" height={24} />
+          {postContent.saves?.some((e) => e.id === user?.id) ? (
+            <button
+              className={styles.postButton}
+              onClick={callUnsavePostMutation}
+            >
+              <img src="/unsave.png" alt="" height={24} />
+            </button>
+          ) : (
+            <button
+              className={styles.postButton}
+              onClick={callSavePostMutation}
+            >
+              <img src="/save.png" alt="" height={24} />
+            </button>
+          )}
         </div>
       </div>
       <p>{postContent.text}</p>
