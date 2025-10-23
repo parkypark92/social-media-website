@@ -133,6 +133,40 @@ module.exports.get_single_post = asyncHandler(async (req, res, next) => {
   res.status(200).json({ post });
 });
 
+module.exports.get_saved_posts = asyncHandler(async (req, res, next) => {
+  const { page, limit } = req.query;
+  const skip = (page - 1) * limit;
+  const savedPosts = await prisma.post.findMany({
+    where: {
+      saves: {
+        some: {
+          id: req.params.userId,
+        },
+      },
+    },
+    orderBy: {
+      postedAt: "desc",
+    },
+    skip: Number(skip),
+    take: Number(limit),
+    include: {
+      author: true,
+      likes: true,
+      saves: true,
+      comments: {
+        include: {
+          author: true,
+        },
+        orderBy: {
+          postedAt: "desc",
+        },
+        take: 1,
+      },
+    },
+  });
+  res.status(200).json({ savedPosts });
+});
+
 module.exports.get_post_comments = asyncHandler(async (req, res, next) => {
   const { page, limit } = req.query;
   const skip = (page - 1) * limit;
