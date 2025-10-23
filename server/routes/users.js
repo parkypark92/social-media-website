@@ -24,6 +24,8 @@ router.post("/friend-request", controller.send_friend_request);
 router.post("/answer-request", controller.answer_friend_request);
 router.post("/like-post", controller.like_post);
 router.post("/unlike-post", controller.unlike_post);
+router.post("/save-post", controller.save_post);
+router.post("/unsave-post", controller.unsave_post);
 router.post("/create-comment", controller.create_comment);
 router.post(
   "/upload-profile-picture",

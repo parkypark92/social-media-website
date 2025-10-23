@@ -32,6 +32,7 @@ module.exports.get_profile_info = asyncHandler(async (req, res, next) => {
         include: {
           author: true,
           likes: true,
+          saves: true,
           comments: {
             orderBy: {
               postedAt: "desc",
@@ -61,6 +62,7 @@ module.exports.create_post = asyncHandler(async (req, res) => {
     include: {
       author: true,
       likes: true,
+      saves: true,
       comments: {
         include: {
           author: true,
@@ -93,6 +95,7 @@ module.exports.get_posts = asyncHandler(async (req, res) => {
     include: {
       author: true,
       likes: true,
+      saves: true,
       comments: {
         include: {
           author: true,
@@ -116,6 +119,7 @@ module.exports.get_single_post = asyncHandler(async (req, res, next) => {
     include: {
       author: true,
       likes: true,
+      saves: true,
       comments: {
         include: {
           author: true,
@@ -274,6 +278,38 @@ module.exports.unlike_post = asyncHandler(async (req, res, next) => {
     },
   });
   res.status(200).json({ msg: "Post unliked!", updatedPost });
+});
+
+module.exports.save_post = asyncHandler(async (req, res, next) => {
+  const savedPost = await prisma.post.update({
+    where: {
+      id: req.body.postId,
+    },
+    data: {
+      saves: {
+        connect: {
+          id: req.body.userId,
+        },
+      },
+    },
+  });
+  res.status(200).json({ msg: "Post saved", savedPost });
+});
+
+module.exports.unsave_post = asyncHandler(async (req, res, next) => {
+  const unsavedPost = await prisma.post.update({
+    where: {
+      id: req.body.postId,
+    },
+    data: {
+      saves: {
+        disconnect: {
+          id: req.body.userId,
+        },
+      },
+    },
+  });
+  res.status(200).json({ msg: "Post unsaved", unsavedPost });
 });
 
 module.exports.create_comment = asyncHandler(async (req, res, next) => {
