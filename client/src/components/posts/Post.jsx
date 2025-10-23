@@ -33,6 +33,7 @@ export default function Post({ postContent, feedPost = false }) {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postData.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["saved-posts", user.id] });
       likeNotificationMutation.mutate(postData);
     },
   });
@@ -90,6 +91,7 @@ export default function Post({ postContent, feedPost = false }) {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postContent.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["saved-posts", user.id] });
     },
   });
 
@@ -118,6 +120,7 @@ export default function Post({ postContent, feedPost = false }) {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postContent.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["saved-posts", user.id] });
     },
   });
 
@@ -146,6 +149,7 @@ export default function Post({ postContent, feedPost = false }) {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postContent.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["saved-posts", user.id] });
     },
   });
 

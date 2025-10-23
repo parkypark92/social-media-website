@@ -12,7 +12,7 @@ export default function Sidebar() {
       <Link to={`/profile/${user.id}`} className={styles.menuLink}>
         <li className={styles.listItem}>Profile</li>
       </Link>
-      <Link to="/" className={styles.menuLink}>
+      <Link to={`/${user.id}/saved`} className={styles.menuLink}>
         <li className={styles.listItem}>Saved</li>
       </Link>
       <Link to={`/${user.id}/friends`} className={styles.menuLink}>

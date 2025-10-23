@@ -11,6 +11,7 @@ import FriendRequests from "../pages/FriendRequests";
 import FriendsList from "../pages/FriendsList";
 import Messages from "../pages/Messages";
 import SinglePost from "../pages/SinglePost";
+import SavedPosts from "../pages/SavedPosts";
 import UploadPicture from "../pages/UploadPicture";
 import ProtectedRoute from "./ProtectedRoute";
 import { Navigate } from "react-router-dom";
@@ -84,6 +85,14 @@ const Router = () => {
           element: (
             <ProtectedRoute>
               <Messages />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/:userId/saved",
+          element: (
+            <ProtectedRoute>
+              <SavedPosts></SavedPosts>
             </ProtectedRoute>
           ),
         },
