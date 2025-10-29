@@ -46,7 +46,10 @@ export default function Messages() {
     if (chats) {
       if (chats.length === 0) {
         setNewChat(true);
-      } else if (currentChat === null) {
+      } else if (chats.length > 0) {
+        setNewChat(false);
+      }
+      if (currentChat === null) {
         setCurrentChat(chats[0]);
       } else if (chats.some((chat) => chat.id === currentChat.id)) {
         const [updatedChat] = chats.filter(
