@@ -8,6 +8,7 @@ import { SocketProvider } from "./contexts/SocketProvider";
 import { OnlineUsersProvider } from "./contexts/OnlineUsers";
 import { NotificationsProvider } from "./contexts/NotificationsProvider";
 import { MessagesProvider } from "./contexts/MessagesProvider";
+import { ScrollRestoration } from "react-router-dom";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -104,6 +105,7 @@ function App() {
             ></Navbar>
             <div className="navbarOffset"></div>
             <OnlineUsersProvider>
+              <ScrollRestoration />
               <Outlet
                 context={{
                   user,
