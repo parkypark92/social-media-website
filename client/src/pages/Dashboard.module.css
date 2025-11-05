@@ -18,6 +18,10 @@
   min-width: 320px;
 }
 
+.fixed {
+  position: fixed;
+}
+
 @media (max-width: 1530px) {
   .menuDisplay {
     flex: 0 0 160px;
