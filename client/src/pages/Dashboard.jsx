@@ -10,7 +10,7 @@ export default function Dashboard() {
   return (
     <div className={styles.dashboardDisplay}>
       <div className={styles.menuDisplay}>
-        <div className={styles.fixed}>
+        <div className={styles.sidebarFixed}>
           <Sidebar></Sidebar>
         </div>
       </div>
@@ -19,7 +19,7 @@ export default function Dashboard() {
         <PostsFeed />
       </div>
       <div className={styles.friendsDisplay}>
-        <div className={styles.fixed}>
+        <div className={styles.friendsFixed}>
           <h2>Friend Requests</h2>
           <FriendRequestsPreview limit={4} />
           <h2>Find some new friends!</h2>

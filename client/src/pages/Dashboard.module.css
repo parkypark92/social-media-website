@@ -18,13 +18,18 @@
   min-width: 320px;
 }
 
-.fixed {
+.sidebarFixed,
+.friendsFixed {
   position: fixed;
+  width: 320px;
 }
 
 @media (max-width: 1530px) {
   .menuDisplay {
     flex: 0 0 160px;
+  }
+  .sidebarFixed {
+    width: 160px;
   }
 }
 
