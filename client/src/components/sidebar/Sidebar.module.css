@@ -13,6 +13,7 @@
 
 .menuLink {
   color: #213547;
+  width: 100%;
 }
 
 .listItem:hover {

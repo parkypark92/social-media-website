@@ -1,6 +1,7 @@
 import SignupForm from "../components/signup/SignupForm";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import styles from "./Signup.module.css";
 
 export default function Signup() {
   const [errorMessage, setErrorMessage] = useState([]);
@@ -8,11 +9,11 @@ export default function Signup() {
     <div>
       <h2>Signup</h2>
       {errorMessage && (
-        <ul>
+        <div className={styles.errors}>
           {errorMessage.map((error) => (
-            <li key={error.msg}>{error.msg}</li>
+            <p key={error.msg}>{error.msg}</p>
           ))}
-        </ul>
+        </div>
       )}
       <SignupForm setErrorMessage={setErrorMessage}></SignupForm>
       <p>

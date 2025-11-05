@@ -1,6 +1,7 @@
 import LoginForm from "../components/login/LoginForm";
 import { useState, useEffect } from "react";
 import { useOutletContext, useNavigate, Link } from "react-router-dom";
+import styles from "./Login.module.css";
 
 export default function Login() {
   const [loginErrors, setLoginErrors] = useState([]);
@@ -15,14 +16,14 @@ export default function Login() {
 
   return (
     <div>
-      {loginErrors && (
-        <ul>
-          {loginErrors.map((error) => {
-            return <li key={error.msg}>{error.msg}</li>;
-          })}
-        </ul>
-      )}
       <h2>Login</h2>
+      {loginErrors && (
+        <div className={styles.errors}>
+          {loginErrors.map((error) => {
+            return <p key={error.msg}>{error.msg}</p>;
+          })}
+        </div>
+      )}
       <LoginForm setLoginErrors={setLoginErrors}></LoginForm>
       <p>
         Don&apos;t have an account yet? No problem,{" "}
