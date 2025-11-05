@@ -22,3 +22,18 @@
 .emptySpace {
   flex: 0 0 320px;
 }
+
+@media (max-width: 1530px) {
+  .friendsDisplay {
+    display: none;
+  }
+
+  .infoDisplay {
+    flex: 0 0 0;
+  }
+
+  .profileContainer {
+    flex-direction: column;
+    max-width: 932px;
+  }
+}
