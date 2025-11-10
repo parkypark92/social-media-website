@@ -24,7 +24,7 @@ export default function Sidebar() {
           <li className={styles.listItem}>Saved</li>
         </div>
       </Link>
-      <Link to={`/${user.id}/friends`} className={styles.menuLink}>
+      <Link to={`/${user.id}/friendsList`} className={styles.menuLink}>
         <div className={styles.menuItem}>
           <img src="/friends.png" alt="" height={20} />
           <li className={styles.listItem}>Friends</li>

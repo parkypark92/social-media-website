@@ -116,7 +116,10 @@ export default function Navbar({
               <img src="/home.png" alt="" height={24} />
             </button>
             <div className={styles.vl}></div>
-            <button className={`${styles.navIcon} ${styles.friendsIcon}`}>
+            <button
+              className={`${styles.navIcon} ${styles.friendsIcon}`}
+              onClick={() => navigate(`/${user.id}/friends`)}
+            >
               <img src="/friends-white.png" height={24} />
             </button>
             <div className={`${styles.vl} ${styles.hidden}`}></div>

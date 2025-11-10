@@ -9,6 +9,7 @@ import Signup from "../pages/Signup";
 import FindFriends from "../pages/FindFriends";
 import FriendRequests from "../pages/FriendRequests";
 import FriendsList from "../pages/FriendsList";
+import Friends from "../pages/Friends";
 import Messages from "../pages/Messages";
 import SinglePost from "../pages/SinglePost";
 import SavedPosts from "../pages/SavedPosts";
@@ -73,10 +74,18 @@ const Router = () => {
           ),
         },
         {
-          path: "/:userId/friends",
+          path: "/:userId/friendsList",
           element: (
             <ProtectedRoute>
               <FriendsList></FriendsList>
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/:userId/friends",
+          element: (
+            <ProtectedRoute>
+              <Friends></Friends>
             </ProtectedRoute>
           ),
         },

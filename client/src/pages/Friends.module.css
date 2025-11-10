@@ -1,0 +1,29 @@
+.offset {
+  height: 56px;
+}
+
+.selectButtons {
+  position: fixed;
+  left: 0;
+  height: 56px;
+  background-color: #fff;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.selectButton {
+  background-color: #e3e4e9;
+  color: black;
+  border: none;
+}
+
+.selectButton:focus {
+  outline: none;
+}
+
+.selected {
+  background-color: #98d1ff;
+}
