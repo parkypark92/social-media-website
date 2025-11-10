@@ -26,10 +26,10 @@
 
 @media (max-width: 1530px) {
   .menuDisplay {
-    flex: 0 0 160px;
+    flex: 0 0 176px;
   }
   .sidebarFixed {
-    width: 160px;
+    width: 176px;
   }
 }
 
