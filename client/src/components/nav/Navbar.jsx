@@ -116,6 +116,14 @@ export default function Navbar({
               <img src="/home.png" alt="" height={24} />
             </button>
             <div className={styles.vl}></div>
+            <button className={`${styles.navIcon} ${styles.friendsIcon}`}>
+              <img src="/friends-white.png" height={24} />
+            </button>
+            <div className={`${styles.vl} ${styles.hidden}`}></div>
+            <button className={`${styles.navIcon} ${styles.savedIcon}`}>
+              <img src="/save.png" height={24} />
+            </button>
+            <div className={`${styles.vl} ${styles.hidden}`}></div>
             <button
               className={`${styles.navIcon} ${styles.notificationsIcon}`}
               onClick={handleNotificationIconClick}
