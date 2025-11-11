@@ -74,7 +74,7 @@ const Router = () => {
           ),
         },
         {
-          path: "/:userId/friendsList",
+          path: "/:userId/friends-list",
           element: (
             <ProtectedRoute>
               <FriendsList></FriendsList>

@@ -1,20 +1,22 @@
 import ProfilePicture from "../profilePicture/ProfilePicture";
 import { useOutletContext } from "react-router-dom";
 import { useOnlineUsers } from "../../contexts/OnlineUsers";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import styles from "./FriendsListPreview.module.css";
 import shared from "../../css/SharedStyle.module.css";
+import PropTypes from "prop-types";
 
-export default function FriendsListPreview() {
-  const { friendsList } = useOutletContext();
+export default function FriendsListPreview({ limit }) {
+  const { user, friendsList } = useOutletContext();
   const { onlineUsers } = useOnlineUsers();
   const navigate = useNavigate();
+  let friendsToMap = limit ? friendsList.slice(0, limit) : friendsList;
   return (
     <div>
       <h2>Friends</h2>
-      {friendsList.length ? (
+      {friendsToMap.length ? (
         <ul>
-          {friendsList.map((friend) => {
+          {friendsToMap.map((friend) => {
             return (
               <div className={styles.container} key={friend.id}>
                 <div className={styles.avatar}>
@@ -31,9 +33,17 @@ export default function FriendsListPreview() {
       ) : (
         <p>You are a lone wolf...</p>
       )}
-      <button className={shared.backLink} onClick={() => navigate(-1)}>
-        Back
-      </button>
+      {limit && friendsToMap.length > 0 ? (
+        <Link to={`/${user?.id}/friends-list`}>View all</Link>
+      ) : !limit ? (
+        <button className={shared.backLink} onClick={() => navigate(-1)}>
+          Back
+        </button>
+      ) : undefined}
     </div>
   );
 }
+
+FriendsListPreview.propTypes = {
+  limit: PropTypes.number,
+};

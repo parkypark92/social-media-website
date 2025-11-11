@@ -90,7 +90,7 @@ export default function Profile() {
               )}
             </div>
             <div className={styles.friendsDisplay}>
-              <FriendsListPreview />
+              <FriendsListPreview limit={5} />
             </div>
           </>
         ) : (
