@@ -123,7 +123,10 @@ export default function Navbar({
               <img src="/friends-white.png" height={24} />
             </button>
             <div className={`${styles.vl} ${styles.hidden}`}></div>
-            <button className={`${styles.navIcon} ${styles.savedIcon}`}>
+            <button
+              className={`${styles.navIcon} ${styles.savedIcon}`}
+              onClick={() => navigate(`/${user.id}/saved`)}
+            >
               <img src="/save.png" height={24} />
             </button>
             <div className={`${styles.vl} ${styles.hidden}`}></div>
