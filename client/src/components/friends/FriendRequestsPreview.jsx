@@ -1,15 +1,17 @@
 import ProfilePicture from "../profilePicture/ProfilePicture";
 import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useOutletContext, Link } from "react-router-dom";
+import { useOutletContext, useNavigate, Link } from "react-router-dom";
 import { useSocket } from "../../contexts/SocketProvider";
 import styles from "./FriendRequestPreview.module.css";
+import shared from "../../css/SharedStyle.module.css";
 import PropTypes from "prop-types";
 
 export default function FriendRequestsPreview({ limit }) {
   const { user } = useOutletContext();
   const queryClient = useQueryClient();
   const socket = useSocket();
+  const navigate = useNavigate();
 
   //REQUESTS FUNCTIONS
   const fetchRequests = async () => {
@@ -152,7 +154,9 @@ export default function FriendRequestsPreview({ limit }) {
       {limit && requestsPreviewQuery.data.requests.length > 0 ? (
         <Link to={`/${user?.id}/friend-requests`}>View all</Link>
       ) : !limit ? (
-        <Link to={`/${user?.id}`}>Back</Link>
+        <button className={shared.backLink} onClick={() => navigate(-1)}>
+          Back
+        </button>
       ) : undefined}
     </div>
   );

@@ -1,11 +1,14 @@
 import Post from "../components/posts/Post";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import styles from "./SinglePost.module.css";
+import shared from "../css/SharedStyle.module.css";
 
 export default function SinglePost() {
   const { postId } = useParams();
+  const navigate = useNavigate();
+
   const fetchSinglePost = async () => {
     const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -29,6 +32,9 @@ export default function SinglePost() {
   return (
     <div className={styles.container}>
       {postQuery.data.post && <Post postContent={postQuery.data.post}></Post>}
+      <button className={shared.backLink} onClick={() => navigate(-1)}>
+        Back
+      </button>
     </div>
   );
 }

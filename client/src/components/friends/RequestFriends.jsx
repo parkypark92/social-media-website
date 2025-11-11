@@ -1,15 +1,17 @@
 import ProfilePicture from "../profilePicture/ProfilePicture";
 import axios from "axios";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useOutletContext, Link } from "react-router-dom";
+import { useOutletContext, useNavigate, Link } from "react-router-dom";
 import { useSocket } from "../../contexts/SocketProvider";
 import styles from "./RequestFriends.module.css";
+import shared from "../../css/SharedStyle.module.css";
 import PropTypes from "prop-types";
 
 export default function RequestFriends({ limit }) {
   const { user } = useOutletContext();
   const queryClient = useQueryClient();
   const socket = useSocket();
+  const navigate = useNavigate();
 
   const fetchUsers = async () => {
     const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -127,7 +129,9 @@ export default function RequestFriends({ limit }) {
       {limit && usersQuery.data.users.length > 0 ? (
         <Link to={`/${user?.id}/find-friends`}>View all</Link>
       ) : !limit ? (
-        <Link to={`/${user?.id}`}>Back</Link>
+        <button className={shared.backLink} onClick={() => navigate(-1)}>
+          Back
+        </button>
       ) : undefined}
     </div>
   );

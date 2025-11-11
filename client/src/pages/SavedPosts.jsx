@@ -1,13 +1,15 @@
 import Post from "../components/posts/Post";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import styles from "./SavedPosts.module.css";
+import shared from "../css/SharedStyle.module.css";
 
 export default function SavedPosts() {
   const { user } = useOutletContext();
   const [savedPostsError, setSavedPostsError] = useState(null);
+  const navigate = useNavigate();
 
   const fetchSavedPosts = async ({ pageParam = 1 }) => {
     const limit = 10;
@@ -72,6 +74,9 @@ export default function SavedPosts() {
       ) : (
         <h2>You have no saved posts...</h2>
       )}
+      <button className={shared.backLink} onClick={() => navigate(-1)}>
+        Back
+      </button>
     </div>
   );
 }

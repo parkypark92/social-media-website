@@ -8,6 +8,7 @@ import Cropper from "react-easy-crop";
 import axios from "axios";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import styles from "./UploadProfilePicture.module.css";
+import shared from "../../css/SharedStyle.module.css";
 
 export default function UploadProfilePicture() {
   const { user } = useOutletContext();
@@ -100,15 +101,20 @@ export default function UploadProfilePicture() {
           </div>
         </div>
       ) : (
-        <form method="POST" encType="multipart/form-data">
-          <input
-            type="file"
-            name="file"
-            id="profile-picture"
-            accept=".jpg, .jpeg, .png"
-            onChange={onFileChange}
-          />
-        </form>
+        <div>
+          <form method="POST" encType="multipart/form-data">
+            <input
+              type="file"
+              name="file"
+              id="profile-picture"
+              accept=".jpg, .jpeg, .png"
+              onChange={onFileChange}
+            />
+          </form>
+          <button className={shared.backLink} onClick={() => navigate(-1)}>
+            Back
+          </button>
+        </div>
       )}
     </div>
   );
