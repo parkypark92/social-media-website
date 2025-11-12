@@ -1,13 +1,11 @@
 import CreatePost from "../components/createPost/CreatePost";
 import PostsFeed from "../components/posts/PostsFeed";
-// import FriendsListPreview from "../components/friends/FriendsListPreview";
 import RequestFriends from "../components/friends/RequestFriends";
 import FriendRequestsPreview from "../components/friends/FriendRequestsPreview";
 import Sidebar from "../components/sidebar/Sidebar";
 import styles from "./Dashboard.module.css";
 
 export default function Dashboard() {
-  console.log("dashboard");
   return (
     <div className={styles.dashboardDisplay}>
       <div className={styles.menuDisplay}>

@@ -3,7 +3,6 @@ import axios from "axios";
 import styles from "./ProfilePicturePrompt.module.css";
 
 export default function ProfilePicturePrompt() {
-  console.log("prompt");
   const { user } = useOutletContext();
 
   const handleFirstLoginUpdate = async () => {

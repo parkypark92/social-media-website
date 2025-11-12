@@ -5,7 +5,6 @@ import { Navigate, useOutletContext } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 export default function ProtectedRoute({ children }) {
-  console.log("protected");
   const token = localStorage.getItem("token");
   const { setUser, isAuthenticated, setIsAuthenticated } = useOutletContext();
 

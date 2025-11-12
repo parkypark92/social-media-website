@@ -1,5 +1,4 @@
 import ProfilePicture from "../profilePicture/ProfilePicture";
-// import UploadProfilePicture from "../profilePicture/UploadProfilePicture";
 import styles from "./ProfileHeader.module.css";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";

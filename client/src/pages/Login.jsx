@@ -4,7 +4,6 @@ import { useOutletContext, useNavigate, Link } from "react-router-dom";
 import styles from "./Login.module.css";
 
 export default function Login() {
-  console.log("login");
   const [loginErrors, setLoginErrors] = useState([]);
   const { user } = useOutletContext();
   const navigate = useNavigate();
