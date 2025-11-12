@@ -6,6 +6,7 @@ import Dashboard from "../pages/Dashboard";
 import Profile from "../pages/Profile";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
+import ProfilePicturePrompt from "../pages/ProfilePicturePrompt";
 import FindFriends from "../pages/FindFriends";
 import FriendRequests from "../pages/FriendRequests";
 import FriendsList from "../pages/FriendsList";
@@ -34,6 +35,14 @@ const Router = () => {
           element: <Navigate to="/login" />,
         },
         {
+          path: "login",
+          element: <Login />,
+        },
+        {
+          path: "signup",
+          element: <Signup />,
+        },
+        {
           path: "/:userId",
           element: (
             <ProtectedRoute>
@@ -42,12 +51,12 @@ const Router = () => {
           ),
         },
         {
-          path: "login",
-          element: <Login />,
-        },
-        {
-          path: "signup",
-          element: <Signup />,
+          path: "/:userId/welcome",
+          element: (
+            <ProtectedRoute>
+              <ProfilePicturePrompt></ProfilePicturePrompt>
+            </ProtectedRoute>
+          ),
         },
         {
           path: "profile/:userId",

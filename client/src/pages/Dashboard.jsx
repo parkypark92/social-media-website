@@ -7,6 +7,7 @@ import Sidebar from "../components/sidebar/Sidebar";
 import styles from "./Dashboard.module.css";
 
 export default function Dashboard() {
+  console.log("dashboard");
   return (
     <div className={styles.dashboardDisplay}>
       <div className={styles.menuDisplay}>

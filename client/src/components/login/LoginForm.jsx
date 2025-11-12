@@ -5,6 +5,7 @@ import styles from "./LoginForm.module.css";
 
 export default function LoginForm({ setLoginErrors }) {
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
@@ -19,7 +20,11 @@ export default function LoginForm({ setLoginErrors }) {
     } else {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", response.data.user);
-      navigate(`/${response.data.user.id}`);
+      if (response.data.user.firstLogin) {
+        navigate(`/${response.data.user.id}/welcome`);
+      } else {
+        navigate(`/${response.data.user.id}`);
+      }
     }
   };
   return (

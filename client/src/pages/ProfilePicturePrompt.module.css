@@ -1,0 +1,14 @@
+.container {
+  background-color: #fff;
+  max-width: 880px;
+  margin: 16px auto;
+  border-radius: 5px;
+  padding: 16px;
+  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
