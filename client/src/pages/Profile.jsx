@@ -5,10 +5,11 @@ import ProfileHeader from "../components/profileHeader/ProfileHeader";
 import CreatePost from "../components/createPost/CreatePost";
 import ProfilePosts from "../components/posts/ProfilePosts";
 import FriendsListPreview from "../components/friends/FriendsListPreview";
+import RequestFriends from "../components/friends/RequestFriends";
 import styles from "./Profile.module.css";
 
 export default function Profile() {
-  const { user } = useOutletContext();
+  const { user, friendsList } = useOutletContext();
   const { userId } = useParams();
   const isOwnProfile = user.id === userId;
 
@@ -90,7 +91,11 @@ export default function Profile() {
               )}
             </div>
             <div className={styles.friendsDisplay}>
-              <FriendsListPreview limit={5} />
+              {friendsList.length > 0 ? (
+                <FriendsListPreview limit={5} />
+              ) : (
+                <RequestFriends limit={5} />
+              )}
             </div>
           </>
         ) : (
