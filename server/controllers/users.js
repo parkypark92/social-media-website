@@ -24,29 +24,40 @@ module.exports.get_profile_info = asyncHandler(async (req, res, next) => {
     where: {
       id: req.query.userId,
     },
+  });
+  res.status(200).json({ profileInfo });
+});
+
+module.exports.get_profile_posts = asyncHandler(async (req, res, next) => {
+  const { page, limit } = req.query;
+  const skip = (page - 1) * limit;
+
+  const profilePosts = await prisma.post.findMany({
+    where: {
+      authorId: req.query.userId,
+    },
+    orderBy: {
+      postedAt: "desc",
+    },
+    skip: Number(skip),
+    take: Number(limit),
     include: {
-      posts: {
+      author: true,
+      likes: true,
+      saves: true,
+      comments: {
         orderBy: {
           postedAt: "desc",
         },
         include: {
           author: true,
-          likes: true,
-          saves: true,
-          comments: {
-            orderBy: {
-              postedAt: "desc",
-            },
-            include: {
-              author: true,
-            },
-            take: 1,
-          },
         },
+        take: 1,
       },
     },
   });
-  res.status(200).json({ profileInfo });
+  console.log(profilePosts);
+  res.status(200).json({ profilePosts });
 });
 
 module.exports.create_post = asyncHandler(async (req, res) => {
@@ -140,7 +151,7 @@ module.exports.get_saved_posts = asyncHandler(async (req, res, next) => {
     where: {
       saves: {
         some: {
-          id: req.params.userId,
+          id: req.query.userId,
         },
       },
     },
