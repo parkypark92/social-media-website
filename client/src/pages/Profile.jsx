@@ -82,7 +82,7 @@ export default function Profile() {
               ) : isError ? (
                 <h2>Error Loading Feed</h2>
               ) : (
-                <h2>You have no posts yet...</h2>
+                <h2>You have no posts yet...get posting!</h2>
               )}
               {allPosts.length > 0 && hasNextPage && (
                 <button onClick={fetchNextPage} disabled={isFetching}>
