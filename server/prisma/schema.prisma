@@ -32,6 +32,7 @@ model User {
   profileUrl        String?
   notifications     Notification[] @relation("userNotifications")
   sentNotifications Notification[] @relation("sentNotifications")
+  firstLogin        Boolean        @default(true)
 }
 
 model Friendship {
