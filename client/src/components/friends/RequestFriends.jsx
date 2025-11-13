@@ -103,6 +103,8 @@ export default function RequestFriends({ limit }) {
 
   return (
     <div>
+      <h2>Find some new friends!</h2>
+
       {usersQuery.data.users.length > 0 ? (
         usersQuery.data.users.map((item) => {
           return (

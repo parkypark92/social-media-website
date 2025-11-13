@@ -39,13 +39,11 @@ export default function Friends() {
       {select === "all-friends" && <FriendsListPreview></FriendsListPreview>}
       {select === "friend-requests" && (
         <>
-          <h2>Friend Requests</h2>
           <FriendRequestsPreview></FriendRequestsPreview>
         </>
       )}
       {select === "find-friends" && (
         <>
-          <h2>Find new friends!</h2>
           <RequestFriends></RequestFriends>
         </>
       )}

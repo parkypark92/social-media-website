@@ -112,6 +112,8 @@ export default function FriendRequestsPreview({ limit }) {
 
   return (
     <div>
+      <h2>Friend Requests</h2>
+
       {requestsPreviewQuery.data.requests.length > 0 ? (
         requestsPreviewQuery.data.requests.map((request) => {
           return (
