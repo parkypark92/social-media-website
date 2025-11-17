@@ -5,3 +5,7 @@
 .chatOffset {
   width: calc(360px - 32px);
 }
+
+.hidden {
+  display: none;
+}

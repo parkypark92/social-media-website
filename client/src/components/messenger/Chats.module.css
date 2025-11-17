@@ -50,3 +50,11 @@
 .newChat:focus {
   outline: none;
 }
+
+@media (max-width: 992px) {
+  .chats {
+    height: auto;
+    width: 100%;
+    position: static;
+  }
+}

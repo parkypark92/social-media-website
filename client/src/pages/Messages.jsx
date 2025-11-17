@@ -1,18 +1,21 @@
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useMessages } from "../contexts/MessagesProvider";
+import { useMediaQuery } from "react-responsive";
 import Chats from "../components/messenger/Chats";
 import MessageBox from "../components/messenger/MessageBox";
-import { useMessages } from "../contexts/MessagesProvider";
 import styles from "./Messages.module.css";
 
 export default function Messages() {
   const { data: chats } = useMessages();
   const [newChat, setNewChat] = useState(false);
   const [currentChat, setCurrentChat] = useState(null);
+  const [chatOpen, setChatOpen] = useState(false);
   const { user } = useOutletContext();
   const queryClient = useQueryClient();
+  const firstRender = useRef(true);
 
   const updateNewMessageSeen = async (currentChat) => {
     const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -60,26 +63,73 @@ export default function Messages() {
     }
   }, [chats, currentChat]);
 
+  useEffect(() => {
+    console.log(firstRender.current);
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    setChatOpen(true);
+  }, [currentChat]);
+
+  const isSmallScreen = useMediaQuery({ maxWidth: 992 });
+
   return (
-    <div className={styles.pageCtnr}>
-      {chats && (
+    <>
+      {isSmallScreen ? (
         <>
-          <Chats
-            setNewChat={setNewChat}
-            currentChat={currentChat}
-            setCurrentChat={setCurrentChat}
-            allChats={chats}
-          ></Chats>
-          <div className={styles.chatOffset}></div>
-          <MessageBox
-            newChat={newChat}
-            setNewChat={setNewChat}
-            currentChat={currentChat}
-            setCurrentChat={setCurrentChat}
-            allChats={chats}
-          ></MessageBox>
+          {chats && (
+            <>
+              <div
+                className={`${chats.length === 0 ? styles.hidden : ""} ${
+                  chatOpen ? styles.hidden : ""
+                }`}
+              >
+                <Chats
+                  setNewChat={setNewChat}
+                  currentChat={currentChat}
+                  setCurrentChat={setCurrentChat}
+                  allChats={chats}
+                  setChatOpen={setChatOpen}
+                ></Chats>
+              </div>
+              <div className={`${!chatOpen ? styles.hidden : ""}`}>
+                <MessageBox
+                  newChat={newChat}
+                  setNewChat={setNewChat}
+                  currentChat={currentChat}
+                  setCurrentChat={setCurrentChat}
+                  allChats={chats}
+                  setChatOpen={setChatOpen}
+                ></MessageBox>
+              </div>
+            </>
+          )}
         </>
+      ) : (
+        <div className={styles.pageCtnr}>
+          {chats && (
+            <>
+              <Chats
+                setNewChat={setNewChat}
+                currentChat={currentChat}
+                setCurrentChat={setCurrentChat}
+                allChats={chats}
+                setChatOpen={setChatOpen}
+              ></Chats>
+              <div className={styles.chatOffset}></div>
+              <MessageBox
+                newChat={newChat}
+                setNewChat={setNewChat}
+                currentChat={currentChat}
+                setCurrentChat={setCurrentChat}
+                allChats={chats}
+                setChatOpen={setChatOpen}
+              ></MessageBox>
+            </>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 }

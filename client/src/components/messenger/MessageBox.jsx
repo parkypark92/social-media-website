@@ -7,6 +7,7 @@ import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { useSocket } from "../../contexts/SocketProvider.jsx";
 import { useOnlineUsers } from "../../contexts/OnlineUsers.jsx";
+import { useMediaQuery } from "react-responsive";
 import PropTypes from "prop-types";
 
 export default function MessageBox({
@@ -15,6 +16,7 @@ export default function MessageBox({
   currentChat,
   setCurrentChat,
   allChats,
+  setChatOpen,
 }) {
   const { user, friendsList } = useOutletContext();
   const recipient =
@@ -99,6 +101,8 @@ export default function MessageBox({
     sendMessageMutation.mutate(formData);
   };
 
+  const isSmallScreen = useMediaQuery({ maxWidth: 992 });
+
   return (
     <div className={styles.messenger}>
       <div className={styles.messengerHeader}>
@@ -108,7 +112,14 @@ export default function MessageBox({
               Start a new chat!
             </h3>
             {allChats.length > 0 && (
-              <button onClick={() => setNewChat(false)}>Cancel</button>
+              <button
+                onClick={() => {
+                  setNewChat(false);
+                  setChatOpen(false);
+                }}
+              >
+                Cancel
+              </button>
             )}
           </>
         ) : currentChat ? (
@@ -118,6 +129,9 @@ export default function MessageBox({
             {onlineUsers.includes(recipient.id) && (
               <small className={styles.online}>online</small>
             )}
+            {isSmallScreen && (
+              <button onClick={() => setChatOpen(false)}>Chats</button>
+            )}
           </>
         ) : (
           <h3>Messenger</h3>
@@ -125,6 +139,9 @@ export default function MessageBox({
       </div>
       {newChat ? (
         <div className={styles.chatSelectCtnr}>
+          {newConversations.length === 0 && (
+            <p>You&apos;ll need to make some more friends to chat with!</p>
+          )}
           {newConversations.map((friend) => {
             return (
               <div
@@ -194,4 +211,5 @@ MessageBox.propTypes = {
   currentChat: PropTypes.object,
   setCurrentChat: PropTypes.func,
   allChats: PropTypes.array,
+  setChatOpen: PropTypes.func,
 };

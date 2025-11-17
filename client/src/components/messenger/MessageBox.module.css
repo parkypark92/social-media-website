@@ -98,3 +98,12 @@
 .online {
   color: rgb(2, 184, 2);
 }
+
+@media (max-width: 992px) {
+  .messenger {
+    height: calc(100vh - 56px);
+    flex-grow: 0;
+    max-width: 100%;
+    margin: 0;
+  }
+}

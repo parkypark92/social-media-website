@@ -8,13 +8,20 @@ export default function Chats({
   allChats,
   currentChat,
   setCurrentChat,
+  setChatOpen,
 }) {
   const { user } = useOutletContext();
   return (
     <div className={styles.chats}>
       <div className={styles.chatsHeader}>
         <h3 style={{ margin: 0 }}>Chats</h3>
-        <button className={styles.newChat} onClick={() => setNewChat(true)}>
+        <button
+          className={styles.newChat}
+          onClick={() => {
+            setNewChat(true);
+            setChatOpen(true);
+          }}
+        >
           <img src="/write.png" alt="" height={32} />
         </button>
       </div>
@@ -55,4 +62,5 @@ Chats.propTypes = {
   setCurrentChat: PropTypes.func,
   allChats: PropTypes.array,
   currentChat: PropTypes.object,
+  setChatOpen: PropTypes.func,
 };
