@@ -1,7 +1,7 @@
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useMessages } from "../contexts/MessagesProvider";
 import { useMediaQuery } from "react-responsive";
 import Chats from "../components/messenger/Chats";
@@ -15,7 +15,6 @@ export default function Messages() {
   const [chatOpen, setChatOpen] = useState(false);
   const { user } = useOutletContext();
   const queryClient = useQueryClient();
-  const firstRender = useRef(true);
 
   const updateNewMessageSeen = async (currentChat) => {
     const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -43,12 +42,13 @@ export default function Messages() {
       messageSeenMutation.mutate(currentChat);
       setNewChat(false);
     }
-  }, [currentChat, user.id]);
+  }, [currentChat, messageSeenMutation, user.id]);
 
   useEffect(() => {
     if (chats) {
       if (chats.length === 0) {
         setNewChat(true);
+        setChatOpen(true);
       } else if (chats.length > 0) {
         setNewChat(false);
       }
@@ -62,15 +62,6 @@ export default function Messages() {
       }
     }
   }, [chats, currentChat]);
-
-  useEffect(() => {
-    console.log(firstRender.current);
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
-    setChatOpen(true);
-  }, [currentChat]);
 
   const isSmallScreen = useMediaQuery({ maxWidth: 992 });
 

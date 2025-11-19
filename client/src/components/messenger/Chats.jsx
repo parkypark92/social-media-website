@@ -38,6 +38,7 @@ export default function Chats({
                 onClick={() => {
                   setCurrentChat(chat);
                   setNewChat(false);
+                  setChatOpen(true);
                 }}
                 style={{ backgroundColor: currentChat == chat && "#ebf5ff" }}
               >
