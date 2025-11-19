@@ -1,17 +1,27 @@
-.usersList {
-  max-width: 1440px;
-  margin: auto;
-  list-style: none;
-  height: 64px;
-  margin-bottom: 8px;
+.container {
+  max-width: 440px;
+  margin: 0 auto 16px auto;
+  padding: 8px;
   background-color: rgb(255, 255, 255);
+  text-align: left;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
+}
+
+.usersList {
+  list-style: none;
+  /* margin-bottom: 8px; */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
+  gap: 8px;
+  padding: 8px 0 16px 0;
   font-weight: bold;
-  border-radius: 5px;
-  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
+}
+
+.header {
+  margin: 0;
+  padding: 8px 0;
 }
 
 .avatar {

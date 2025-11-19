@@ -1,15 +1,25 @@
 .container {
-  max-width: 1440px;
+  max-width: 440px;
   margin: auto;
-  list-style: none;
-  margin-bottom: 8px;
+  padding: 8px;
   background-color: rgb(255, 255, 255);
+  text-align-last: left;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px rgba(184, 184, 184, 0.5);
+}
+
+.friendDisplay {
+  list-style: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
+  padding: 8px 0 16px 0;
   font-weight: bold;
-  border-radius: 5px;
+}
+
+.header {
+  margin: 0;
+  padding: 8px 0;
 }
 
 .avatar {

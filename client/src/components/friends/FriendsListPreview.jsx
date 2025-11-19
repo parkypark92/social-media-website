@@ -12,13 +12,13 @@ export default function FriendsListPreview({ limit }) {
   const navigate = useNavigate();
   let friendsToMap = limit ? friendsList.slice(0, limit) : friendsList;
   return (
-    <div>
-      <h2>Friends</h2>
+    <div className={styles.container}>
+      <h2 className={styles.header}>Friends</h2>
       {friendsToMap.length ? (
         <ul>
           {friendsToMap.map((friend) => {
             return (
-              <div className={styles.container} key={friend.id}>
+              <div className={styles.friendDisplay} key={friend.id}>
                 <div className={styles.avatar}>
                   <ProfilePicture userId={friend.id} />
                   <li>{friend.username}</li>

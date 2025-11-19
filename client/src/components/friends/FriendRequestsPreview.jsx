@@ -111,9 +111,8 @@ export default function FriendRequestsPreview({ limit }) {
     return <h2>{requestsPreviewQuery.error.message}</h2>;
 
   return (
-    <div>
-      <h2>Friend Requests</h2>
-
+    <div className={styles.container}>
+      <h2 className={styles.header}>Friend Requests</h2>
       {requestsPreviewQuery.data.requests.length > 0 ? (
         requestsPreviewQuery.data.requests.map((request) => {
           return (
@@ -130,6 +129,7 @@ export default function FriendRequestsPreview({ limit }) {
               ) : (
                 <div className={styles.buttons}>
                   <button
+                    className={styles.accept}
                     data-sender={request.sender.id}
                     id="accepted"
                     onClick={callMutation}

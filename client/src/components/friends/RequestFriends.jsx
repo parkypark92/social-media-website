@@ -102,8 +102,8 @@ export default function RequestFriends({ limit }) {
   if (usersQuery.isError) return <h2>{usersQuery.error.message}</h2>;
 
   return (
-    <div>
-      <h2>Find some new friends!</h2>
+    <div className={styles.container}>
+      <h2 className={styles.header}>Find some new friends!</h2>
 
       {usersQuery.data.users.length > 0 ? (
         usersQuery.data.users.map((item) => {
