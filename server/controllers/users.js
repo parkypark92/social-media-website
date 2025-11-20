@@ -469,6 +469,19 @@ module.exports.create_conversation = asyncHandler(async (req, res, next) => {
   res.status(200).json({ conversation });
 });
 
+module.exports.delete_empty_conversations = asyncHandler(
+  async (req, res, next) => {
+    await prisma.conversation.deleteMany({
+      where: {
+        id: {
+          in: req.body.chatsToDelete,
+        },
+      },
+    });
+    res.status(200).json({ msg: "Chats deleted" });
+  }
+);
+
 module.exports.send_message = asyncHandler(async (req, res, next) => {
   try {
     const message = await prisma.message.create({

@@ -37,6 +37,10 @@ router.post(
 router.get("/profile-picture", controller.get_profile_picture);
 router.get("/conversations", controller.get_conversations);
 router.post("/create-conversation", controller.create_conversation);
+router.post(
+  "/delete-empty-conversations",
+  controller.delete_empty_conversations
+);
 router.post("/send-message", controller.send_message);
 router.post("/message-seen", controller.update_message_seen);
 router.post(
