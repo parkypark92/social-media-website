@@ -34,6 +34,39 @@ export default function Messages() {
     },
   });
 
+  const deleteEmptyChats = async (chats) => {
+    const chatsToDelete = chats
+      .filter((chat) => chat.messages.length === 0)
+      .map((chat) => chat.id);
+    if (chatsToDelete.length === 0) return;
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    const response = await axios.post(
+      `${BASE_URL}/users/delete-empty-conversations`,
+      { userId: user.id, chatsToDelete }
+    );
+    if (response.status === 200) {
+      const updatedCurrentChat = chats.find(
+        (chat) => chat.messages.length !== 0
+      );
+      setCurrentChat(updatedCurrentChat);
+    }
+    if (response.status !== 200) {
+      throw new Error("Error deleting chats");
+    }
+  };
+
+  const deleteEmptyChatsMutation = useMutation({
+    mutationFn: deleteEmptyChats,
+    onSuccess: () => {
+      console.log("deleted");
+      queryClient.invalidateQueries({ queryKey: ["conversations", user.id] });
+    },
+  });
+
+  useEffect(() => {
+    deleteEmptyChatsMutation.mutate(chats);
+  }, []);
+
   useEffect(() => {
     if (
       currentChat?.lastMessageSeen === false &&
@@ -47,18 +80,20 @@ export default function Messages() {
   useEffect(() => {
     if (chats) {
       if (chats.length === 0) {
+        console.log(1);
         setNewChat(true);
         setChatOpen(true);
       } else if (chats.length > 0) {
         setNewChat(false);
       }
-      if (currentChat === null) {
-        setCurrentChat(chats[0]);
-      } else if (chats.some((chat) => chat.id === currentChat.id)) {
+      if (chats.some((chat) => chat.id === currentChat?.id)) {
         const [updatedChat] = chats.filter(
           (chat) => chat.id === currentChat?.id
         );
         setCurrentChat(updatedChat);
+      }
+      if (currentChat === null) {
+        setCurrentChat(chats[0]);
       }
     }
   }, [chats, currentChat]);
