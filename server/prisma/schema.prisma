@@ -62,7 +62,7 @@ model Comment {
   id       String   @id @default(uuid())
   text     String
   postedAt DateTime @default(now())
-  post     Post     @relation(fields: [postId], references: [id])
+  post     Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId   String
   author   User     @relation(fields: [authorId], references: [id])
   authorId String
@@ -105,5 +105,5 @@ model Notification {
   senderId    String
   sender      User     @relation("sentNotifications", fields: [senderId], references: [id])
   postId      String?
-  post        Post?    @relation(fields: [postId], references: [id])
+  post        Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
