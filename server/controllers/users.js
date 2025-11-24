@@ -85,6 +85,15 @@ module.exports.create_post = asyncHandler(async (req, res) => {
   res.status(201).json({ post });
 });
 
+module.exports.delete_post = asyncHandler(async (req, res, next) => {
+  await prisma.post.delete({
+    where: {
+      id: req.body.postId,
+    },
+  });
+  res.status(200).json({ msg: "Post deleted" });
+});
+
 module.exports.get_posts = asyncHandler(async (req, res) => {
   const ids = Array.isArray(req.query.ids) ? req.query.ids : [];
   if (ids.length === 0) {

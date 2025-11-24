@@ -15,6 +15,7 @@ router.get(
 router.get("/profile-info", controller.get_profile_info);
 router.get("/profile-posts", controller.get_profile_posts);
 router.post("/create-post", controller.create_post);
+router.post("/delete-post", controller.delete_post);
 router.get("/get-posts", controller.get_posts);
 router.get("/get-single-post", controller.get_single_post);
 router.get("/get-saved-posts", controller.get_saved_posts);
