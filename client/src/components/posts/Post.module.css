@@ -19,7 +19,7 @@
   gap: 16px;
 }
 
-.headerRight:hover {
+.postButton:hover {
   transform: scale(1.03);
   cursor: pointer;
 }

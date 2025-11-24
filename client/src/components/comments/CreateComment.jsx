@@ -35,6 +35,7 @@ export default function CreateComment({ postInfo }) {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postInfo.id] });
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["profile-posts"] });
       createNotificationMutation.mutate(postInfo);
     },
   });

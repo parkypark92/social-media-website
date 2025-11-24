@@ -15,10 +15,10 @@ export default function SinglePost() {
     const response = await axios.get(`${BASE_URL}/users/get-single-post`, {
       params: { postId },
     });
-    if (response.data.post) {
+    if (response.status === 200) {
       return response.data;
     } else {
-      throw new Error("Error dislpaying post!");
+      throw new Error("Error displaying post!");
     }
   };
 
@@ -31,7 +31,11 @@ export default function SinglePost() {
 
   return (
     <div className={styles.container}>
-      {postQuery.data.post && <Post postContent={postQuery.data.post}></Post>}
+      {postQuery.data.post !== null ? (
+        <Post postContent={postQuery.data.post}></Post>
+      ) : (
+        <h2>Post deleted</h2>
+      )}
       <button className={shared.backLink} onClick={() => navigate(-1)}>
         Back
       </button>

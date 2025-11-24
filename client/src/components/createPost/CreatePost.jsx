@@ -30,6 +30,7 @@ export default function CreatePost() {
     onSuccess: () => {
       setInputText("");
       queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["profile-posts", user.id] });
     },
   });
 

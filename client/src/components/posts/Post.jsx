@@ -161,6 +161,36 @@ export default function Post({ postContent, feedPost = false }) {
     });
   };
 
+  //DELETE POST FUNCTIONS
+  const handleDeletePost = async (data) => {
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    const response = await axios.post(`${BASE_URL}/users/delete-post`, data);
+    if (response.status !== 200) {
+      alert("An error occured, please try again");
+    }
+  };
+
+  const deletePostMutation = useMutation({
+    mutationFn: handleDeletePost,
+    onSuccess: () => {
+      console.log("success");
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["post", postContent.id] });
+      queryClient.refetchQueries({
+        queryKey: ["profile-posts"],
+        exact: false,
+      });
+      queryClient.invalidateQueries({ queryKey: ["saved-posts"] });
+    },
+  });
+
+  const calldeletePostMutation = (e) => {
+    e.preventDefault();
+    deletePostMutation.mutate({
+      postId: postContent.id,
+    });
+  };
+
   return (
     <div className={styles.postContainer}>
       <div className={styles.postHeader}>
@@ -174,6 +204,14 @@ export default function Post({ postContent, feedPost = false }) {
           </div>
         </div>
         <div className={styles.headerRight}>
+          {user.id === postContent.author.id && (
+            <button
+              className={styles.postButton}
+              onClick={calldeletePostMutation}
+            >
+              <img src="/bin.png" height={24} />
+            </button>
+          )}
           {postContent.saves?.some((e) => e.id === user?.id) ? (
             <button
               className={styles.postButton}
