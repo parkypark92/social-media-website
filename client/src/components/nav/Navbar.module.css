@@ -60,6 +60,10 @@
   height: 38px;
 }
 
+.notificationsCountRelative {
+  position: relative;
+}
+
 .notificationsCount,
 .newMessagesCount {
   position: absolute;
@@ -73,12 +77,13 @@
   font-size: 0.7em;
   border-radius: 50%;
   z-index: 1;
+  top: 0;
+  right: 20%;
 }
 
-.notificationsCount {
-  top: 0;
-  left: 90px;
-}
+/* .notificationsCount {
+  
+} */
 
 .newMessagesCount {
   top: 0;

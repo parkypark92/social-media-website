@@ -86,12 +86,6 @@ export default function Navbar({
         <h2 className={styles.logo}>FineFellows</h2>
         {user && (
           <div className={styles.icons}>
-            {notifications &&
-            notifications.filter((n) => n.seen === false).length > 0 ? (
-              <div className={styles.notificationsCount}>
-                {notifications.filter((n) => n.seen === false).length}
-              </div>
-            ) : null}
             {path !== "messages" &&
             chats &&
             chats.filter(
@@ -130,21 +124,34 @@ export default function Navbar({
               <img src="/save.png" height={24} />
             </button>
             <div className={`${styles.vl} ${styles.hidden}`}></div>
-            <button
-              className={`${styles.navIcon} ${styles.notificationsIcon}`}
-              onClick={handleNotificationIconClick}
-            >
-              <img
-                className={styles.image}
-                src="/bell.png"
-                alt=""
-                height={26}
-              />
-            </button>
+            <div className={styles.notificationsCountRelative}>
+              {notifications &&
+              notifications.filter((n) => n.seen === false).length > 0 ? (
+                <div className={styles.notificationsCount}>
+                  {notifications.filter((n) => n.seen === false).length}
+                </div>
+              ) : null}
+              <button
+                className={`${styles.navIcon} ${styles.notificationsIcon}`}
+                onClick={handleNotificationIconClick}
+              >
+                <img
+                  className={styles.image}
+                  src="/bell.png"
+                  alt=""
+                  height={26}
+                />
+              </button>
+            </div>
             <div className={styles.vl}></div>
-            <button className={styles.navIcon} onClick={handleMessageIconClick}>
-              <img src="/message.png" alt="" height={24} />
-            </button>
+            <div className={styles.notificationsCountRelative}>
+              <button
+                className={styles.navIcon}
+                onClick={handleMessageIconClick}
+              >
+                <img src="/message.png" alt="" height={24} />
+              </button>
+            </div>
             <div className={styles.vl}></div>
             <button className={styles.navIcon}>
               <img
