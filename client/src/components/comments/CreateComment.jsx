@@ -7,7 +7,6 @@ import styles from "./CreateComment.module.css";
 import { useSocket } from "../../contexts/SocketProvider";
 
 export default function CreateComment({ postInfo }) {
-  console.log(postInfo);
   const { user } = useOutletContext();
   const [inputText, setInputtext] = useState("");
   const queryClient = useQueryClient();

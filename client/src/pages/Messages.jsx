@@ -58,7 +58,6 @@ export default function Messages() {
   const deleteEmptyChatsMutation = useMutation({
     mutationFn: deleteEmptyChats,
     onSuccess: () => {
-      console.log("deleted");
       queryClient.invalidateQueries({ queryKey: ["conversations", user.id] });
     },
   });
@@ -99,7 +98,6 @@ export default function Messages() {
   }, [chats, currentChat]);
 
   const isSmallScreen = useMediaQuery({ maxWidth: 992 });
-
   return (
     <>
       {isSmallScreen ? (
@@ -127,6 +125,7 @@ export default function Messages() {
                   setCurrentChat={setCurrentChat}
                   allChats={chats}
                   setChatOpen={setChatOpen}
+                  chatOpen={chatOpen}
                 ></MessageBox>
               </div>
             </>

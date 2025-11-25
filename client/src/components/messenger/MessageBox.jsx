@@ -17,6 +17,7 @@ export default function MessageBox({
   setCurrentChat,
   allChats,
   setChatOpen,
+  chatOpen,
 }) {
   const { user, friendsList } = useOutletContext();
   const recipient =
@@ -26,11 +27,14 @@ export default function MessageBox({
   const queryClient = useQueryClient();
   const socket = useSocket();
   const { onlineUsers } = useOnlineUsers();
-  const setRef = useCallback((node) => {
-    if (node) {
-      node.scrollIntoView();
-    }
-  }, []);
+  const setRef = useCallback(
+    (node) => {
+      if ((currentChat || chatOpen) && node) {
+        node.scrollIntoView();
+      }
+    },
+    [chatOpen, currentChat]
+  );
 
   useEffect(() => {
     setNewConversations(
@@ -212,4 +216,5 @@ MessageBox.propTypes = {
   setCurrentChat: PropTypes.func,
   allChats: PropTypes.array,
   setChatOpen: PropTypes.func,
+  chatOpen: PropTypes.bool,
 };
