@@ -7,6 +7,7 @@ import styles from "./CreateComment.module.css";
 import { useSocket } from "../../contexts/SocketProvider";
 
 export default function CreateComment({ postInfo }) {
+  console.log(postInfo);
   const { user } = useOutletContext();
   const [inputText, setInputtext] = useState("");
   const queryClient = useQueryClient();
@@ -34,8 +35,7 @@ export default function CreateComment({ postInfo }) {
       setInputtext("");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postInfo.id] });
-      queryClient.invalidateQueries({ queryKey: ["profile"] });
-      queryClient.invalidateQueries({ queryKey: ["profile-posts"] });
+      queryClient.invalidateQueries({ queryKey: ["comments", postInfo.id] });
       createNotificationMutation.mutate(postInfo);
     },
   });

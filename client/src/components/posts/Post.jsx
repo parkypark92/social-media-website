@@ -173,7 +173,6 @@ export default function Post({ postContent, feedPost = false }) {
   const deletePostMutation = useMutation({
     mutationFn: handleDeletePost,
     onSuccess: () => {
-      console.log("success");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postContent.id] });
       queryClient.refetchQueries({
