@@ -140,14 +140,6 @@ module.exports.get_single_post = asyncHandler(async (req, res, next) => {
       author: true,
       likes: true,
       saves: true,
-      comments: {
-        include: {
-          author: true,
-        },
-        orderBy: {
-          postedAt: "desc",
-        },
-      },
     },
   });
   res.status(200).json({ post });
