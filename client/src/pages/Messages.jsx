@@ -29,10 +29,17 @@ export default function Messages() {
 
   const messageSeenMutation = useMutation({
     mutationFn: updateNewMessageSeen,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["conversations", user.id]);
+    onSuccess: (updatedChat) => {
+      queryClient.setQueryData(["conversations", user.id], (oldData) => {
+        if (!oldData) return oldData;
+
+        return oldData.map((chat) =>
+          chat.id === updatedChat.id ? updatedChat : chat
+        );
+      });
     },
   });
+  queryClient.invalidateQueries(["conversations", user.id]);
 
   const deleteEmptyChats = async (chats) => {
     const chatsToDelete = chats
@@ -63,39 +70,34 @@ export default function Messages() {
   });
 
   useEffect(() => {
+    if (!chats) return;
     deleteEmptyChatsMutation.mutate(chats);
   }, []);
 
   useEffect(() => {
-    if (
-      currentChat?.lastMessageSeen === false &&
-      currentChat?.lastMessageSenderId !== user.id
-    ) {
-      messageSeenMutation.mutate(currentChat);
+    if (!chats) return;
+    if (chats.length === 0) {
+      console.log(1);
+      setNewChat(true);
+      setChatOpen(true);
+    } else if (chats.length > 0) {
       setNewChat(false);
     }
-  }, [currentChat, messageSeenMutation, user.id]);
-
-  useEffect(() => {
-    if (chats) {
-      if (chats.length === 0) {
-        console.log(1);
-        setNewChat(true);
-        setChatOpen(true);
-      } else if (chats.length > 0) {
+    if (chats.some((chat) => chat.id === currentChat?.id)) {
+      const [updatedChat] = chats.filter((chat) => chat.id === currentChat?.id);
+      if (
+        updatedChat?.lastMessageSeen === false &&
+        updatedChat?.lastMessageSenderId !== user.id
+      ) {
+        messageSeenMutation.mutate(updatedChat);
         setNewChat(false);
       }
-      if (chats.some((chat) => chat.id === currentChat?.id)) {
-        const [updatedChat] = chats.filter(
-          (chat) => chat.id === currentChat?.id
-        );
-        setCurrentChat(updatedChat);
-      }
-      if (currentChat === null) {
-        setCurrentChat(chats[0]);
-      }
+      setCurrentChat(updatedChat);
     }
-  }, [chats, currentChat]);
+    if (currentChat === null) {
+      setCurrentChat(chats[0]);
+    }
+  }, [chats]);
 
   const isSmallScreen = useMediaQuery({ maxWidth: 992 });
   return (

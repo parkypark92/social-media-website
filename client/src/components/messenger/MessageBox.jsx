@@ -59,6 +59,15 @@ export default function MessageBox({
     }
   };
 
+  const createConversationMutation = useMutation({
+    mutationFn: createConversation,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["conversations", user.id] });
+      setCurrentChat(data.conversation);
+      setNewChat(false);
+    },
+  });
+
   const sendMessage = async (data) => {
     const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -70,21 +79,11 @@ export default function MessageBox({
     }
   };
 
-  const createConversationMutation = useMutation({
-    mutationFn: createConversation,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["conversations", user.id] });
-      setCurrentChat(data.conversation);
-      setNewChat(false);
-    },
-  });
-
   const sendMessageMutation = useMutation({
     mutationFn: sendMessage,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["conversations", user.id] });
       setMessageValue("");
-
       const message = data.message;
       const recipientId =
         data.conversation.userAId === user.id
