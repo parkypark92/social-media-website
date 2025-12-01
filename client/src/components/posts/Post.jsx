@@ -11,7 +11,7 @@ import { useOutletContext, Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 
 export default function Post({ postContent, feedPost = false }) {
-  const { user } = useOutletContext();
+  const { user, friendsList } = useOutletContext();
   const queryClient = useQueryClient();
   const socket = useSocket();
 
@@ -211,21 +211,23 @@ export default function Post({ postContent, feedPost = false }) {
               <img src="/bin.png" height={24} />
             </button>
           )}
-          {postContent.saves?.some((e) => e.id === user?.id) ? (
-            <button
-              className={styles.postButton}
-              onClick={callUnsavePostMutation}
-            >
-              <img src="/unsave.png" alt="" height={24} />
-            </button>
-          ) : (
-            <button
-              className={styles.postButton}
-              onClick={callSavePostMutation}
-            >
-              <img src="/save.png" alt="" height={24} />
-            </button>
-          )}
+          {(friendsList.some((friend) => friend.id === postContent.author.id) ||
+            user.id === postContent.author.id) &&
+            (postContent.saves?.some((e) => e.id === user?.id) ? (
+              <button
+                className={styles.postButton}
+                onClick={callUnsavePostMutation}
+              >
+                <img src="/unsave.png" alt="" height={24} />
+              </button>
+            ) : (
+              <button
+                className={styles.postButton}
+                onClick={callSavePostMutation}
+              >
+                <img src="/save.png" alt="" height={24} />
+              </button>
+            ))}
         </div>
       </div>
       <p>{postContent.text}</p>
@@ -251,7 +253,9 @@ export default function Post({ postContent, feedPost = false }) {
         )}
         <span>{postContent.likes.length}</span>
       </div>
-      <CreateComment postInfo={postContent}></CreateComment>
+      {friendsList.some((friend) => friend.id === postContent.author.id) && (
+        <CreateComment postInfo={postContent}></CreateComment>
+      )}
       {feedPost ? (
         <>
           <LatestComment latestComment={postContent.comments}></LatestComment>
