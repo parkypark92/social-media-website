@@ -6,12 +6,6 @@ export default function Sidebar() {
   const { user } = useOutletContext();
   return (
     <ul className={styles.list}>
-      <Link to="/" className={styles.menuLink}>
-        <div className={styles.menuItem}>
-          <img src="/home-black.png" alt="" height={20} />
-          <li className={styles.listItem}>Home</li>
-        </div>
-      </Link>
       <Link to={`/profile/${user.id}`} className={styles.menuLink}>
         <div className={styles.menuItem}>
           <img src="/profile.png" alt="" height={20} />
