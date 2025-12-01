@@ -104,7 +104,7 @@ export default function MessageBox({
     sendMessageMutation.mutate(formData);
   };
 
-  const isSmallScreen = useMediaQuery({ maxWidth: 992 });
+  const isSmallScreen = useMediaQuery({ maxWidth: 1040 });
 
   return (
     <div className={styles.messenger}>

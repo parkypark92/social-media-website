@@ -1,7 +1,8 @@
 .container {
+  width: 100%;
   max-width: 440px;
   margin: 0 auto 16px auto;
-  padding: 8px;
+  padding: 16px;
   background-color: rgb(255, 255, 255);
   text-align: left;
   border-radius: 5px;
@@ -19,7 +20,7 @@
 
 .header {
   margin: 0;
-  padding: 8px 0;
+  /* padding: 8px 0; */
 }
 
 .avatar {

@@ -99,7 +99,7 @@ export default function Messages() {
     }
   }, [chats]);
 
-  const isSmallScreen = useMediaQuery({ maxWidth: 992 });
+  const isSmallScreen = useMediaQuery({ maxWidth: 1040 });
   return (
     <>
       {isSmallScreen ? (
