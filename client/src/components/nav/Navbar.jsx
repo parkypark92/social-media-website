@@ -86,23 +86,6 @@ export default function Navbar({
         <h2 className={styles.logo}>FineFellows</h2>
         {user && (
           <div className={styles.icons}>
-            {path !== "messages" &&
-            chats &&
-            chats.filter(
-              (c) =>
-                c.newMessageNotificationSeen === false &&
-                c.lastMessageSenderId !== user.id
-            ).length > 0 ? (
-              <div className={styles.newMessagesCount}>
-                {
-                  chats.filter(
-                    (c) =>
-                      c.newMessageNotificationSeen === false &&
-                      c.lastMessageSenderId !== user.id
-                  ).length
-                }
-              </div>
-            ) : null}
             <button
               className={styles.navIcon}
               onClick={() => navigate(`/${user.id}`)}
@@ -145,6 +128,23 @@ export default function Navbar({
             </div>
             <div className={styles.vl}></div>
             <div className={styles.notificationsCountRelative}>
+              {path !== "messages" &&
+              chats &&
+              chats.filter(
+                (c) =>
+                  c.newMessageNotificationSeen === false &&
+                  c.lastMessageSenderId !== user.id
+              ).length > 0 ? (
+                <div className={styles.newMessagesCount}>
+                  {
+                    chats.filter(
+                      (c) =>
+                        c.newMessageNotificationSeen === false &&
+                        c.lastMessageSenderId !== user.id
+                    ).length
+                  }
+                </div>
+              ) : null}
               <button
                 className={styles.navIcon}
                 onClick={handleMessageIconClick}

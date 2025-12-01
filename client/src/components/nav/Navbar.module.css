@@ -81,15 +81,6 @@
   right: 20%;
 }
 
-/* .notificationsCount {
-  
-} */
-
-.newMessagesCount {
-  top: 0;
-  left: 155px;
-}
-
 @media (max-width: 992px) {
   .logo {
     display: none;
