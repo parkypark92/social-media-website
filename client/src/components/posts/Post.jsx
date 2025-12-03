@@ -11,7 +11,7 @@ import { useOutletContext, Link } from "react-router-dom";
 import { format, parseISO } from "date-fns";
 
 export default function Post({ postContent, feedPost = false }) {
-  const { user, friendsList } = useOutletContext();
+  const { user, friendsList, setPopupMessage } = useOutletContext();
   const queryClient = useQueryClient();
   const socket = useSocket();
 
@@ -165,7 +165,9 @@ export default function Post({ postContent, feedPost = false }) {
   const handleDeletePost = async (data) => {
     const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
     const response = await axios.post(`${BASE_URL}/users/delete-post`, data);
-    if (response.status !== 200) {
+    if (response.status === 200) {
+      setPopupMessage("Post Deleted!");
+    } else {
       alert("An error occured, please try again");
     }
   };
@@ -175,9 +177,8 @@ export default function Post({ postContent, feedPost = false }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       queryClient.invalidateQueries({ queryKey: ["post", postContent.id] });
-      queryClient.refetchQueries({
-        queryKey: ["profile-posts"],
-        exact: false,
+      queryClient.invalidateQueries({
+        queryKey: ["profile-posts", user.id],
       });
       queryClient.invalidateQueries({ queryKey: ["saved-posts"] });
     },

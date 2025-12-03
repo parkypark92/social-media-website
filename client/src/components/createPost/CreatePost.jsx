@@ -1,5 +1,4 @@
 import ProfilePicture from "../profilePicture/ProfilePicture.jsx";
-import PopupNotification from "../PopupNotification/PopupNotification.jsx";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -7,10 +6,9 @@ import { useOutletContext } from "react-router-dom";
 import styles from "./CreatePost.module.css";
 
 export default function CreatePost() {
-  const { user } = useOutletContext();
+  const { user, setPopupMessage } = useOutletContext();
   const queryClient = useQueryClient();
   const [inputText, setInputText] = useState("");
-  const [popupMessage, setPopupMessage] = useState("");
   const publishPost = async (data) => {
     const formData = {
       text: data.get("newPost"),
@@ -69,10 +67,6 @@ export default function CreatePost() {
           </button>
         </div>
       </form>
-      <PopupNotification
-        message={popupMessage}
-        onClose={() => setPopupMessage("")}
-      ></PopupNotification>
     </div>
   );
 }

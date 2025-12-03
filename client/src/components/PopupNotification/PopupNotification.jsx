@@ -14,7 +14,11 @@ export default function PopupNotification({
 
   if (!message) return null;
 
-  return <div className={styles.msgContainer}>{message}</div>;
+  return (
+    <div className={styles.msgPosition}>
+      <div className={styles.msgContainer}>{message}</div>
+    </div>
+  );
 }
 
 PopupNotification.propTypes = {

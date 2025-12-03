@@ -8,6 +8,7 @@ import { SocketProvider } from "./contexts/SocketProvider";
 import { OnlineUsersProvider } from "./contexts/OnlineUsers";
 import { NotificationsProvider } from "./contexts/NotificationsProvider";
 import { MessagesProvider } from "./contexts/MessagesProvider";
+import PopupNotification from "./components/PopupNotification/PopupNotification";
 import { ScrollRestoration } from "react-router-dom";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
   const [friendsList, setFriendsList] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [notificationsIsOpen, setNotificationsIsOpen] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -104,6 +106,10 @@ function App() {
               setNotificationsIsOpen={setNotificationsIsOpen}
             ></Navbar>
             <div className="navbarOffset"></div>
+            <PopupNotification
+              message={popupMessage}
+              onClose={() => setPopupMessage("")}
+            ></PopupNotification>
             <OnlineUsersProvider>
               <ScrollRestoration />
               <Outlet
@@ -113,6 +119,7 @@ function App() {
                   isAuthenticated,
                   setIsAuthenticated,
                   friendsList,
+                  setPopupMessage,
                 }}
               />
             </OnlineUsersProvider>
