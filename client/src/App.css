@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+.appContainer {
+  height: 100%;
+}
+
 form {
   display: flex;
   flex-direction: column;

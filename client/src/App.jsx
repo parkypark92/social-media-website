@@ -91,7 +91,7 @@ function App() {
   if (friendsQuery.isError) return <h2>{friendsQuery.error.message}</h2>;
 
   return (
-    <div onClick={handleNotificationsDisplay}>
+    <div className="appContainer" onClick={handleNotificationsDisplay}>
       <SocketProvider id={user?.id}>
         <MessagesProvider userId={user?.id}>
           <NotificationsProvider userId={user?.id}>
