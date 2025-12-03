@@ -1,7 +1,15 @@
+import styles from "./SignupForm.module.css";
+
 export default function DateSelect() {
   return (
-    <div>
-      <select name="day" id="day" defaultValue="default" required>
+    <div className={styles.dateContainer}>
+      <select
+        className={styles.day}
+        name="day"
+        id="day"
+        defaultValue="default"
+        required
+      >
         <option value="default" disabled>
           DD
         </option>
@@ -11,7 +19,13 @@ export default function DateSelect() {
           </option>
         ))}
       </select>
-      <select name="month" id="month" defaultValue="default" required>
+      <select
+        className={styles.month}
+        name="month"
+        id="month"
+        defaultValue="default"
+        required
+      >
         <option value="default" disabled>
           MM
         </option>
@@ -21,7 +35,13 @@ export default function DateSelect() {
           </option>
         ))}
       </select>
-      <select name="year" id="year" defaultValue="default" required>
+      <select
+        className={styles.year}
+        name="year"
+        id="year"
+        defaultValue="default"
+        required
+      >
         <option value="default" disabled>
           YYYY
         </option>
