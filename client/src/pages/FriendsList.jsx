@@ -4,7 +4,7 @@ import styles from "./FriendsList.module.css";
 export default function FriendsList() {
   return (
     <div className={styles.container}>
-      <FriendsListPreview></FriendsListPreview>;
+      <FriendsListPreview></FriendsListPreview>
     </div>
   );
 }
