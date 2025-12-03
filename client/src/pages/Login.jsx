@@ -15,7 +15,7 @@ export default function Login() {
   }, [navigate, user]);
 
   return (
-    <div>
+    <div className={styles.pageContainer}>
       <h2>Login</h2>
       {loginErrors && (
         <div className={styles.errors}>

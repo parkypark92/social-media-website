@@ -1,3 +1,10 @@
 .errors {
   color: rgb(224, 24, 24);
 }
+
+.pageContainer {
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

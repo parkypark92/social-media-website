@@ -6,7 +6,7 @@ import styles from "./Signup.module.css";
 export default function Signup() {
   const [errorMessage, setErrorMessage] = useState([]);
   return (
-    <div>
+    <div className={styles.pageContainer}>
       <h2>Signup</h2>
       {errorMessage && (
         <div className={styles.errors}>
