@@ -47,6 +47,12 @@ export default function MessageBox({
     );
   }, [friendsList, allChats]);
 
+  useEffect(() => {
+    if (chatOpen) {
+      window.scrollTo(0, 0);
+    }
+  }, [chatOpen]);
+
   const createConversation = async (data) => {
     const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
