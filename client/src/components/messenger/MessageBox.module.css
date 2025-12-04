@@ -45,7 +45,8 @@
   outline: none;
 }
 
-.sendMessage {
+.sendMessage,
+.backButton {
   background-color: transparent;
   padding: 0 4px;
   display: flex;
@@ -54,12 +55,18 @@
     brightness(95%) contrast(98%);
 }
 
-.sendMessage:hover {
+.sendMessage:hover,
+.backButton:hover {
   border-color: transparent;
 }
 
-.sendMessage:focus {
+.sendMessage:focus,
+.backButton:focus {
   outline: none;
+}
+
+.backButton {
+  margin-left: auto;
 }
 
 .disabled {
@@ -90,9 +97,17 @@
 }
 
 .avatar {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.avatar h3 {
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .online {

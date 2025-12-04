@@ -37,6 +37,8 @@
   text-overflow: ellipsis;
 }
 
-.usersList button {
+.usersList button,
+.usersList p {
   min-width: fit-content;
+  padding: 6px 8px;
 }

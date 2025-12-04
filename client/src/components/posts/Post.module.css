@@ -11,12 +11,28 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
 }
 
 .headerLeft {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+.headerRight {
+  min-width: fit-content;
+}
+
+.authorAndDate {
+  min-width: 0;
+}
+
+.authorAndDate h3 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .postButton:hover {

@@ -127,24 +127,32 @@ export default function MessageBox({
             </h3>
             {allChats.length > 0 && (
               <button
+                className={styles.backButton}
                 onClick={() => {
                   setNewChat(false);
                   setChatOpen(false);
                 }}
               >
-                Cancel
+                <img src="/arrow.png" alt="" height={24} />
               </button>
             )}
           </>
         ) : currentChat ? (
           <>
-            <ProfilePicture userId={recipient.id} size={40} link={false} />
-            <h3>{recipient.username}</h3>
+            <div className={styles.avatar}>
+              <ProfilePicture userId={recipient.id} size={40} link={false} />
+              <h3>{recipient.username}</h3>
+            </div>
             {onlineUsers.includes(recipient.id) && (
               <small className={styles.online}>online</small>
             )}
             {isSmallScreen && (
-              <button onClick={() => setChatOpen(false)}>Chats</button>
+              <button
+                className={styles.backButton}
+                onClick={() => setChatOpen(false)}
+              >
+                <img src="/arrow.png" alt="" height={24} />
+              </button>
             )}
           </>
         ) : (

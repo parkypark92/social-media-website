@@ -23,9 +23,16 @@
 }
 
 .avatar {
+  min-width: 0;
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.avatar li {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .online {

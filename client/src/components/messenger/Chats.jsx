@@ -11,6 +11,7 @@ export default function Chats({
   setChatOpen,
 }) {
   const { user } = useOutletContext();
+
   return (
     <div className={styles.chats}>
       <div className={styles.chatsHeader}>

@@ -24,6 +24,7 @@
 }
 
 .avatar {
+  min-width: 0;
   display: flex;
   gap: 8px;
   align-items: center;
@@ -44,4 +45,14 @@
 .decline {
   background-color: rgb(216, 216, 216);
   color: black;
+}
+
+.avatar li {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.requestPreviewDisplay p {
+  min-width: fit-content;
 }
