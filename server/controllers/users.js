@@ -3,7 +3,7 @@ const prisma = require("../config/prisma");
 const supabase = require("../config/supabase").supabase;
 const { decode } = require("base64-arraybuffer");
 const asyncHandler = require("express-async-handler");
-const { Server } = require("socket.io");
+// const { Server } = require("socket.io");
 
 module.exports.authenticate_user = (req, res, next) => {
   passport.authenticate("jwt", (err, user, info) => {
