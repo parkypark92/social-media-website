@@ -12,7 +12,7 @@ export function SocketProvider({ id, children }) {
   const [socket, setSocket] = useState();
 
   useEffect(() => {
-    const newSocket = io("https://social-media-website-client.onrender.com", {
+    const newSocket = io("https://social-media-website-8w09.onrender.com", {
       query: { id },
     });
     setSocket(newSocket);
