@@ -12,7 +12,9 @@ export function SocketProvider({ id, children }) {
   const [socket, setSocket] = useState();
 
   useEffect(() => {
-    const newSocket = io("http://localhost:3000", { query: { id } });
+    const newSocket = io("https://social-media-website-client.onrender.com", {
+      query: { id },
+    });
     setSocket(newSocket);
     return () => newSocket.close();
   }, [id]);
